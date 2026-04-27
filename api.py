@@ -128,6 +128,7 @@ class LLMChatCompletionsRequest(BaseModel):
                 "messages": [
                     {"role": "user", "content": "Say hello in one short sentence."}
                 ],
+                "reasoning_effort": "none",
                 "stream": False,
             }
         },
@@ -147,6 +148,7 @@ class LLMCompletionsRequest(BaseModel):
             "example": {
                 "model": "qwen3.5:4b",
                 "prompt": "Say hello in one short sentence.",
+                "reasoning_effort": "none",
                 "stream": False,
             }
         },
