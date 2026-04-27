@@ -1,12 +1,15 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, BackgroundTasks, UploadFile, File, Response
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, HTTPException, BackgroundTasks, UploadFile, File, Response, Request
+from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 import os
 import re
 import logging
+import json
+
+import httpx
 
 from pipeline import RAGPipeline
 from config import RAGConfig
@@ -17,13 +20,15 @@ logger = logging.getLogger("rag-api")
 
 # ── Global pipeline instance ──────────────────────────────────────────────────
 rag_pipeline: Optional[RAGPipeline] = None
+llm_proxy_client: Optional[httpx.AsyncClient] = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle startup and shutdown using the modern FastAPI lifespan pattern."""
-    global rag_pipeline
+    global rag_pipeline, llm_proxy_client
     config_path = os.getenv("RAG_CONFIG_PATH", "config_rag.yaml")
+    llm_proxy_client = httpx.AsyncClient(timeout=300.0)
 
     # Retry loop — Milvus may still be warming up even after its healthcheck
     # passes. We retry up to 5 times (50 seconds total) before giving up.
@@ -59,6 +64,8 @@ async def lifespan(app: FastAPI):
     yield  # Application runs here
 
     logger.info("RAG API shutting down.")
+    if llm_proxy_client is not None:
+        await llm_proxy_client.aclose()
 
 
 app = FastAPI(
@@ -92,6 +99,11 @@ class RAGResponse(BaseModel):
     context: str
     sources: List[Dict[str, Any]]
     metadata: Dict[str, Any]
+
+
+class LLMModelsResponse(BaseModel):
+    object: str
+    data: List[Dict[str, Any]]
 
 
 # ── Debug Request / Response schemas ───────────────────────────────────────────
@@ -178,6 +190,149 @@ def strip_thought_process(text: str) -> str:
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
 
+def _load_runtime_config() -> RAGConfig:
+    if rag_pipeline:
+        return rag_pipeline.config
+
+    config_path = os.getenv("RAG_CONFIG_PATH", "config_rag.yaml")
+    if not os.path.exists(config_path):
+        raise HTTPException(status_code=503, detail="Runtime config not found")
+    return RAGConfig.from_yaml(config_path)
+
+
+def _llm_proxy() -> httpx.AsyncClient:
+    if llm_proxy_client is None:
+        raise HTTPException(status_code=503, detail="LLM proxy client not initialized")
+    return llm_proxy_client
+
+
+def _llm_base_url() -> str:
+    return _load_runtime_config().generation.llm_endpoint.rstrip("/")
+
+
+def _llm_default_model() -> str:
+    return _load_runtime_config().generation.model_name
+
+
+def _normalize_reasoning_effort(value: Any) -> Any:
+    if value is None:
+        return None
+
+    normalized = str(value).strip().lower()
+    if normalized in {"none", "off", "false", "0"}:
+        return "none"
+    if normalized in {"true", "on", "1"}:
+        return "high"
+    if normalized in {"low", "medium", "high"}:
+        return normalized
+    return value
+
+
+def _prepare_llm_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    forwarded = dict(payload)
+    forwarded["model"] = forwarded.get("model") or _llm_default_model()
+    if "reasoning_effort" in forwarded:
+        forwarded["reasoning_effort"] = _normalize_reasoning_effort(
+            forwarded.get("reasoning_effort")
+        )
+    return forwarded
+
+
+def _llm_error_response(
+    error_type: str,
+    message: str,
+    *,
+    status_code: int,
+    provider_error: Any = None,
+) -> JSONResponse:
+    payload: Dict[str, Any] = {
+        "error": {
+            "type": error_type,
+            "message": message,
+            "status_code": status_code,
+        }
+    }
+    if provider_error is not None:
+        payload["error"]["provider_error"] = provider_error
+    return JSONResponse(status_code=status_code, content=payload)
+
+
+async def _proxy_llm_json(path: str, payload: Dict[str, Any]) -> Response:
+    upstream_url = f"{_llm_base_url()}/{path.lstrip('/')}"
+    try:
+        upstream = await _llm_proxy().post(upstream_url, json=payload)
+    except httpx.TimeoutException:
+        return _llm_error_response(
+            "upstream_timeout",
+            "Timed out while waiting for Ollama",
+            status_code=504,
+        )
+    except httpx.HTTPError as exc:
+        return _llm_error_response(
+            "upstream_unreachable",
+            f"Failed to reach Ollama: {exc}",
+            status_code=502,
+        )
+
+    if upstream.is_success:
+        content_type = upstream.headers.get("content-type", "")
+        if "application/json" in content_type:
+            return JSONResponse(status_code=upstream.status_code, content=upstream.json())
+        return Response(
+            content=upstream.content,
+            status_code=upstream.status_code,
+            media_type=content_type or None,
+        )
+
+    try:
+        provider_error = upstream.json()
+    except ValueError:
+        provider_error = upstream.text
+    return _llm_error_response(
+        "upstream_error",
+        "Ollama returned an error",
+        status_code=upstream.status_code,
+        provider_error=provider_error,
+    )
+
+
+async def _proxy_llm_stream(path: str, payload: Dict[str, Any]):
+    upstream_url = f"{_llm_base_url()}/{path.lstrip('/')}"
+    try:
+        async with _llm_proxy().stream("POST", upstream_url, json=payload) as upstream:
+            if upstream.is_success:
+                async for chunk in upstream.aiter_bytes():
+                    if chunk:
+                        yield chunk
+                return
+
+            body = await upstream.aread()
+            try:
+                provider_error = json.loads(body.decode("utf-8"))
+            except Exception:
+                provider_error = body.decode("utf-8", errors="replace")
+            error_payload = {
+                "error": {
+                    "type": "upstream_error",
+                    "message": "Ollama returned an error",
+                    "status_code": upstream.status_code,
+                    "provider_error": provider_error,
+                }
+            }
+            yield f"data: {json.dumps(error_payload, ensure_ascii=True)}\n\n".encode("utf-8")
+    except httpx.TimeoutException:
+        yield b'data: {"error":{"type":"upstream_timeout","message":"Timed out while waiting for Ollama","status_code":504}}\n\n'
+    except httpx.HTTPError as exc:
+        error_payload = {
+            "error": {
+                "type": "upstream_unreachable",
+                "message": f"Failed to reach Ollama: {exc}",
+                "status_code": 502,
+            }
+        }
+        yield f"data: {json.dumps(error_payload, ensure_ascii=True)}\n\n".encode("utf-8")
+
+
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 @app.get("/health", summary="Health check")
 async def health_check():
@@ -190,6 +345,65 @@ async def health_check():
             else "not_connected"
         ),
     }
+
+
+@app.get("/v1/models", response_model=LLMModelsResponse, summary="List plain LLM models exposed by this API")
+async def list_llm_models():
+    model_name = _llm_default_model()
+    return {
+        "object": "list",
+        "data": [
+            {
+                "id": model_name,
+                "object": "model",
+                "owned_by": "ollama",
+            }
+        ],
+    }
+
+
+@app.post("/v1/chat/completions", summary="Proxy plain chat completions to Ollama")
+async def proxy_chat_completions(request: Request):
+    payload = _prepare_llm_payload(await request.json())
+    logger.info(
+        "Plain LLM request /v1/chat/completions model=%s stream=%s",
+        payload.get("model"),
+        payload.get("stream", False),
+    )
+
+    if payload.get("stream"):
+        return StreamingResponse(
+            _proxy_llm_stream("/chat/completions", payload),
+            media_type="text/event-stream",
+            headers={
+                "X-Accel-Buffering": "no",
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            },
+        )
+    return await _proxy_llm_json("/chat/completions", payload)
+
+
+@app.post("/v1/completions", summary="Proxy plain completions to Ollama")
+async def proxy_completions(request: Request):
+    payload = _prepare_llm_payload(await request.json())
+    logger.info(
+        "Plain LLM request /v1/completions model=%s stream=%s",
+        payload.get("model"),
+        payload.get("stream", False),
+    )
+
+    if payload.get("stream"):
+        return StreamingResponse(
+            _proxy_llm_stream("/completions", payload),
+            media_type="text/event-stream",
+            headers={
+                "X-Accel-Buffering": "no",
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            },
+        )
+    return await _proxy_llm_json("/completions", payload)
 
 
 @app.get("/collections", summary="List indexed collections")

@@ -19,6 +19,9 @@ http://152.118.31.54:8000/docs
 | Method | Path | Purpose |
 |---|---|---|
 | `GET` | `/health` | Check whether the API and vector store are reachable |
+| `GET` | `/v1/models` | List the plain LLM model exposed through the wrapper |
+| `POST` | `/v1/chat/completions` | Proxy plain chat completions to Ollama |
+| `POST` | `/v1/completions` | Proxy plain completions to Ollama |
 | `GET` | `/collections` | List indexed Milvus collections |
 | `GET` | `/ingestion/status` | View ingested files and chunk counts |
 | `POST` | `/query` | Run a standard RAG query |
@@ -32,6 +35,9 @@ http://152.118.31.54:8000/docs
 ## Base Notes
 
 - The API listens on port `8000`.
+- Plain LLM wrapper endpoints also live on port `8000`, but they are separate from the RAG contract.
+- Use `/v1/chat/completions` or `/v1/completions` for non-RAG callers that just need model inference.
+- Use `/query` and `/query/stream` only for retrieval-backed answers.
 - `query` endpoints accept optional `metadata_filter`.
 - The streaming endpoint returns Server-Sent Events.
 - Ingestion runs in the background, so the response comes back before processing finishes.
@@ -57,6 +63,35 @@ Example response:
   "status": "healthy",
   "milvus": "connected"
 }
+```
+
+## Plain LLM Wrapper
+
+### `GET /v1/models`
+Returns the model currently exposed through the backend wrapper.
+
+```bash
+curl -X GET http://152.118.31.54:8000/v1/models
+```
+
+### `POST /v1/chat/completions`
+Proxy a standard OpenAI-compatible chat request through the backend to Ollama. This is for plain generation only and does not run retrieval.
+
+```bash
+curl -X POST http://152.118.31.54:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"qwen3.5:4b","messages":[{"role":"user","content":"Say hello"}]}'
+```
+
+If `model` is omitted, the backend uses the current `generation.model_name` from the active runtime config.
+
+### `POST /v1/completions`
+Proxy a standard OpenAI-compatible completions request through the backend to Ollama.
+
+```bash
+curl -X POST http://152.118.31.54:8000/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Say hello","max_tokens":64}'
 ```
 
 ### `GET /collections`

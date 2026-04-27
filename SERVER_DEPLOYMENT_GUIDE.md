@@ -331,6 +331,17 @@ curl -X POST http://localhost:8000/query \
   }'
 ```
 
+### Plain LLM wrapper test
+```bash
+curl -X POST http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "Say hello"}
+    ]
+  }'
+```
+
 ### List indexed collections
 ```bash
 curl http://localhost:8000/collections
