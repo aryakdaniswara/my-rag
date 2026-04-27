@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, BackgroundTasks, UploadFile, File, Response, Request
+from fastapi import FastAPI, HTTPException, BackgroundTasks, UploadFile, File, Response
 from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 import os
@@ -104,6 +104,53 @@ class RAGResponse(BaseModel):
 class LLMModelsResponse(BaseModel):
     object: str
     data: List[Dict[str, Any]]
+
+
+class LLMChatMessage(BaseModel):
+    role: str
+    content: Any
+
+    model_config = ConfigDict(extra="allow")
+
+
+class LLMChatCompletionsRequest(BaseModel):
+    model: Optional[str] = None
+    messages: List[LLMChatMessage]
+    max_tokens: Optional[int] = None
+    stream: bool = False
+    reasoning_effort: Optional[Any] = None
+
+    model_config = ConfigDict(
+        extra="allow",
+        json_schema_extra={
+            "example": {
+                "model": "qwen3.5:4b",
+                "messages": [
+                    {"role": "user", "content": "Say hello in one short sentence."}
+                ],
+                "stream": False,
+            }
+        },
+    )
+
+
+class LLMCompletionsRequest(BaseModel):
+    model: Optional[str] = None
+    prompt: Any
+    max_tokens: Optional[int] = None
+    stream: bool = False
+    reasoning_effort: Optional[Any] = None
+
+    model_config = ConfigDict(
+        extra="allow",
+        json_schema_extra={
+            "example": {
+                "model": "qwen3.5:4b",
+                "prompt": "Say hello in one short sentence.",
+                "stream": False,
+            }
+        },
+    )
 
 
 # ── Debug Request / Response schemas ───────────────────────────────────────────
@@ -363,8 +410,8 @@ async def list_llm_models():
 
 
 @app.post("/v1/chat/completions", summary="Proxy plain chat completions to Ollama")
-async def proxy_chat_completions(request: Request):
-    payload = _prepare_llm_payload(await request.json())
+async def proxy_chat_completions(request: LLMChatCompletionsRequest):
+    payload = _prepare_llm_payload(request.model_dump(exclude_unset=True))
     logger.info(
         "Plain LLM request /v1/chat/completions model=%s stream=%s",
         payload.get("model"),
@@ -385,8 +432,8 @@ async def proxy_chat_completions(request: Request):
 
 
 @app.post("/v1/completions", summary="Proxy plain completions to Ollama")
-async def proxy_completions(request: Request):
-    payload = _prepare_llm_payload(await request.json())
+async def proxy_completions(request: LLMCompletionsRequest):
+    payload = _prepare_llm_payload(request.model_dump(exclude_unset=True))
     logger.info(
         "Plain LLM request /v1/completions model=%s stream=%s",
         payload.get("model"),
