@@ -467,25 +467,21 @@ The rebuild now writes a single tidy bundle under `/app/storage/rebuilds/<timest
 - `ingestion_state.json`
 - `rebuild_manifest.json`
 
-If you want the rebuild to keep running after your terminal disconnects, use a detached one-off Compose container and follow its logs:
+If you want the rebuild to keep running after your terminal disconnects, use detached `docker exec` inside the running API container and follow the log file:
 
 ```bash
-docker compose run -d --name rag-rebuild --no-deps rag-api \
-  python cli.py rebuild-index \
-  --config /app/config_rag.yaml \
-  --directory /app/data
-docker compose logs -f rag-rebuild
-docker compose rm -f rag-rebuild
+docker exec -d my-rag-api sh -lc 'python cli.py rebuild-index --config /app/config_rag.yaml --directory /app/data > /app/storage/rebuild-index.log 2>&1'
+docker exec -it my-rag-api sh -lc 'tail -f /app/storage/rebuild-index.log'
 ```
 
-If GPU memory is tight, stop the API first so the rebuild process does not load a second copy of the embedding models:
+This repo currently runs `rag-api` with `network_mode: host`. On older `docker-compose` versions, detached `docker compose run -d ...` can fail with a host-networking conflict, so detached `docker exec -d` is the safer operational path.
+
+If GPU memory is tight, avoid the detached path and run the rebuild in an attached shell during a maintenance window so you can control service load directly:
 
 ```bash
-docker compose stop rag-api
-docker compose run --rm --no-deps rag-api python cli.py rebuild-index \
+docker compose exec rag-api python cli.py rebuild-index \
   --config /app/config_rag.yaml \
   --directory /app/data
-docker compose start rag-api
 ```
 
 The command writes a generated rebuild config such as `/app/storage/rebuilds/20260422_153000/config.yaml`, uses a fresh state file such as `/app/storage/rebuilds/20260422_153000/ingestion_state.json`, and ingests into a shadow collection such as `documents_rebuild_20260422_153000`.

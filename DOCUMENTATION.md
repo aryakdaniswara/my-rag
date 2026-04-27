@@ -221,11 +221,10 @@ This creates a generated rebuild config, a fresh ingestion state file, and a sha
 
 ```bash
 python cli.py promote-index \
-  --collection-name documents_rebuild_YYYYMMDD_HHMMSS \
-  --state-path storage/ingestion_state_rebuild_YYYYMMDD_HHMMSS.json
+  --rebuild-dir storage/rebuilds/YYYYMMDD_HHMMSS
 ```
 
-The promotion command prints the exact production config values to apply; it does not mutate production config automatically.
+The promotion command prints the exact production config values to apply; it does not mutate production config automatically. In the Docker server deployment, the detached rebuild path should use `docker exec -d my-rag-api ...` rather than `docker compose run -d ...` because this repo uses `network_mode: host` for `rag-api`.
 
 ### `POST /ingestion/upload`
 Uploads a single file (PDF/HTML) and triggers ingestion.

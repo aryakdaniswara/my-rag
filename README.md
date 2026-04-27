@@ -2,6 +2,11 @@
 
 A production-ready Retrieval-Augmented Generation (RAG) pipeline designed for research and extensibility.
 
+This repo is organized to support two common modes:
+
+- local development with `config_rag.yaml`
+- Docker server deployment with `config_server.yaml` mounted as `/app/config_rag.yaml`
+
 ## Features
 
 - **Advanced Ingestion**: PDF parsing via Docling with hierarchical-first hybrid chunking that merges undersized chunks and caps oversized chunks with overlap, plus HTML extraction via Trafilatura with standard overlapping text chunks.
@@ -15,7 +20,7 @@ A production-ready Retrieval-Augmented Generation (RAG) pipeline designed for re
 ## Installation
 
 ```bash
-pip install -r src/my_rag/requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
@@ -25,14 +30,14 @@ Edit `config_rag.yaml` to set your LLM endpoint, embedding models, and Milvus UR
 
 ### 2. Ingestion
 ```bash
-python src/my_rag/cli.py ingest --config config_rag.yaml --directory ./data/docs
+python cli.py ingest --config config_rag.yaml --directory ./data
 ```
 
 ### 3. Safe index rebuild
 When parser or chunker behavior changes, build a shadow collection with a fresh ingestion state instead of wiping the live collection:
 
 ```bash
-python src/my_rag/cli.py rebuild-index --config config_rag.yaml --directory ./data/docs
+python cli.py rebuild-index --config config_rag.yaml --directory ./data
 ```
 
 The rebuild now writes a tidy bundle under `storage/rebuilds/<timestamp>/`:
@@ -41,56 +46,56 @@ The rebuild now writes a tidy bundle under `storage/rebuilds/<timestamp>/`:
 - `ingestion_state.json`
 - `rebuild_manifest.json`
 
-If you want to run the rebuild in the background on the server, use a detached one-off Compose run and follow the logs:
+If you want to run the rebuild in the background on the server with the current host-networked deployment, use detached `docker exec` inside the already running API container and write logs to shared storage:
 
 ```bash
-docker compose run -d --name rag-rebuild --no-deps rag-api \
-  python cli.py rebuild-index --config /app/config_rag.yaml --directory /app/data
-docker compose logs -f rag-rebuild
-docker compose rm -f rag-rebuild
+docker exec -d my-rag-api sh -lc 'python cli.py rebuild-index --config /app/config_rag.yaml --directory /app/data > /app/storage/rebuild-index.log 2>&1'
+docker exec -it my-rag-api sh -lc 'tail -f /app/storage/rebuild-index.log'
 ```
+
+The detached `docker compose run -d ...` path may fail on older `docker-compose` versions with this repo's `network_mode: host` setup.
 
 After validation, print the promotion patch from the rebuild folder:
 
 ```bash
-python src/my_rag/cli.py promote-index \
+python cli.py promote-index \
   --rebuild-dir storage/rebuilds/YYYYMMDD_HHMMSS
 ```
 
 Check the live collections before and after promotion:
 
 ```bash
-python src/my_rag/cli.py collections --config storage/rebuilds/YYYYMMDD_HHMMSS/config.yaml
+python cli.py collections --config storage/rebuilds/YYYYMMDD_HHMMSS/config.yaml
 ```
 
 After the rebuilt collection is healthy, clean up the old collection explicitly:
 
 ```bash
-python src/my_rag/cli.py cleanup-collection \
+python cli.py cleanup-collection \
   --rebuild-dir storage/rebuilds/YYYYMMDD_HHMMSS \
   --yes
 ```
 
 ### 4. Querying
 ```bash
-python src/my_rag/cli.py query --config config_rag.yaml --query "What is the main topic?"
+python cli.py query --config config_rag.yaml --query "What is the main topic?"
 ```
 
 ### 5. Debugging
 Find chunks containing a keyword:
 ```bash
-python src/my_rag/cli.py find-keyword --config config_rag.yaml --keyword "machine learning"
+python cli.py find-keyword --config config_rag.yaml --keyword "machine learning"
 ```
 
 Trace retrieval with a keyword check:
 ```bash
-python src/my_rag/cli.py trace --config config_rag.yaml --query "..." --check-keyword "activation"
+python cli.py trace --config config_rag.yaml --query "..." --check-keyword "activation"
 ```
 
 ### 5. Evaluation
 Generate synthetic QA and evaluate:
 ```bash
-python src/my_rag/cli.py eval --config config_rag.yaml --synthetic --paths ./data/docs/sample.pdf
+python cli.py eval --config config_rag.yaml --synthetic --paths ./data/sample.pdf
 ```
 
 ## Architecture
