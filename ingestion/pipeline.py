@@ -17,6 +17,9 @@ class IngestionPipeline:
         self,
         chunk_size: int = 512,
         chunk_overlap: int = 50,
+        pdf_min_chunk_tokens: int = 300,
+        pdf_max_chunk_tokens: int = 1000,
+        pdf_split_overlap_tokens: int = 120,
         embedding_model: str = "microsoft/harrier-oss-v1-0.6b",
         pdf_parser: str = "docling",
         pdf_chunking_strategy: str = "hierarchical",
@@ -42,6 +45,9 @@ class IngestionPipeline:
             embedding_model=embedding_model,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
+            pdf_min_chunk_tokens=pdf_min_chunk_tokens,
+            pdf_max_chunk_tokens=pdf_max_chunk_tokens,
+            pdf_split_overlap_tokens=pdf_split_overlap_tokens,
         )
         self.html_text_parser = HTMLParser()
 

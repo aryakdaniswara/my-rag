@@ -4,7 +4,7 @@ A production-ready Retrieval-Augmented Generation (RAG) pipeline designed for re
 
 ## Features
 
-- **Advanced Ingestion**: PDF parsing via Docling with hierarchical chunking, plus HTML extraction via Trafilatura with standard overlapping text chunks.
+- **Advanced Ingestion**: PDF parsing via Docling with hierarchical-first hybrid chunking that merges undersized chunks and caps oversized chunks with overlap, plus HTML extraction via Trafilatura with standard overlapping text chunks.
 - **Hybrid Search**: Combines Dense (BGE) and Sparse (SPLADE) embeddings using Milvus.
 - **Reranking**: Integration with a dedicated GGUF reranker service to improve retrieval precision.
 - **Debuggability**: 
@@ -105,5 +105,5 @@ python src/my_rag/cli.py eval --config config_rag.yaml --synthetic --paths ./dat
 
 ## Known Limitations
 
-- **Chunker Config**: The `chunk_size` and `chunk_overlap` settings in the YAML files are currently ignored by the `HierarchicalChunker` implementation in favor of structural boundaries. This is planned for a future update.
+- **Chunker Config**: HTML uses `chunk_size` and `chunk_overlap`. PDFs use Docling `HierarchicalChunker` plus hybrid normalization with `pdf_min_chunk_tokens`, `pdf_max_chunk_tokens`, and `pdf_split_overlap_tokens`.
 - **VRAM Competition**: Running long-context reranking (8k tokens) on consumer GPUs alongside a large LLM may require careful GPU allocation.

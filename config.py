@@ -8,6 +8,9 @@ from generation.prompts import DEFAULT_SYSTEM_PROMPT
 class IngestionConfig:
     chunk_size: int = 512
     chunk_overlap: int = 50
+    pdf_min_chunk_tokens: int = 300
+    pdf_max_chunk_tokens: int = 1000
+    pdf_split_overlap_tokens: int = 120
     pdf_parser: str = "docling"
     pdf_chunking_strategy: str = "hierarchical"
     html_parser: str = "trafilatura"

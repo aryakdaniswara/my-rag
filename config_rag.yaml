@@ -3,7 +3,10 @@
 # Ingestion settings
 ingestion:
   chunk_size: 1000
-  chunk_overlap: 200
+  chunk_overlap: 120
+  pdf_min_chunk_tokens: 300
+  pdf_max_chunk_tokens: 1000
+  pdf_split_overlap_tokens: 120
   pdf_parser: "docling"
   pdf_chunking_strategy: "hierarchical"
   html_parser: "trafilatura"

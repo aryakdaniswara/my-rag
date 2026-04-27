@@ -18,7 +18,7 @@ To ensure high-quality text extraction and structural preservation, we use a sop
   - **PDF**: `Docling` (by IBM). Docling identifies layout structures such as tables and headers, then outputs a strictly typed `DoclingDocument`.
   - **HTML**: `Trafilatura` with a BeautifulSoup fallback. HTML pages are treated as web text because many scraped pages convert successfully in Docling but produce no chunkable structure.
 - **Chunking**:
-  - PDFs use `docling.chunking.HierarchicalChunker`.
+  - PDFs use `docling.chunking.HierarchicalChunker` followed by hybrid normalization.
   - HTML uses the standard overlapping text chunker controlled by `ingestion.chunk_size` and `ingestion.chunk_overlap`.
   - PDF `ChunkRecord`s can include Docling metadata such as page numbers. HTML `ChunkRecord`s keep external crawl metadata such as `source_url`, `domain`, and `scraped_at`.
   - **Job-Level Snapshots**: For debugging, normal ingestion can save one JSON snapshot per ingestion job to `storage/snapshots/ingest_job_<timestamp>.json`. This is controlled by `ingestion.save_snapshots` in the config. Processed files include their actual chunk text in the snapshot; unchanged and duplicate files are represented as manifest entries for efficiency.
@@ -127,7 +127,7 @@ For a responsive user experience, the system supports real-time token streaming:
 ## 4. Pipeline Data Flow
 
 ### Ingestion Flow
-`Raw Files` -> `SHA-256 Fingerprint Scan` -> `Incremental/Duplicate Classification` -> `PDF: Docling + Hierarchical Chunking / HTML: Trafilatura + Standard Text Chunking` -> `Dense & Sparse Embedding` -> `Milvus Storage` -> `Job Snapshot Manifest`
+`Raw Files` -> `SHA-256 Fingerprint Scan` -> `Incremental/Duplicate Classification` -> `PDF: Docling + Hierarchical Hybrid Chunking / HTML: Trafilatura + Standard Text Chunking` -> `Dense & Sparse Embedding` -> `Milvus Storage` -> `Job Snapshot Manifest`
 
 ### Query Flow
 `User Query` -> `Dual Embedding` -> `Milvus Hybrid Search` -> `Metadata Filtering (Optional)` -> `RRF (k=60)` -> `Top-50 Candidates` -> `Jina Reranking` -> `Top-5 Context` -> `Grounded Generation` -> `Answer + Sources`
@@ -142,10 +142,13 @@ All configuration is driven by `config_rag.yaml` (local) or `config_server.yaml`
 
 | Section | Parameter | Default | Description |
 |---|---|---|---|
-| `ingestion` | `chunk_size` | `512` | Max token-like units per standard text chunk; Docling hierarchical PDF chunks follow document structure |
-| `ingestion` | `chunk_overlap` | `50` | Overlap for standard text chunks, used by HTML ingestion |
+| `ingestion` | `chunk_size` | `512` | Max token-like units per standard HTML text chunk |
+| `ingestion` | `chunk_overlap` | `50` | Overlap for standard HTML text chunks |
+| `ingestion` | `pdf_min_chunk_tokens` | `300` | Minimum token-like size for merged PDF hierarchical chunks |
+| `ingestion` | `pdf_max_chunk_tokens` | `1000` | Upper bound before a PDF hierarchical chunk is split |
+| `ingestion` | `pdf_split_overlap_tokens` | `120` | Overlap used only when splitting oversized PDF hierarchical chunks |
 | `ingestion` | `pdf_parser` | `docling` | Parser for PDF files |
-| `ingestion` | `pdf_chunking_strategy` | `hierarchical` | Chunking strategy for PDF files; currently uses Docling `HierarchicalChunker` |
+| `ingestion` | `pdf_chunking_strategy` | `hierarchical` | Chunking strategy for PDF files; uses Docling `HierarchicalChunker` plus hybrid normalization |
 | `ingestion` | `html_parser` | `trafilatura` | Parser for HTML files |
 | `ingestion` | `html_chunking_strategy` | `standard` | Chunking strategy for HTML files; standard uses `chunk_size` and `chunk_overlap` |
 | `embedding` | `device` | `cuda:0` | Default GPU for embedding models |
@@ -251,6 +254,41 @@ The system includes several debugging endpoints to inspect the pipeline at diffe
 **`POST /debug/rerank`** - View reranking results after Jina reranking but before LLM generation
 - Request body: `{"query": "your query", "k": 20, "rerank_top_k": 5}`
 - Response: Reranked documents with updated scores
+
+## Chunking Decision Tree
+
+### End-to-End Path
+
+```mermaid
+flowchart TD
+    A[Input file] --> B{File type}
+    B -->|HTML / HTM| C[Parse with Trafilatura or BeautifulSoup fallback]
+    C --> D[Normalize plain text]
+    D --> E[Split with chunk_size and chunk_overlap]
+    E --> F[Emit standard_text chunks]
+
+    B -->|PDF| G[Convert with Docling]
+    G --> H[Run HierarchicalChunker]
+    H --> I[Merge adjacent tiny chunks until pdf_min_chunk_tokens]
+    I --> J{Chunk size after merge}
+    J -->|Within pdf_max_chunk_tokens| K[Keep merged chunk]
+    J -->|Above pdf_max_chunk_tokens| L[Split with pdf_split_overlap_tokens]
+    K --> M[Emit hierarchical_hybrid chunks]
+    L --> M
+```
+
+### How PDF Max Splitting Works
+
+- The split is a size guardrail, not a new semantic parser.
+- If a merged PDF chunk grows beyond `pdf_max_chunk_tokens`, it is split by token-like units with `pdf_split_overlap_tokens`.
+- The overlap softens the boundary so the next chunk still carries some trailing context from the previous one.
+- This does mean a long table or long appendix can still be cut across a boundary, but it avoids a single giant retrieval unit that becomes hard to rank and expensive to embed/rerank.
+
+### Why This Decision Tree Exists
+
+- HTML pages usually behave like web text, so standard overlap chunking works well.
+- PDF chunks benefit from structural chunking first, then a simple merge-small / split-large normalization pass.
+- This keeps the policy understandable and general, even though it cannot be optimal for every flattened table scenario.
 
 ## 7. CLI Usage (Extended)
 
@@ -396,10 +434,11 @@ To improve performance, reduce LLM costs, and ensure 100% accuracy for strictly 
 
 As of April 2026, there are several areas where ingestion and model limits still need care:
 
-### A. Chunker Configuration (`chunk_size` & `chunk_overlap`)
-- **Issue**: The `HierarchicalChunker` used for PDF Docling documents ignores the `chunk_size` and `chunk_overlap` parameters passed to its constructor.
-- **Impact**: Changing `chunk_size` in your YAML files affects HTML standard text chunks, but not PDF hierarchical chunks. PDF chunking still relies on document structural boundaries.
-- **Planned Fix**: Initialize the `HierarchicalChunker` with a `HuggingFaceTokenizer` and a `max_tokens` constraint to bridge this gap.
+### A. Chunker Configuration (`chunk_size`, `chunk_overlap`, and PDF hybrid knobs)
+- **Current Behavior**: HTML uses the standard overlapping chunker controlled by `chunk_size` and `chunk_overlap`.
+- **Current Behavior**: PDFs use Docling `HierarchicalChunker`, then merge undersized chunks up to `pdf_min_chunk_tokens`.
+- **Current Behavior**: Any merged PDF chunk above `pdf_max_chunk_tokens` is split with `pdf_split_overlap_tokens`.
+- **Impact**: PDF chunking keeps structural boundaries where possible, avoids tiny chunks, and uses overlap to soften large-chunk boundaries without adding document-specific heuristics.
 
 ### B. Embedding Model Context Limits
 - **Issue**: Most embedding models (Dense and Sparse) have internal token limits (typically 512 or 8192). 
