@@ -23,6 +23,7 @@ http://152.118.31.54:8000/docs
 | `POST` | `/v1/chat/completions` | Proxy plain chat completions to Ollama |
 | `POST` | `/v1/completions` | Proxy plain completions to Ollama |
 | `GET` | `/collections` | List indexed Milvus collections |
+| `GET` | `/runtime/config` | Show the active collection and ingestion state path used by the running API |
 | `GET` | `/ingestion/status` | View ingested files and chunk counts |
 | `POST` | `/query` | Run a standard RAG query |
 | `POST` | `/query/stream` | Run a streaming RAG query over SSE |
@@ -117,6 +118,28 @@ Example response:
 }
 ```
 
+### `GET /runtime/config`
+Show which collection and ingestion state path the running API is actually using.
+
+```bash
+curl -X GET http://152.118.31.54:8000/runtime/config
+```
+
+Example response:
+
+```json
+{
+  "config_path": "/app/config_rag.yaml",
+  "active_collection": "documents_rebuild_20260422_132325",
+  "active_collection_present": true,
+  "ingestion_state_path": "storage/rebuilds/20260422_132325/ingestion_state.json",
+  "available_collections": [
+    "documents",
+    "documents_rebuild_20260422_132325"
+  ]
+}
+```
+
 ## Query
 
 ### `POST /query`
@@ -207,6 +230,14 @@ Ingestion is incremental and content-aware:
 - Duplicate files are recorded as aliases of the canonical document in `storage/ingestion_state.json`.
 
 Use `/ingest` for normal incremental updates. If parsing or chunking behavior changes and the same source files need to be rebuilt, do not wipe the live Milvus collection first. Use the CLI-only `rebuild-index` workflow to build a shadow collection with a fresh state file, validate it, then promote it intentionally.
+
+The tidy rebuild flow stores rebuild artifacts under `storage/rebuilds/YYYYMMDD_HHMMSS/` and the promoted `ingestion.state_path` should normally point at:
+
+```text
+storage/rebuilds/YYYYMMDD_HHMMSS/ingestion_state.json
+```
+
+Older loose paths such as `storage/ingestion_state_rebuild_YYYYMMDD_HHMMSS.json` are legacy layouts that can still work, but new rebuilds should stay under `storage/rebuilds/...` so the active shadow state and bundle stay together.
 
 When `save_snapshots: true`, each `/ingest` call writes one snapshot file:
 

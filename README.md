@@ -46,6 +46,14 @@ The rebuild now writes a tidy bundle under `storage/rebuilds/<timestamp>/`:
 - `ingestion_state.json`
 - `rebuild_manifest.json`
 
+After promotion, keep the active shadow state path aligned to that same folder:
+
+```text
+storage/rebuilds/YYYYMMDD_HHMMSS/ingestion_state.json
+```
+
+Older loose files like `storage/ingestion_state_rebuild_YYYYMMDD_HHMMSS.json` are legacy layouts. They still work if the config points there, but new rebuilds should keep the state file inside the rebuild folder so the bundle stays organized.
+
 If you want to run the rebuild in the background on the server with the current host-networked deployment, use detached `docker exec` inside the already running API container and write logs to shared storage:
 
 ```bash

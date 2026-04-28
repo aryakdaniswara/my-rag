@@ -486,6 +486,14 @@ docker compose exec rag-api python cli.py rebuild-index \
 
 The command writes a generated rebuild config such as `/app/storage/rebuilds/20260422_153000/config.yaml`, uses a fresh state file such as `/app/storage/rebuilds/20260422_153000/ingestion_state.json`, and ingests into a shadow collection such as `documents_rebuild_20260422_153000`.
 
+After promotion, the active `ingestion.state_path` should normally keep pointing at that rebuild folder path, for example:
+
+```text
+storage/rebuilds/20260422_153000/ingestion_state.json
+```
+
+Older loose paths like `storage/ingestion_state_rebuild_20260422_153000.json` are legacy layouts. They can still work if the config points there, but the organized default is to keep the active state file inside the rebuild bundle folder.
+
 Validate the rebuilt collection before promotion:
 
 ```bash

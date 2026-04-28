@@ -468,6 +468,27 @@ async def list_collections():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/runtime/config", summary="Show active runtime storage config")
+async def runtime_config():
+    """Returns the active collection and ingestion state path used by the running API."""
+    config = _load_runtime_config()
+    active_collection = config.storage.collection_name
+    collections = []
+    if rag_pipeline and rag_pipeline.storage:
+        try:
+            collections = rag_pipeline.storage.list_collections()
+        except Exception as e:
+            logger.warning(f"Failed to list collections while reading runtime config: {e}")
+
+    return {
+        "config_path": os.getenv("RAG_CONFIG_PATH", "config_rag.yaml"),
+        "active_collection": active_collection,
+        "active_collection_present": active_collection in collections if collections else None,
+        "ingestion_state_path": config.ingestion.state_path,
+        "available_collections": collections,
+    }
+
+
 @app.get("/ingestion/status", summary="Get ingestion status of all files")
 async def ingestion_status():
     """Returns the list of files currently ingested with their metadata."""
