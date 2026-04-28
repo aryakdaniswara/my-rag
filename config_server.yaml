@@ -24,6 +24,7 @@ embedding:
 
 storage:
   milvus_uri: "http://127.0.0.1:19530"
+  collection_base_name: "documents"
   collection_name: "documents_rebuild_20260422_132325"
   db_name: "default"
   metric_type: "COSINE"

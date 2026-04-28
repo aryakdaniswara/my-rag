@@ -56,7 +56,8 @@ def _build_rebuild_config(
     ingestion = rebuild_data.setdefault("ingestion", {})
     storage = rebuild_data.setdefault("storage", {})
 
-    base_collection = storage.get("collection_name", "documents")
+    configured_collection = storage.get("collection_name", "documents")
+    base_collection = storage.get("collection_base_name", "documents")
     rebuild_collection = collection_name or f"{base_collection}_rebuild_{timestamp}"
     if rebuild_dir:
         rebuild_root = Path(rebuild_dir)
@@ -84,7 +85,7 @@ def _build_rebuild_config(
         {
             "created_at": timestamp,
             "source_config_path": str(base_path),
-            "source_collection_name": base_collection,
+            "source_collection_name": configured_collection,
             "rebuild_collection_name": rebuild_collection,
             "rebuild_root": str(rebuild_root),
             "rebuild_config_path": str(rebuild_config_path),

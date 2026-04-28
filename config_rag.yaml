@@ -25,6 +25,7 @@ embedding:
 # Vector storage
 storage:
   milvus_uri: "./milvus.db"
+  collection_base_name: "documents"
   collection_name: "documents"
   db_name: "default"
 

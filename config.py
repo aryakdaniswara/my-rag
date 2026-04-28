@@ -35,6 +35,7 @@ class EmbeddingConfig:
 @dataclass
 class StorageConfig:
     milvus_uri: str = "./milvus.db"
+    collection_base_name: str = "documents"
     collection_name: str = "documents"
     db_name: str = "default"
     metric_type: str = "COSINE"
