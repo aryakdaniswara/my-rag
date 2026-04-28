@@ -76,6 +76,13 @@ python cli.py cleanup-collection \
   --yes
 ```
 
+If you also want to remove the old rebuild bundle folder on a Docker server and the host user gets `permission denied`, delete it from inside the running API container:
+
+```bash
+docker exec -it my-rag-api sh
+rm -rf /app/storage/rebuilds/YYYYMMDD_HHMMSS
+```
+
 ### 4. Querying
 ```bash
 python cli.py query --config config_rag.yaml --query "What is the main topic?"

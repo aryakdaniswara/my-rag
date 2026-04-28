@@ -226,6 +226,13 @@ python cli.py promote-index \
 
 The promotion command prints the exact production config values to apply; it does not mutate production config automatically. In the Docker server deployment, the detached rebuild path should use `docker exec -d my-rag-api ...` rather than `docker compose run -d ...` because this repo uses `network_mode: host` for `rag-api`.
 
+After the rebuilt collection is promoted and any old collection is cleaned up, you may also delete the old rebuild bundle folder itself. On Docker servers, files under bind-mounted `storage/` may be root-owned, so if host-side deletion fails with `permission denied`, remove the folder from inside the running API container:
+
+```bash
+docker exec -it my-rag-api sh
+rm -rf /app/storage/rebuilds/YYYYMMDD_HHMMSS
+```
+
 ### `POST /ingestion/upload`
 Uploads a single file (PDF/HTML) and triggers ingestion.
 - **Multipart Form**: `file` (the document to upload).

@@ -523,6 +523,13 @@ docker compose exec rag-api python cli.py cleanup-collection \
   --yes
 ```
 
+If you also want to remove the old rebuild bundle folder itself and host-side deletion fails with `permission denied`, delete it from inside the running API container:
+
+```bash
+docker exec -it my-rag-api sh
+rm -rf /app/storage/rebuilds/20260422_153000
+```
+
 Rollback is just restoring the previous `collection_name` and `state_path` in `config_server.yaml`, then restarting `rag-api`.
 
 > Do not delete Milvus first for a normal rebuild. If `storage/ingestion_state.json` still says the same files are unchanged, a normal `/ingest` can skip them even after the live collection was wiped.
@@ -581,12 +588,16 @@ This section documents every production issue encountered on `riset-01` and its 
 
 ### Deleting root-owned files created by containers
 
-Containers run as `root` by default, so files written to mounted directories are owned by root:
+Containers run as `root` by default, so files written to mounted directories are often owned by root:
 
 ```bash
 # Never do: rm -rf ./storage/milvus  (permission denied)
 
-# Instead, use a temporary Alpine container to delete:
+# For rebuild bundles, the simplest path is usually:
+docker exec -it my-rag-api sh
+rm -rf /app/storage/rebuilds/YYYYMMDD_HHMMSS
+
+# For other mounted storage paths, use a temporary Alpine container to delete:
 docker run --rm \
   -v $(pwd)/storage/milvus:/target \
   alpine \
