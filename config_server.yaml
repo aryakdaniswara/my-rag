@@ -11,7 +11,7 @@ ingestion:
   html_chunking_strategy: "standard"
   save_snapshots: true
   incremental: true
-  state_path: "storage/ingestion_state_rebuild_20260422_132325.json"
+  state_path: "storage/ingestion_state_rebuild_20260428_080844.json"
 
 embedding:
   dense_model: "microsoft/harrier-oss-v1-0.6b"
