@@ -223,6 +223,8 @@ def main():
     eval_parser.add_argument(
         "--synthetic", action="store_true", help="Generate synthetic QA"
     )
+    eval_parser.add_argument("--paths", nargs="*", help="Files used for synthetic QA generation")
+    eval_parser.add_argument("--directory", help="Directory used for synthetic QA generation")
     eval_parser.add_argument("--output", help="Output file for results")
 
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
@@ -482,16 +484,25 @@ def main():
 
     elif args.command == "eval":
         questions = args.questions
+        ground_truths = None
         if args.synthetic:
+            if not args.paths and not args.directory:
+                parser.error("eval --synthetic requires --paths or --directory")
             qa_pairs = rag.generate_synthetic_qa(
-                paths=args.paths if hasattr(args, "paths") else None,
+                paths=args.paths,
+                directory=args.directory,
+                num_qa_per_doc=rag.config.evaluation.num_synthetic_qa,
             )
             questions = [p["question"] for p in qa_pairs]
+            ground_truths = [p["answer"] for p in qa_pairs]
             print(f"Generated {len(questions)} synthetic questions")
 
-        results = rag.evaluate(questions=questions)
-        output = args.output or "eval_results.json"
-        with open(output, "w") as f:
+        if not questions:
+            parser.error("eval requires --questions or --synthetic")
+
+        results = rag.evaluate(questions=questions, ground_truths=ground_truths)
+        output = args.output or results.get("report_path") or "eval_results.json"
+        with open(output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)
         print(f"Results saved to {output}")
 

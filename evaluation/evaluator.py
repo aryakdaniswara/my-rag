@@ -120,7 +120,11 @@ class RAGASEvaluator:
                 questions, metrics_df, retrieval_logs, rerank_logs
             )
 
-            return {"metrics": metrics_df.to_dict(), "failure_analysis": analysis}
+            return {
+                "metrics": metrics_df.to_dict(),
+                "failure_analysis": analysis,
+                "metric_descriptions": METRIC_DESCRIPTIONS,
+            }
         except Exception as e:
             logger.error(f"RAGAS evaluation failed: {e}")
             return {"error": str(e)}
@@ -183,4 +187,5 @@ class RAGASEvaluator:
                 "context_recall": [0.0] * len(questions),
             },
             "failure_analysis": [],
+            "metric_descriptions": METRIC_DESCRIPTIONS,
         }

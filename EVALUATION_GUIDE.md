@@ -9,6 +9,14 @@ It is written for a research-plus-engineering audience and has two goals:
 
 This guide is intentionally explicit about what is already implemented versus what is still a design target. It should not be read as a promise that every recommended capability is already wired into the runtime.
 
+Current practical default in this repo:
+
+- evaluation is configured local-first for now
+- the judge model defaults to the same local model family as generation
+- the evaluation embedding defaults to the same local dense embedding model used by retrieval
+
+That default is pragmatic for early iteration, but it is weaker than the ideal independent API-judge setup described later in this guide.
+
 ## What "Bulletproof" Means Here
 
 For this repo, "bulletproof" evaluation means:
@@ -28,9 +36,9 @@ It does not mean "one metric says we are done." A bulletproof eval stack is a co
 
 - `RAGAS` is the evaluation framework exposed by the current evaluator.
 - The evaluator supports the metrics `faithfulness`, `answer_relevancy`, `context_precision`, and `context_recall`.
-- The pipeline currently initializes the evaluator with `self.llm.client`, not with an independent judge configured from `config.evaluation`.
-- `config.evaluation.eval_llm` and `config.evaluation.eval_embeddings` exist in YAML, but they are not fully wired through the runtime path yet.
-- Synthetic QA generation exists, but the generated pairs do not yet carry a full provenance payload such as snapshot path, file path, page metadata, or chunk identifiers.
+- The pipeline now builds the evaluator from `config.evaluation` rather than silently reusing `self.llm.client`.
+- The current config defaults are local-first, so independence is a policy and configuration choice, not an automatic guarantee.
+- A bootstrap synthetic dataset now exists at `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`.
 - Retrieval timing exists today in the `/debug/retrieve` path as `retrieval_time_ms`.
 - General end-to-end query timing, generation timing, and time to first token (TTFT) are not yet formalized as stable evaluation outputs.
 - There is no stable per-run evaluation bundle format yet.
@@ -66,6 +74,203 @@ It does not mean "one metric says we are done." A bulletproof eval stack is a co
 - one-off anecdotal answers that "look good"
 - metric changes after model or config drift without version tracking
 - headline RAGAS claims made before retrieval quality is checked
+
+## How RAGAS Actually Works
+
+In this repo, `RAGAS` is not a single magic score. It is a bundle of metric-specific judge workflows.
+
+For the four metrics currently configured here, the judge logic is broadly:
+
+- `faithfulness`
+  - decompose the answer into simpler factual statements
+  - judge each statement against the retrieved context
+  - score = supported statements / total statements
+- `answer_relevancy`
+  - generate one or more questions that the answer appears to answer
+  - embed those generated questions and compare them to the original user question
+  - penalize clearly noncommittal answers
+- `context_precision`
+  - inspect each retrieved chunk and ask whether it was useful for arriving at the answer
+  - compute an average-precision-style score so relevant chunks ranked earlier help more
+- `context_recall`
+  - inspect the reference answer statement by statement
+  - judge whether the retrieved context contains support for each statement
+  - score = supported reference statements / total reference statements
+
+This is why RAGAS can be powerful but also why it must be explained carefully:
+
+- some metrics are LLM-judge heavy
+- some metrics depend on embeddings
+- some metrics assume your reference answer is high quality
+- some metrics are sensitive to chunk granularity and ranking order
+
+## What the Scores Mean
+
+All four configured metrics are continuous scores from `0.0` to `1.0`, where higher is better, but they do not mean the same thing.
+
+### Faithfulness
+
+Meaning:
+
+- how much of the generated answer is supported by the retrieved context
+
+High score means:
+
+- the answer mostly stays grounded in retrieved evidence
+
+Low score means:
+
+- the answer contains unsupported claims, hallucinated details, or claims that the judge could not infer from context
+
+Important caveat:
+
+- a faithful answer can still be incomplete, unhelpful, or evasive
+
+### Answer Relevancy
+
+Meaning:
+
+- how well the answer actually addresses the user's question
+
+High score means:
+
+- the answer is aligned with the question
+
+Low score means:
+
+- the answer drifts, is generic, or effectively answers another question
+
+Important caveat:
+
+- this metric uses generated reverse-questions plus embedding similarity, so it is not a pure factuality score
+
+### Context Precision
+
+Meaning:
+
+- how well the retrieved ranking places useful chunks near the top
+
+High score means:
+
+- the chunks that actually mattered were ranked early
+
+Low score means:
+
+- useful evidence may exist in the retrieved set, but the ranking is noisy or front-loaded with irrelevant chunks
+
+Important caveat:
+
+- this is very sensitive to chunk granularity and the candidate ordering that reaches the judge
+
+### Context Recall
+
+Meaning:
+
+- whether the retrieved context contains the information needed to support the reference answer
+
+High score means:
+
+- the retrieval stage likely brought back enough supporting evidence
+
+Low score means:
+
+- the system probably missed key evidence, even if the answer sounded plausible
+
+Important caveat:
+
+- this depends heavily on the quality and scope of the reference answer or ground truth
+
+## Upsides and Downsides of RAGAS
+
+### Upsides
+
+- it gives stage-aware signals instead of one monolithic pass/fail judgment
+- it can separate retrieval weakness from generation weakness better than answer-only scoring
+- it can be run repeatedly across model candidates and config changes
+- it can work with synthetic bootstrap datasets before a large human benchmark exists
+- it produces richer evidence than anecdotal spot checks
+
+### Downsides
+
+- it is still judge-dependent, so model choice matters
+- some metrics are prompt-sensitive
+- some metrics are embedding-sensitive
+- poor ground truth will poison the evaluation
+- synthetic-only datasets can overestimate real-world readiness
+- scores can look precise even when the underlying dataset or retrieval setup is weak
+
+## Actual Prompt Sources
+
+This section matters because prompt provenance changes how confidently we can explain the scores.
+
+### What Is Not the Live RAGAS Prompt Source
+
+`generation/prompts.py` contains `RAGAS_EVALUATION_PROMPT`, but that is not the live prompt source used by the current evaluator path.
+
+Treat it as a legacy or placeholder prompt, not the actual RAGAS metric prompt implementation.
+
+### What Is the Live Prompt Source
+
+The active prompt logic comes from the installed `ragas` package.
+
+For the currently configured metrics in this repo, the live prompt classes are in these package files:
+
+- `.venv/Lib/site-packages/ragas/metrics/_faithfulness.py`
+  - `StatementGeneratorPrompt`
+  - `NLIStatementPrompt`
+- `.venv/Lib/site-packages/ragas/metrics/_answer_relevance.py`
+  - `ResponseRelevancePrompt`
+- `.venv/Lib/site-packages/ragas/metrics/_context_precision.py`
+  - `ContextPrecisionPrompt`
+- `.venv/Lib/site-packages/ragas/metrics/_context_recall.py`
+  - `ContextRecallClassificationPrompt`
+
+These prompt classes are implemented as structured `PydanticPrompt` objects with:
+
+- an instruction
+- typed input schema
+- typed output schema
+- built-in examples
+
+That is the real prompt source the evaluator should be explained from.
+
+### Is It Sourced from Actual RAGAS Documentation?
+
+The safest answer is:
+
+- the canonical behavior comes from the `ragas` package source and official docs together
+- the package source is the ground truth for the exact live prompt classes and scoring flow
+- the official RAGAS docs explain the conceptual metric purpose, expected inputs, and usage patterns
+
+For this repo, when documenting the exact prompt behavior, prefer the installed package source first because it reflects what the runtime is actually using.
+
+## Metric Caveats You Should Explain Out Loud
+
+When presenting results, do not oversimplify the scores.
+
+### Faithfulness Caveats
+
+- depends on statement decomposition quality
+- can under-score answers if the judge fails to decompose correctly
+- can over-penalize compressed or implicit wording
+
+### Answer Relevancy Caveats
+
+- mixes judge generation with embedding similarity
+- can be affected by the chosen evaluation embedding model
+- does not directly prove factual correctness
+
+### Context Precision Caveats
+
+- sensitive to ranking order
+- sensitive to chunk size and chunk boundaries
+- can look worse even when the right evidence exists but is ranked too low
+
+### Context Recall Caveats
+
+- depends on the reference answer
+- can punish retrieval if the reference answer contains claims that are too broad or too detailed for the chosen dataset
+- can look artificially good if the reference answer is itself narrow or weak
 
 ## Supported Evaluation Modes
 
@@ -126,7 +331,7 @@ This model should be documented in the report as the system under test.
 
 The judge model is the model used by `RAGAS` or surrounding evaluation logic to score or interpret outputs.
 
-Recommended default:
+Recommended long-term default:
 
 - primary path uses an API judge
 - keep the judge model stable while changing only the system under test
@@ -186,7 +391,7 @@ Policy:
 
 ### Current Gap
 
-Today, synthetic QA generation exists, but it does not yet persist the full provenance payload described above.
+Today, the repo has a bootstrap dataset generated from `snapshot-chunk.json`, but it is still `synthetic_unreviewed` and should not be treated as a final benchmark.
 
 ## Phase 2: Run Retrieval-First Diagnostics
 
@@ -219,7 +424,7 @@ Useful current repo evidence:
 
 Use `RAGAS` as the main framework.
 
-Recommended default:
+Recommended long-term default:
 
 - evaluate local or API generation with an API-based judge
 
@@ -236,7 +441,7 @@ Document in every report:
 
 ### Current Gap
 
-The current runtime does not yet fully honor this separation. Although `config.evaluation.eval_llm` and `config.evaluation.eval_embeddings` exist, the pipeline currently initializes the evaluator from `self.llm.client`.
+The runtime now honors `config.evaluation` directly, but the shipped defaults are still local-first. That means the system can separate the judge from generation by configuration, yet the default setup still uses the same local model family for early iteration.
 
 ## Phase 4: Track Latency as a First-Class Output
 
@@ -317,7 +522,7 @@ Add or formalize the following `evaluation` fields:
 
 ### Required Runtime Changes
 
-- evaluation config must support independent judge settings instead of silently reusing `self.llm.client`
+- evaluation config must continue to support independent judge settings without silently falling back to the generation client
 - wire `evaluation.eval_llm` and `evaluation.eval_embeddings` through the actual runtime path
 - support OpenAI-compatible API judge configuration explicitly
 - keep generation-under-test and judge configuration separate
@@ -332,7 +537,7 @@ Add or formalize the following `evaluation` fields:
 
 ### Explicit Current Gap
 
-Today, the config suggests independent evaluation settings, but the runtime still initializes the evaluator from `self.llm.client` in `pipeline.py`.
+Today, the runtime reads evaluation config directly, but the default local-first configuration is still weaker than a truly independent API-judge setup.
 
 ## Validation Scenarios the Implementation Must Pass
 
@@ -351,17 +556,19 @@ Today, the config suggests independent evaluation settings, but the runtime stil
 If you are operating `my_rag` today and want the safest path before full eval hardening lands:
 
 1. Keep local generation under test if that matches the real deployment.
-2. Prefer an API judge for serious evaluation runs.
-3. Start from snapshot-grounded synthetic QA.
-4. Manually review a benchmark subset before making strong claims.
-5. Run retrieval diagnostics before celebrating RAGAS improvements.
-6. Record config, model identities, and dataset version for every run.
+2. Use the current local-first judge setup for fast iteration, but treat it as lower-trust.
+3. Prefer an API judge later for serious comparison runs or thesis-grade claims.
+4. Start from snapshot-grounded synthetic QA.
+5. Manually review a benchmark subset before making strong claims.
+6. Run retrieval diagnostics before celebrating RAGAS improvements.
+7. Record config, model identities, and dataset version for every run.
 
 ## Current Repo Notes
 
 The following behaviors are true today and should shape how you interpret evaluation results:
 
 - the existing CLI `eval` path is minimal and should not yet be treated as the final bulletproof workflow
+- the current bootstrap dataset artifact is `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`
 - the old README example using `python cli.py eval --config config_rag.yaml --synthetic --paths ...` overstates the current CLI surface
 - synthetic QA generation is useful for bootstrapping, but it is not yet a fully provenance-rich benchmark builder
 - the current documentation should point here for evaluation truth instead of duplicating methodology elsewhere
@@ -386,8 +593,18 @@ Use this structure for human-readable summaries derived from a future stable JSO
 For this repo, the best practical path is:
 
 - local or API generation under test
-- API judge as the default
+- local-first judge for iteration, then API judge for stronger later comparisons
 - snapshot-grounded synthetic QA as the bootstrap dataset
 - reviewed subset for strong claims
 - retrieval-first diagnosis before headline RAGAS conclusions
 - stable provenance and latency reporting as mandatory evaluation artifacts
+
+## External References
+
+When you need official upstream references while maintaining this guide, start with:
+
+- RAGAS documentation: `https://docs.ragas.io/`
+- RAGAS prompt reference: `https://docs.ragas.io/en/latest/references/prompt/`
+- RAGAS GitHub repository: `https://github.com/explodinggradients/ragas`
+
+For exact prompt behavior, verify the installed package source used by this repo before assuming the docs and your runtime are perfectly aligned.

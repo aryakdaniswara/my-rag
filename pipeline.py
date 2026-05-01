@@ -4,6 +4,7 @@ import logging
 import json
 import os
 import uuid
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -111,6 +112,128 @@ class RAGPipeline:
         self.ingestion_state = IngestionState(
             state_path=config.ingestion.state_path
         )
+
+    def _build_eval_llm(self):
+        mode = (self.config.evaluation.judge_mode or "api").strip().lower()
+        if mode not in {"api", "local", "reuse_generation"}:
+            raise ValueError(
+                "evaluation.judge_mode must be one of: api, local, reuse_generation"
+            )
+
+        judge_model = self.config.evaluation.eval_llm or self.config.generation.model_name
+
+        if mode == "reuse_generation":
+            endpoint = self.config.generation.llm_endpoint
+            api_key = os.getenv("OPENAI_API_KEY", "dummy")
+        elif mode == "local":
+            endpoint = (
+                self.config.evaluation.eval_llm_endpoint
+                or self.config.generation.llm_endpoint
+            )
+            api_key = os.getenv(
+                self.config.evaluation.eval_llm_api_key_env,
+                os.getenv("OPENAI_API_KEY", "dummy"),
+            )
+        else:
+            endpoint = self.config.evaluation.eval_llm_endpoint
+            api_key = os.getenv(self.config.evaluation.eval_llm_api_key_env)
+            if not api_key:
+                raise ValueError(
+                    "Missing API key for evaluation judge. "
+                    f"Set env var: {self.config.evaluation.eval_llm_api_key_env}"
+                )
+
+        from openai import OpenAI
+        from ragas.llms import llm_factory
+
+        client_kwargs = {"api_key": api_key}
+        if endpoint:
+            client_kwargs["base_url"] = endpoint
+
+        client = OpenAI(**client_kwargs)
+        return llm_factory(judge_model, client=client)
+
+    def _build_eval_embeddings(self):
+        eval_embeddings = self.config.evaluation.eval_embeddings
+        if not eval_embeddings:
+            raise ValueError("evaluation.eval_embeddings must be configured")
+
+        if self.config.evaluation.eval_embeddings_endpoint:
+            from langchain_openai import OpenAIEmbeddings as LangchainOpenAIEmbeddings
+            from ragas.embeddings import LangchainEmbeddingsWrapper
+
+            api_key = os.getenv(
+                self.config.evaluation.eval_llm_api_key_env,
+                os.getenv("OPENAI_API_KEY"),
+            )
+            if not api_key:
+                raise ValueError(
+                    "Missing API key for evaluation embeddings. "
+                    f"Set env var: {self.config.evaluation.eval_llm_api_key_env}"
+                )
+
+            embeddings = LangchainOpenAIEmbeddings(
+                model=eval_embeddings,
+                api_key=api_key,
+                base_url=self.config.evaluation.eval_embeddings_endpoint,
+            )
+            return LangchainEmbeddingsWrapper(embeddings)
+
+        if eval_embeddings.startswith("text-embedding-"):
+            from langchain_openai import OpenAIEmbeddings as LangchainOpenAIEmbeddings
+            from ragas.embeddings import LangchainEmbeddingsWrapper
+
+            api_key = os.getenv(
+                self.config.evaluation.eval_llm_api_key_env,
+                os.getenv("OPENAI_API_KEY"),
+            )
+            if not api_key:
+                raise ValueError(
+                    "Missing API key for evaluation embeddings. "
+                    f"Set env var: {self.config.evaluation.eval_llm_api_key_env}"
+                )
+
+            embeddings = LangchainOpenAIEmbeddings(
+                model=eval_embeddings,
+                api_key=api_key,
+            )
+            return LangchainEmbeddingsWrapper(embeddings)
+
+        from ragas.embeddings.base import HuggingfaceEmbeddings
+
+        return HuggingfaceEmbeddings(model_name=eval_embeddings)
+
+    @staticmethod
+    def _summarize_timings(records: List[Dict[str, Any]]) -> Dict[str, Optional[float]]:
+        if not records:
+            return {
+                "retrieval_time_ms_avg": None,
+                "generation_time_ms_avg": None,
+                "end_to_end_time_ms_avg": None,
+                "ttft_ms_avg": None,
+            }
+
+        def _avg(key: str) -> Optional[float]:
+            values = [float(r[key]) for r in records if r.get(key) is not None]
+            if not values:
+                return None
+            return sum(values) / len(values)
+
+        return {
+            "retrieval_time_ms_avg": _avg("retrieval_time_ms"),
+            "generation_time_ms_avg": _avg("generation_time_ms"),
+            "end_to_end_time_ms_avg": _avg("end_to_end_time_ms"),
+            "ttft_ms_avg": _avg("ttft_ms"),
+        }
+
+    def _write_eval_report(self, report: Dict[str, Any]) -> str:
+        report_dir = Path(self.config.evaluation.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = report_dir / f"eval_report_{timestamp}.json"
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2, ensure_ascii=False, default=str)
+        return str(output_path)
 
     @classmethod
     def from_config(cls, config: RAGConfig) -> "RAGPipeline":
@@ -894,17 +1017,59 @@ class RAGPipeline:
         """Evaluate the RAG pipeline using RAGAS metrics."""
         if self.evaluator is None:
             self.evaluator = RAGASEvaluator(
-                eval_llm=self.llm.client,
+                eval_llm=self._build_eval_llm(),
+                eval_embeddings=self._build_eval_embeddings(),
                 metrics=self.config.evaluation.metrics,
             )
 
         contexts = []
         answers = []
+        timings = []
+        sources = []
 
         for q in questions:
-            result = self.query(q)
+            query_started = time.time()
+
+            retrieval_started = time.time()
+            docs = self.retriever.retrieve(
+                query=q,
+                collection_name=self.config.storage.collection_name,
+                k=self.config.retrieval.k,
+            )
+            rerank_top_k = self.config.retrieval.rerank_top_k
+            docs = docs[:rerank_top_k]
+            retrieval_time_ms = (time.time() - retrieval_started) * 1000
+
+            generation_started = time.time()
+            llm_result = self.llm.generate(
+                prompt=q,
+                retrieved_docs=docs,
+                context=None if docs else "No context provided.",
+            )
+            generation_time_ms = (time.time() - generation_started) * 1000
+            end_to_end_time_ms = (time.time() - query_started) * 1000
+
+            result = RAGResult(
+                answer=llm_result.answer,
+                context=llm_result.context,
+                retrieved_docs=docs,
+                sources=llm_result.sources,
+                confidence_score=self._compute_retrieval_strength(docs),
+                metadata={"query": q, "num_docs": len(docs)},
+            )
             contexts.append([result.context])
             answers.append(result.answer)
+            sources.append(result.sources)
+            timings.append(
+                {
+                    "question": q,
+                    "retrieval_time_ms": retrieval_time_ms,
+                    "generation_time_ms": generation_time_ms,
+                    "end_to_end_time_ms": end_to_end_time_ms,
+                    "ttft_ms": None,
+                    "stream_completed": None,
+                }
+            )
 
         eval_results = self.evaluator.evaluate(
             questions=questions,
@@ -915,7 +1080,37 @@ class RAGPipeline:
             rerank_logs=rerank_logs,
         )
 
-        return eval_results
+        report = {
+            "generated_at": datetime.now().isoformat(),
+            "judge_mode": self.config.evaluation.judge_mode,
+            "models": {
+                "generation_model": self.config.generation.model_name,
+                "generation_endpoint": self.config.generation.llm_endpoint,
+                "judge_model": self.config.evaluation.eval_llm,
+                "judge_endpoint": self.config.evaluation.eval_llm_endpoint,
+                "evaluation_embeddings": self.config.evaluation.eval_embeddings,
+                "evaluation_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
+            },
+            "dataset": {
+                "dataset_path": self.config.evaluation.dataset_path,
+                "question_count": len(questions),
+                "has_ground_truths": ground_truths is not None,
+            },
+            "timings": {
+                "per_question": timings,
+                "summary": self._summarize_timings(timings),
+            },
+            "results": eval_results,
+            "artifacts": {
+                "sources": sources,
+            },
+            "caveats": [
+                "ttft_ms is not captured for this non-streaming evaluation path",
+                "independent judge configuration depends on evaluation config and available API credentials",
+            ],
+        }
+        report["report_path"] = self._write_eval_report(report)
+        return report
 
     def generate_synthetic_qa(
         self,

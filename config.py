@@ -75,8 +75,14 @@ class EvaluationConfig:
             "context_recall",
         ]
     )
+    judge_mode: str = "api"
     eval_llm: str = "gpt-4o-mini"
+    eval_llm_endpoint: Optional[str] = None
+    eval_llm_api_key_env: str = "OPENAI_API_KEY"
     eval_embeddings: str = "all-MiniLM-L6-v2"
+    eval_embeddings_endpoint: Optional[str] = None
+    dataset_path: Optional[str] = None
+    report_dir: str = "storage/eval_reports"
     num_synthetic_qa: int = 3
 
 
