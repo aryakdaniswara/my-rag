@@ -108,10 +108,15 @@ python cli.py trace --config config_rag.yaml --query "..." --check-keyword "acti
 ```
 
 ### 5. Evaluation
-Generate synthetic QA and evaluate:
-```bash
-python cli.py eval --config config_rag.yaml --synthetic --paths ./data/sample.pdf
-```
+Evaluation guidance now lives in [EVALUATION_GUIDE.md](./EVALUATION_GUIDE.md).
+
+Use that guide as the canonical source of truth for:
+
+- what the current repo can evaluate today
+- what still needs to be hardened for a bulletproof workflow
+- how to think about independent judges, synthetic QA, reviewed benchmarks, latency, and TTFT
+
+The current CLI `eval` command is still a minimal path and should not be mistaken for the final evaluation system described in the guide.
 
 ## Architecture
 

@@ -117,6 +117,8 @@ For a responsive user experience, the system supports real-time token streaming:
   - **Reranking Failure**: Relevant info was in top-50 but ranked too low.
   - **Generation Failure**: Correct context was present, but the LLM failed to use it.
 - **Synthetic QA**: A module that uses the LLM to generate "Ground Truth" Q&A pairs from your documents.
+- **Canonical Guide**: Evaluation methodology, current limitations, target hardening design, judge independence, dataset provenance, and latency/TTFT guidance now live in `EVALUATION_GUIDE.md`.
+- **Important Current Limitation**: The current runtime evaluation path is not yet the final bulletproof design. In particular, config fields such as `evaluation.eval_llm` and `evaluation.eval_embeddings` are not yet fully honored end-to-end, and the pipeline currently initializes the evaluator from the generation client.
 
 ---
 
@@ -347,9 +349,22 @@ python cli.py trace --config config_rag.yaml --query "..." --check-keyword "acti
 ```
 
 ### 7.5 Evaluation
+
+Use `EVALUATION_GUIDE.md` as the canonical evaluation document.
+
+The current CLI command remains a minimal path:
+
 ```bash
-python cli.py eval --config config_rag.yaml --synthetic --paths ./data/doc.pdf
+python cli.py eval --config config_rag.yaml --questions "Example question"
 ```
+
+Treat that CLI path as a basic starting point, not as the full bulletproof evaluation workflow. The guide documents the current gaps and the target design for:
+
+- independent judge configuration
+- snapshot-grounded synthetic datasets
+- reviewed benchmark subsets
+- stable result bundles
+- latency and TTFT tracking
 
 ---
 
@@ -367,6 +382,7 @@ python cli.py eval --config config_rag.yaml --synthetic --paths ./data/doc.pdf
 ### Adding New Evaluation Metrics
 1. Add the metric class from `ragas.metrics` to the `metric_map` in `evaluation/evaluator.py`.
 2. Add the metric name to the `metrics` list in `config_rag.yaml`.
+3. Re-check `EVALUATION_GUIDE.md` so the evaluation contract stays aligned with the actual implementation.
 
 ---
 
