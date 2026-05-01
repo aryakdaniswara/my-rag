@@ -83,6 +83,12 @@ services:
       - ./storage/hf_cache:/root/.cache/huggingface
       # Debugging: saved chunks before embedding (snapshots)
       - ./storage/snapshots:/app/storage/snapshots
+      # Evaluation: curated/bootstrapped datasets used by eval runs
+      - ./storage/eval_datasets:/app/storage/eval_datasets
+      # Evaluation: persisted eval report bundles
+      - ./storage/eval_reports:/app/storage/eval_reports
+      # Rebuild bundles and detached rebuild logs
+      - ./storage/rebuilds:/app/storage/rebuilds
       # Uploads: directory for user-uploaded documents
       - ./uploads:/app/uploads:rw
     environment:

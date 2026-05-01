@@ -1,0 +1,222 @@
+[
+  {
+    "question": "Selain dari anggaran pendapatan dan belanja negara, pendapatan Universitas Indonesia juga dapat berasal dari apa?",
+    "answer": "Selain dari anggaran pendapatan dan belanja negara, pendapatan Universitas Indonesia juga dapat berasal dari biaya pendidikan.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 0,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > REKTOR UNIVERSITAS INDONESIA,",
+      "benchmark_group": "legal_basis"
+    }
+  },
+  {
+    "question": "Menurut Peraturan Menteri Pendidikan, Kebudayaan, Riset, dan Teknologi Nomor 2 Tahun 2024, apa yang menjadi dasar dalam penetapan tarif Uang Kuliah Tunggal?",
+    "answer": "Dasar dalam penetapan tarif Uang Kuliah Tunggal adalah Biaya Kuliah Tunggal yang ditetapkan oleh direktorat jenderal yang mempunyai tugas dan fungsi di bidang pendidikan akademik.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 1,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > REKTOR UNIVERSITAS INDONESIA,",
+      "benchmark_group": "legal_basis"
+    }
+  },
+  {
+    "question": "Menurut Peraturan Menteri Pendidikan, Kebudayaan, Riset, dan Teknologi Nomor 2 Tahun 2024, sebelum tarif Uang Kuliah Tunggal ditetapkan, konsultasi dilakukan dengan pihak mana?",
+    "answer": "Sebelum tarif Uang Kuliah Tunggal ditetapkan, konsultasi dilakukan dengan kementerian yang menyelenggarakan urusan pemerintahan di bidang pendidikan melalui direktorat jenderal yang mempunyai tugas dan fungsi di bidang pendidikan akademik.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 2,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > REKTOR UNIVERSITAS INDONESIA,",
+      "benchmark_group": "legal_basis"
+    }
+  },
+  {
+    "question": "Peraturan Rektor Universitas Indonesia Nomor 2 Tahun 2025 mengatur tentang apa?",
+    "answer": "Peraturan Rektor Universitas Indonesia Nomor 2 Tahun 2025 mengatur tentang Biaya Pendidikan.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 4,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > REKTOR UNIVERSITAS INDONESIA,",
+      "benchmark_group": "legal_basis"
+    }
+  },
+  {
+    "question": "Apa nomor surat Direktorat Jenderal Pendidikan Tinggi, Riset, dan Teknologi tanggal 12 Maret 2026 yang berisi rekomendasi tarif UKT dan IPI Universitas Indonesia?",
+    "answer": "Nomor surat tersebut adalah 152/DST/B.B1/PR.07.04/2026.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 5,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > REKTOR UNIVERSITAS INDONESIA,",
+      "benchmark_group": "document_reference"
+    }
+  },
+  {
+    "question": "Keputusan Rektor Universitas Indonesia tentang tarif Uang Kuliah Tunggal bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi menetapkan tarif untuk jalur apa dan tahun akademik berapa?",
+    "answer": "Keputusan Rektor Universitas Indonesia tentang tarif Uang Kuliah Tunggal bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi menetapkan tarif bagi mahasiswa jalur Seleksi Nasional Berbasis Prestasi dan jalur Seleksi Nasional Berbasis Tes Tahun Akademik 2026/2027.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 6,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > MEMUTUSKAN:",
+      "benchmark_group": "decision_scope"
+    }
+  },
+  {
+    "question": "Kapan Keputusan Rektor Universitas Indonesia tentang tarif Uang Kuliah Tunggal bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi mulai berlaku?",
+    "answer": "Keputusan Rektor Universitas Indonesia tentang tarif Uang Kuliah Tunggal bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi mulai berlaku untuk Tahun Akademik 2026/2027.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 8,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > MEMUTUSKAN:",
+      "benchmark_group": "decision_scope"
+    }
+  },
+  {
+    "question": "Berapa UKT 11 untuk Program Studi Pendidikan Dokter?",
+    "answer": "UKT 11 untuk Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 22,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > A. Program Sarjana",
+      "benchmark_group": "ukt_lookup"
+    }
+  },
+  {
+    "question": "Apakah Program Studi Sastra Arab memiliki UKT 10 pada lampiran tarif Uang Kuliah Tunggal Program Sarjana Tahun Akademik 2026/2027?",
+    "answer": "Tidak. Pada lampiran tarif Uang Kuliah Tunggal Program Sarjana Tahun Akademik 2026/2027, UKT 10 untuk Program Studi Sastra Arab ditandai dengan '-'.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 25,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-4.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-4.pdf > A. Program Sarjana",
+      "benchmark_group": "ukt_lookup"
+    }
+  },
+  {
+    "question": "Berapa UKT dan IPI untuk Program Studi Ilmu Komputer pada jalur khusus kerja sama Tahun Akademik 2026/2027?",
+    "answer": "Untuk Program Studi Ilmu Komputer pada jalur khusus kerja sama Tahun Akademik 2026/2027, UKT-nya adalah Rp29.300.000 dan IPI-nya adalah Rp80.000.000.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 177,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-1.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-1.pdf > Tarif Uang Kuliah Tunggal dan Iuran Pengembangan Institusi Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027",
+      "benchmark_group": "ukt_ipi_lookup"
+    }
+  },
+  {
+    "question": "Berapa biaya registrasi status kuliah di luar negeri bagi mahasiswa berstatus overseas?",
+    "answer": "Biaya registrasi status kuliah di luar negeri bagi mahasiswa berstatus overseas adalah Rp1.100.000 per semester atau term.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 162,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "pdf-proxy-1.pdf",
+      "breadcrumb": "www.ui.ac.id > pdf-proxy-1.pdf > MEMUTUSKAN:",
+      "benchmark_group": "special_case_rule"
+    }
+  },
+  {
+    "question": "Berapa tarif biaya tunda kuliah bagi calon mahasiswa Program Pascasarjana?",
+    "answer": "Tarif biaya tunda kuliah bagi calon mahasiswa Program Pascasarjana adalah 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1",
+    "chunk_id": 186,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "pdf_url": "https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf",
+      "page_url": "https://www.ui.ac.id/skbp2026/",
+      "filename": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf",
+      "breadcrumb": "www.ui.ac.id > SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf > MEMUTUSKAN:",
+      "benchmark_group": "tunda_kuliah"
+    }
+  },
+  {
+    "question": "Di mana pengguna bisa melihat info lebih lanjut tentang penetapan UKT Universitas Indonesia?",
+    "answer": "Info lebih lanjut tentang penetapan UKT Universitas Indonesia dapat dilihat di situs resmi UKT Universitas Indonesia: https://ukt.ui.ac.id/.",
+    "sample_label": "synthetic_unreviewed",
+    "doc_id": "page-html-ukt",
+    "chunk_id": 2696,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "page_number": null,
+    "metadata": {
+      "page_url": "https://www.ui.ac.id/",
+      "filename": "page.html",
+      "breadcrumb": "www.ui.ac.id > page.html > SK Biaya Pendidikan Universitas Indonesia 2026 > Untuk Info Lebih Lanjut Situs Resmi Penetapan UKT Universitas Indonesia :",
+      "benchmark_group": "source_discovery"
+    }
+  }
+]

@@ -114,7 +114,7 @@ class RAGPipeline:
         )
 
     def _build_eval_llm(self):
-        mode = (self.config.evaluation.judge_mode or "api").strip().lower()
+        mode = (self.config.evaluation.judge_mode or "local").strip().lower()
         if mode not in {"api", "local", "reuse_generation"}:
             raise ValueError(
                 "evaluation.judge_mode must be one of: api, local, reuse_generation"

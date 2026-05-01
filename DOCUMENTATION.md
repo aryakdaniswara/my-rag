@@ -119,6 +119,7 @@ For a responsive user experience, the system supports real-time token streaming:
 - **Synthetic QA**: A module that uses the LLM to generate "Ground Truth" Q&A pairs from your documents.
 - **Canonical Guide**: Evaluation methodology, current limitations, target hardening design, judge independence, dataset provenance, and latency/TTFT guidance now live in `EVALUATION_GUIDE.md`.
 - **Important Current Limitation**: The current runtime evaluation path is still not the final bulletproof design. Evaluation config is now wired through the runtime, but the shipped defaults are intentionally local-first, so they are weaker than a truly independent API-judge setup.
+- **Current Iteration Dataset**: The default benchmark is `storage/eval_datasets/ui_mixed_seed.json`, with the broader snapshot-grounded dataset kept as a bootstrap artifact and narrower slice datasets kept for targeted checks.
 
 ---
 

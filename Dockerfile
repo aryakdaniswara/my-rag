@@ -60,6 +60,10 @@ RUN pip uninstall -y opencv-python opencv-python-headless opencv-contrib-python 
 # Copy project source
 COPY . .
 
+# Create runtime storage directories used by rebuilds, evaluation reports,
+# and bootstrapped evaluation datasets when bind mounts are absent.
+RUN mkdir -p /app/storage/snapshots /app/storage/rebuilds /app/storage/eval_reports /app/storage/eval_datasets /app/uploads
+
 EXPOSE 8000
 
 CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]

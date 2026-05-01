@@ -118,6 +118,8 @@ Use that guide as the canonical source of truth for:
 
 The current CLI `eval` command is still a minimal path and should not be mistaken for the final evaluation system described in the guide.
 
+For day-to-day iteration, the default evaluation dataset is currently the mixed seed file `storage/eval_datasets/ui_mixed_seed.json`, while narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
+
 ## Architecture
 
 - `ingestion/`: Document parsing and chunking.

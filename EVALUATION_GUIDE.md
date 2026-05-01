@@ -39,9 +39,11 @@ It does not mean "one metric says we are done." A bulletproof eval stack is a co
 - The pipeline now builds the evaluator from `config.evaluation` rather than silently reusing `self.llm.client`.
 - The current config defaults are local-first, so independence is a policy and configuration choice, not an automatic guarantee.
 - A bootstrap synthetic dataset now exists at `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`.
-- Retrieval timing exists today in the `/debug/retrieve` path as `retrieval_time_ms`.
-- General end-to-end query timing, generation timing, and time to first token (TTFT) are not yet formalized as stable evaluation outputs.
-- There is no stable per-run evaluation bundle format yet.
+- The current default evaluation dataset is the broader mixed seed `storage/eval_datasets/ui_mixed_seed.json`.
+- The evaluation path now records per-sample `retrieval_time_ms`, `generation_time_ms`, and `end_to_end_time_ms`.
+- Evaluation runs now write one JSON bundle per run under `evaluation.report_dir`.
+- `ttft_ms` is still not captured in the current non-streaming evaluation path.
+- `stream_completed` is documented but not yet populated by the current non-streaming evaluation path.
 
 ### Target Bulletproof State
 
@@ -74,6 +76,78 @@ It does not mean "one metric says we are done." A bulletproof eval stack is a co
 - one-off anecdotal answers that "look good"
 - metric changes after model or config drift without version tracking
 - headline RAGAS claims made before retrieval quality is checked
+
+## What Is Fair for This System
+
+For this repo, a fair evaluation setup is not just "more questions." It should reflect the real user job the system is trying to do.
+
+That means:
+
+- broad mixed-document synthetic QA is useful as a bootstrap smoke test
+- task-focused benchmarks are better for judging whether the system is actually good at a concrete UI support job
+
+Right now, a more fair short-term benchmark is a mixed seed built from multiple use-case slices such as:
+
+- UKT lookup and tariff interpretation
+- rector-decision or policy lookup
+- official link or source discovery
+
+Why this is better:
+
+- the questions are closer to how users actually ask
+- retrieval quality is tested on the exact chunk shapes that matter
+- answer evaluation is less diluted by unrelated document genres
+- failures become easier to attribute to chunking, retrieval, table flattening, or answer synthesis
+
+Current repo recommendation:
+
+- keep the broad snapshot-grounded dataset as a bootstrap artifact
+- use a mixed seed dataset as the default benchmark for iteration
+- keep narrower sub-benchmarks for specific diagnostics like UKT-only or policy-only checks
+
+The current default seed dataset in config is:
+
+- `storage/eval_datasets/ui_mixed_seed.json`
+
+The broader bootstrap artifact remains:
+
+- `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`
+
+## How To Make Synthetic QA Fair
+
+Synthetic QA is useful here, but it becomes misleading if every question is too clean, too literal, or too close to one chunk.
+
+For this system, a fair synthetic benchmark slice should include a mix of:
+
+- direct lookup questions
+- paraphrased user-style questions
+- source-discovery questions asking where the answer comes from
+- boundary questions where the correct answer is "not listed" or "not found in this document"
+- comparison questions only if the live product is expected to answer them
+
+It should avoid:
+
+- only copy-paste phrasings from the chunk text
+- only single-sentence answers with no ambiguity
+- only positive cases where the answer definitely exists
+- mixing too many unrelated document types into one tiny dataset and then reporting one headline score
+- generic prompts that rely on referents such as `ini`, `itu`, `dokumen ini`, or `lampiran ini`
+- questions that omit the concrete entity, program studi, jalur, or tahun akademik needed for retrieval
+
+Practical benchmark design for this repo:
+
+- `UKT / tariff lookup`
+  - best for table flattening, retrieval, and exact-answer grounding
+- `Rector / policy lookup`
+  - best for decree references, legal basis, and citation-style source grounding
+- `Official source discovery`
+  - best for checking whether the system can point users to the right page or document
+
+Recommended short-term path:
+
+1. Keep `storage/eval_datasets/ui_mixed_seed.json` as the main iteration slice.
+2. Keep narrower sub-benchmarks such as `storage/eval_datasets/ukt_fasilkom_seed.json` for targeted regression checks.
+3. Review the mixed seed manually before using it for serious claims.
 
 ## How RAGAS Actually Works
 
@@ -391,7 +465,7 @@ Policy:
 
 ### Current Gap
 
-Today, the repo has a bootstrap dataset generated from `snapshot-chunk.json`, but it is still `synthetic_unreviewed` and should not be treated as a final benchmark.
+Today, the repo has bootstrap datasets generated from `snapshot-chunk.json`, but they are still `synthetic_unreviewed` and should not be treated as final benchmarks.
 
 ## Phase 2: Run Retrieval-First Diagnostics
 
@@ -469,7 +543,7 @@ Recommended interpretation:
 
 ### Current Gap
 
-The current repo exposes retrieval timing in the debug retrieval path, but does not yet emit a stable eval artifact with all latency fields above.
+The current repo emits stable JSON eval artifacts and captures non-streaming latency fields, but it still does not capture `ttft_ms` or streaming completion state in the main evaluation path.
 
 ## Phase 5: Produce a Stable Final Report
 
@@ -558,7 +632,7 @@ If you are operating `my_rag` today and want the safest path before full eval ha
 1. Keep local generation under test if that matches the real deployment.
 2. Use the current local-first judge setup for fast iteration, but treat it as lower-trust.
 3. Prefer an API judge later for serious comparison runs or thesis-grade claims.
-4. Start from snapshot-grounded synthetic QA.
+4. Start from snapshot-grounded synthetic QA, then narrow into task-focused benchmark slices.
 5. Manually review a benchmark subset before making strong claims.
 6. Run retrieval diagnostics before celebrating RAGAS improvements.
 7. Record config, model identities, and dataset version for every run.
@@ -569,6 +643,7 @@ The following behaviors are true today and should shape how you interpret evalua
 
 - the existing CLI `eval` path is minimal and should not yet be treated as the final bulletproof workflow
 - the current bootstrap dataset artifact is `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`
+- the current default benchmark artifact is `storage/eval_datasets/ui_mixed_seed.json`
 - the old README example using `python cli.py eval --config config_rag.yaml --synthetic --paths ...` overstates the current CLI surface
 - synthetic QA generation is useful for bootstrapping, but it is not yet a fully provenance-rich benchmark builder
 - the current documentation should point here for evaluation truth instead of duplicating methodology elsewhere
@@ -595,6 +670,8 @@ For this repo, the best practical path is:
 - local or API generation under test
 - local-first judge for iteration, then API judge for stronger later comparisons
 - snapshot-grounded synthetic QA as the bootstrap dataset
+- a mixed benchmark spanning multiple chunk sections as the default iteration target
+- narrower slice benchmarks such as UKT/FASILKOM for targeted regression checks
 - reviewed subset for strong claims
 - retrieval-first diagnosis before headline RAGAS conclusions
 - stable provenance and latency reporting as mandatory evaluation artifacts
