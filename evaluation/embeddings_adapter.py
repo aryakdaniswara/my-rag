@@ -31,6 +31,9 @@ class LocalDenseRagasEmbeddings:
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         return self._embedder.embed_documents(texts)
 
+    def unload(self) -> None:
+        self._embedder.unload()
+
     async def aembed_query(self, text: str) -> List[float]:
         return await asyncio.to_thread(self.embed_query, text)
 

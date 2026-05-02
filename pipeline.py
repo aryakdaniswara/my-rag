@@ -112,6 +112,36 @@ class RAGPipeline:
             state_path=config.ingestion.state_path
         )
 
+    def close(self) -> None:
+        """Release local model resources held by this pipeline."""
+        try:
+            self.dense_model.unload()
+        except Exception as exc:
+            logger.warning("Failed to unload dense model: %s", exc)
+
+        try:
+            self.sparse_model.unload()
+        except Exception as exc:
+            logger.warning("Failed to unload sparse model: %s", exc)
+
+        if self.evaluator is not None:
+            try:
+                eval_embeddings = getattr(self.evaluator, "eval_embeddings", None)
+                if hasattr(eval_embeddings, "unload"):
+                    eval_embeddings.unload()
+            except Exception as exc:
+                logger.warning("Failed to unload eval embeddings: %s", exc)
+
+        try:
+            import gc
+            import torch
+
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception as exc:
+            logger.warning("Failed during final CUDA cleanup: %s", exc)
+
     def _build_eval_llm(self):
         mode = (self.config.evaluation.judge_mode or "local").strip().lower()
         if mode not in {"api", "local", "reuse_generation"}:

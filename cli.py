@@ -250,6 +250,7 @@ def _run_eval_matrix(
 
         label = spec.label or spec.model_name
         print(f"[{index}/{len(model_specs)}] Evaluating {label}")
+        run_rag = None
         try:
             run_rag = RAGPipeline(run_config)
             report = run_rag.evaluate(
@@ -277,6 +278,9 @@ def _run_eval_matrix(
                 },
                 "report_path": None,
             }
+        finally:
+            if run_rag is not None:
+                run_rag.close()
 
         matrix_entry = _build_matrix_entry(report, label)
         aggregate["models"].append(matrix_entry)

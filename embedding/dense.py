@@ -31,6 +31,7 @@ class DenseEmbeddingModel(BaseEmbeddingModel):
         if self._model is None:
             from sentence_transformers import SentenceTransformer
             import torch
+            from transformers import BitsAndBytesConfig
 
             model_kwargs = {
                 "trust_remote_code": True,
@@ -38,7 +39,9 @@ class DenseEmbeddingModel(BaseEmbeddingModel):
                 "attn_implementation": "sdpa",
             }
             if self.quantize_8bit:
-                model_kwargs["load_in_8bit"] = True
+                model_kwargs["quantization_config"] = BitsAndBytesConfig(
+                    load_in_8bit=True
+                )
 
             self._model = SentenceTransformer(
                 self.model_name,
