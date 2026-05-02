@@ -1,2 +1,2 @@
 # Evaluation run config: qwen3.5:8b under test, fixed Gemini judge.
-extends: "../../config_server.yaml"
+extends: "./eval_base_api_judge.yaml"

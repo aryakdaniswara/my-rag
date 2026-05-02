@@ -584,10 +584,12 @@ Current deployment caveat:
 
 Current run layout:
 
+- `evaluation/configs/eval_base_api_judge.yaml` as the canonical comparison baseline
 - `evaluation/configs/config_eval_qwen35_8b.yaml` for the `qwen3.5:8b` run
 - `evaluation/configs/config_eval_qwen35_4b.yaml` for the `qwen3.5:4b` run
 - `evaluation/configs/config_eval_qwen35_2b.yaml` for the `qwen3.5:2b` run
-- these comparison configs now inherit from `config_server.yaml` and override only the generation model under test
+- the per-model configs now inherit from `evaluation/configs/eval_base_api_judge.yaml` and override only the generation model under test
+- `config_server.yaml` remains the deployment/runtime config and is no longer the evaluation inheritance root
 - all three configs should keep the same judge settings so the comparison stays fair
 
 ### Evaluation Embeddings
