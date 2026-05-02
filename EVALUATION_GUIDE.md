@@ -415,6 +415,26 @@ Do not assume:
 - the best answer model is automatically the best judge
 - the generation model should judge itself by default
 
+Current practical recommendation for this repo:
+
+- keep the local system-under-test comparison narrow: `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:8b`
+- keep the judge fixed across those runs instead of changing both generation and judge at once
+- current target serious judge is `gemma-4-31b-it`
+- for now, use the normal Gemini API/OpenAI-compatible behavior for that judge rather than retrofitting Gemini-specific thinking controls into the repo's current eval path
+
+Current deployment caveat:
+
+- `gemma-4-31b-it` was validated live on the Gemini API and is the selected judge for the next round of comparisons
+- Gemini-specific thinking controls were explored, but they are not wired into the repo's current evaluation path
+- because of that, do not claim reduced or minimal thinking in eval reports unless the runtime path is later updated and re-verified
+
+Current run layout:
+
+- `evaluation/configs/config_eval_qwen35_8b.yaml` for the `qwen3.5:8b` run
+- `evaluation/configs/config_eval_qwen35_4b.yaml` for the `qwen3.5:4b` run
+- `evaluation/configs/config_eval_qwen35_2b.yaml` for the `qwen3.5:2b` run
+- all three configs should keep the same judge settings so the comparison stays fair
+
 ### Evaluation Embeddings
 
 Evaluation embeddings are separate from retrieval embeddings.

@@ -1,4 +1,4 @@
-# Server Configuration for Docker Deployment
+# Evaluation run config: qwen3.5:4b under test, fixed Gemini judge.
 ingestion:
   chunk_size: 1000
   chunk_overlap: 120
@@ -30,8 +30,8 @@ storage:
   metric_type: "COSINE"
 
 retrieval:
-  k: 15                         # Candidate pool fetched from Milvus before reranking
-  rerank_top_k: 10               # Docs passed to the LLM after reranking
+  k: 15
+  rerank_top_k: 10
   hybrid_weight: 0.5
   reranker_model: null
   reranker_endpoint: "http://127.0.0.1:8012/v1/rerank"
@@ -39,10 +39,10 @@ retrieval:
 
 generation:
   llm_endpoint: "http://127.0.0.1:11434/v1"
-  model_name: "qwen3.5:8b" # Primary local candidate; compare against qwen3.5:4b and qwen3.5:2b in separate runs
+  model_name: "qwen3.5:4b"
   max_tokens: 1200
   temperature: 0.2
-  reasoning_effort: none # If reasoning is set to high, max token should be adjusted to
+  reasoning_effort: none
 
 evaluation:
   metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
