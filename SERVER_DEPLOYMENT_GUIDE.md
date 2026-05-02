@@ -176,6 +176,7 @@ services:
       # Ollama (and many OpenAI-compatible endpoints) require an API key
       # variable to be set, even though it's not actually validated.
       - OPENAI_API_KEY=dummy
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
 
     # ── GPU Configuration ──────────────────────────────────────────────────
     # GPU 0: Dense (Harrier) + Sparse (OpenSearch) embedding models
@@ -580,6 +581,7 @@ This section documents every production issue encountered on `riset-01` and its 
 | `Milvus connector failed: name resolution` | Host mode container cannot resolve Docker name `milvus` | Use `http://127.0.0.1:19530` in `config_server.yaml` ✅ |
 | `ImportError: bitsandbytes quantization` | Missing `bitsandbytes` or `accelerate` | Add to `requirements.txt` and rebuild image ✅ |
 | `OPENAI_API_KEY not found` | Ollama requires the var set | `environment: OPENAI_API_KEY=dummy` ✅ |
+| `Missing API key for evaluation judge. Set env var: GEMINI_API_KEY` | The API judge key is not available inside `rag-api` | Create `.env` beside `docker-compose.yml` with `GEMINI_API_KEY=...`, then `docker compose restart rag-api` |
 | Port 8000 unreachable from network | Server firewall (`ufw`) blocking the port | Ask server admin: `sudo ufw allow 8000/tcp` |
 
 ### Performance

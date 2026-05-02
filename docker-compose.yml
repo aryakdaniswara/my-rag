@@ -95,6 +95,8 @@ services:
       - RAG_CONFIG_PATH=/app/config_rag.yaml
       # Ollama and OpenAI-compatible endpoints require this var even with a dummy value
       - OPENAI_API_KEY=dummy
+      # Evaluation judge API key loaded from local .env
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       # Memory management for PyTorch to avoid fragmentation
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
