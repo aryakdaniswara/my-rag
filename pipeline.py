@@ -1013,6 +1013,7 @@ class RAGPipeline:
         ground_truths: Optional[List[str]] = None,
         retrieval_logs: Optional[List[Dict]] = None,
         rerank_logs: Optional[List[Dict]] = None,
+        dataset_metadata: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """Evaluate the RAG pipeline using RAGAS metrics."""
         if self.evaluator is None:
@@ -1109,6 +1110,8 @@ class RAGPipeline:
                 "independent judge configuration depends on evaluation config and available API credentials",
             ],
         }
+        if dataset_metadata:
+            report["dataset"].update(dataset_metadata)
         report["report_path"] = self._write_eval_report(report)
         return report
 

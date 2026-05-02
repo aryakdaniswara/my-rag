@@ -39,11 +39,12 @@ It does not mean "one metric says we are done." A bulletproof eval stack is a co
 - The pipeline now builds the evaluator from `config.evaluation` rather than silently reusing `self.llm.client`.
 - The current config defaults are local-first, so independence is a policy and configuration choice, not an automatic guarantee.
 - A bootstrap synthetic dataset now exists at `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`.
-- The current default evaluation dataset is the broader mixed seed `storage/eval_datasets/ui_mixed_seed.json`.
+- The current default evaluation dataset is the broader mixed seed `storage/eval_datasets/ui_mixed_seed.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is omitted.
 - The evaluation path now records per-sample `retrieval_time_ms`, `generation_time_ms`, and `end_to_end_time_ms`.
 - Evaluation runs now write one JSON bundle per run under `evaluation.report_dir`.
 - `ttft_ms` is still not captured in the current non-streaming evaluation path.
 - `stream_completed` is documented but not yet populated by the current non-streaming evaluation path.
+- `context_recall` is skipped automatically when no ground-truth/reference answers are available.
 
 ### Target Bulletproof State
 
@@ -586,6 +587,7 @@ Current run layout:
 - `evaluation/configs/config_eval_qwen35_8b.yaml` for the `qwen3.5:8b` run
 - `evaluation/configs/config_eval_qwen35_4b.yaml` for the `qwen3.5:4b` run
 - `evaluation/configs/config_eval_qwen35_2b.yaml` for the `qwen3.5:2b` run
+- these comparison configs now inherit from `config_server.yaml` and override only the generation model under test
 - all three configs should keep the same judge settings so the comparison stays fair
 
 ### Evaluation Embeddings
@@ -817,7 +819,7 @@ The following behaviors are true today and should shape how you interpret evalua
 - the existing CLI `eval` path is minimal and should not yet be treated as the final bulletproof workflow
 - the current bootstrap dataset artifact is `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`
 - the current default benchmark artifact is `storage/eval_datasets/ui_mixed_seed.json`
-- the old README example using `python cli.py eval --config config_rag.yaml --synthetic --paths ...` overstates the current CLI surface
+- the CLI now supports three practical input paths: `--questions`, `--synthetic`, or the configured `evaluation.dataset_path`
 - synthetic QA generation is useful for bootstrapping, but it is not yet a fully provenance-rich benchmark builder
 - the current documentation should point here for evaluation truth instead of duplicating methodology elsewhere
 

@@ -36,6 +36,59 @@ def _load_json(path: Path) -> dict:
         return json.load(f)
 
 
+def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
+    if not path.exists():
+        raise FileNotFoundError(f"evaluation dataset not found: {path}")
+
+    with open(path, "r", encoding="utf-8") as f:
+        rows = json.load(f)
+
+    if not isinstance(rows, list) or not rows:
+        raise ValueError(f"evaluation dataset must be a non-empty JSON array: {path}")
+
+    questions: list[str] = []
+    ground_truths: list[str | None] = []
+    sample_label_counts: dict[str, int] = {}
+
+    for idx, row in enumerate(rows, start=1):
+        if not isinstance(row, dict):
+            raise ValueError(f"dataset row {idx} must be a JSON object")
+
+        question = row.get("question")
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError(f"dataset row {idx} is missing a non-empty 'question'")
+
+        reference = row.get("ground_truth")
+        if reference is None:
+            reference = row.get("reference")
+        if reference is None:
+            reference = row.get("answer")
+
+        if reference is not None and not isinstance(reference, str):
+            raise ValueError(
+                f"dataset row {idx} has a non-string reference answer field"
+            )
+
+        questions.append(question)
+        ground_truths.append(reference.strip() if isinstance(reference, str) else None)
+
+        sample_label = row.get("sample_label")
+        if isinstance(sample_label, str) and sample_label.strip():
+            sample_label_counts[sample_label] = sample_label_counts.get(sample_label, 0) + 1
+
+    has_any_ground_truth = any(
+        isinstance(reference, str) and reference for reference in ground_truths
+    )
+    metadata = {
+        "dataset_path": str(path),
+        "dataset_row_count": len(rows),
+        "has_ground_truths": has_any_ground_truth,
+        "sample_label_counts": sample_label_counts,
+    }
+
+    return questions, (ground_truths if has_any_ground_truth else None), metadata
+
+
 def _default_rebuild_root(base_config_path: str, timestamp: str) -> Path:
     base_path = Path(base_config_path)
     return base_path.parent / "storage" / "rebuilds" / timestamp
@@ -220,6 +273,10 @@ def main():
     eval_parser = subparsers.add_parser("eval", help="Evaluate RAG with synthetic QA")
     eval_parser.add_argument("--config", required=True, help="Path to config YAML")
     eval_parser.add_argument("--questions", nargs="*", help="Questions to evaluate")
+    eval_parser.add_argument(
+        "--dataset",
+        help="Optional dataset JSON file. Defaults to evaluation.dataset_path when --questions is omitted.",
+    )
     eval_parser.add_argument(
         "--synthetic", action="store_true", help="Generate synthetic QA"
     )
@@ -485,6 +542,7 @@ def main():
     elif args.command == "eval":
         questions = args.questions
         ground_truths = None
+        dataset_metadata = None
         if args.synthetic:
             if not args.paths and not args.directory:
                 parser.error("eval --synthetic requires --paths or --directory")
@@ -496,11 +554,24 @@ def main():
             questions = [p["question"] for p in qa_pairs]
             ground_truths = [p["answer"] for p in qa_pairs]
             print(f"Generated {len(questions)} synthetic questions")
+        elif not questions:
+            dataset_path_value = args.dataset or rag.config.evaluation.dataset_path
+            if not dataset_path_value:
+                parser.error(
+                    "eval requires --questions, --synthetic, or evaluation.dataset_path"
+                )
+            dataset_path = Path(dataset_path_value)
+            questions, ground_truths, dataset_metadata = _load_eval_dataset(dataset_path)
+            print(f"Loaded {len(questions)} evaluation samples from {dataset_path}")
 
         if not questions:
-            parser.error("eval requires --questions or --synthetic")
+            parser.error("eval requires --questions, --synthetic, or a dataset")
 
-        results = rag.evaluate(questions=questions, ground_truths=ground_truths)
+        results = rag.evaluate(
+            questions=questions,
+            ground_truths=ground_truths,
+            dataset_metadata=dataset_metadata,
+        )
         output = args.output or results.get("report_path") or "eval_results.json"
         with open(output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)

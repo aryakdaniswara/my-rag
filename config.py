@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from pathlib import Path
+from typing import Any, List, Optional
 
 from generation.prompts import DEFAULT_SYSTEM_PROMPT
 
@@ -100,8 +101,55 @@ class RAGConfig:
         """Load config from a YAML file. Any missing top-level key falls back to defaults."""
         import yaml
 
-        with open(path, "r") as f:
-            data = yaml.safe_load(f) or {}
+        def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+            merged = dict(base)
+            for key, value in override.items():
+                if isinstance(value, dict) and isinstance(merged.get(key), dict):
+                    merged[key] = _merge_dicts(merged[key], value)
+                else:
+                    merged[key] = value
+            return merged
+
+        def _load_config_file(config_path: Path, seen: set[Path]) -> dict[str, Any]:
+            resolved_path = config_path.resolve()
+            if resolved_path in seen:
+                raise ValueError(f"Config inheritance cycle detected at: {resolved_path}")
+
+            with open(resolved_path, "r", encoding="utf-8") as f:
+                loaded = yaml.safe_load(f) or {}
+
+            if not isinstance(loaded, dict):
+                raise ValueError(f"Config file must contain a YAML mapping: {resolved_path}")
+
+            extends_value = loaded.pop("extends", None)
+            if not extends_value:
+                return loaded
+
+            if isinstance(extends_value, str):
+                extends_paths = [extends_value]
+            elif isinstance(extends_value, list) and all(
+                isinstance(item, str) for item in extends_value
+            ):
+                extends_paths = extends_value
+            else:
+                raise ValueError(
+                    f"'extends' must be a string or list of strings: {resolved_path}"
+                )
+
+            merged_base: dict[str, Any] = {}
+            seen.add(resolved_path)
+            try:
+                for parent_path in extends_paths:
+                    parent_data = _load_config_file(
+                        (resolved_path.parent / parent_path).resolve(), seen
+                    )
+                    merged_base = _merge_dicts(merged_base, parent_data)
+            finally:
+                seen.remove(resolved_path)
+
+            return _merge_dicts(merged_base, loaded)
+
+        data = _load_config_file(Path(path), seen=set())
 
         ingestion_data = dict(data.get("ingestion", {}))
         legacy_chunking_strategy = ingestion_data.pop("chunking_strategy", None)

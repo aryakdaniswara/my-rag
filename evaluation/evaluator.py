@@ -80,8 +80,9 @@ class RAGASEvaluator:
             from ragas import EvaluationDataset
             from datasets import Dataset
         except ImportError:
-            logger.warning("RAGAS not installed, returning mock results")
-            return self._mock_evaluation(questions, contexts, answers)
+            raise RuntimeError(
+                "RAGAS evaluation dependencies are not installed in this environment"
+            )
 
         metric_map = {
             "faithfulness": Faithfulness(),
@@ -90,7 +91,13 @@ class RAGASEvaluator:
             "context_recall": LLMContextRecall(),
         }
 
-        selected_metrics = [metric_map[m] for m in self.metrics if m in metric_map]
+        has_ground_truths = bool(
+            ground_truths and any(isinstance(g, str) and g.strip() for g in ground_truths)
+        )
+        effective_metrics = [
+            m for m in self.metrics if m in metric_map and (m != "context_recall" or has_ground_truths)
+        ]
+        selected_metrics = [metric_map[m] for m in effective_metrics]
 
         dataset = Dataset.from_list(
             [
@@ -120,10 +127,20 @@ class RAGASEvaluator:
                 questions, metrics_df, retrieval_logs, rerank_logs
             )
 
+            metric_descriptions = {
+                key: value for key, value in METRIC_DESCRIPTIONS.items() if key in effective_metrics
+            }
             return {
                 "metrics": metrics_df.to_dict(),
                 "failure_analysis": analysis,
-                "metric_descriptions": METRIC_DESCRIPTIONS,
+                "metric_descriptions": metric_descriptions,
+                "requested_metrics": self.metrics,
+                "used_metrics": effective_metrics,
+                "metric_caveats": (
+                    ["context_recall was skipped because no ground-truth/reference answers were provided"]
+                    if "context_recall" in self.metrics and "context_recall" not in effective_metrics
+                    else []
+                ),
             }
         except Exception as e:
             logger.error(f"RAGAS evaluation failed: {e}")
@@ -145,8 +162,8 @@ class RAGASEvaluator:
                 failures.append(
                     {
                         "query": q,
-                        "type": "Retrieval Failure",
-                        "reason": "The relevant information was not retrieved from the database.",
+                        "type": "Possible Retrieval Issue",
+                        "reason": "Heuristic metric-based classification: the retrieved evidence appears incomplete for the reference answer.",
                     }
                 )
 
@@ -156,8 +173,8 @@ class RAGASEvaluator:
                 failures.append(
                     {
                         "query": q,
-                        "type": "Reranking Failure",
-                        "reason": "Relevant information was retrieved but ranked too low for the LLM.",
+                        "type": "Possible Reranking Issue",
+                        "reason": "Heuristic metric-based classification: some useful evidence may have been retrieved but ranked too low.",
                     }
                 )
 
@@ -169,23 +186,8 @@ class RAGASEvaluator:
                 failures.append(
                     {
                         "query": q,
-                        "type": "Generation Failure",
-                        "reason": "LLM failed to synthesize a correct answer despite having the correct context.",
+                        "type": "Possible Generation Issue",
+                        "reason": "Heuristic metric-based classification: the answer quality appears weak despite non-trivial retrieved evidence.",
                     }
                 )
-
         return failures
-
-    def _mock_evaluation(self, questions, contexts, answers) -> Dict[str, Any]:
-        """Return mock evaluation when RAGAS is not available."""
-        return {
-            "metrics": {
-                "question": questions,
-                "faithfulness": [0.0] * len(questions),
-                "answer_relevancy": [0.0] * len(questions),
-                "context_precision": [0.0] * len(questions),
-                "context_recall": [0.0] * len(questions),
-            },
-            "failure_analysis": [],
-            "metric_descriptions": METRIC_DESCRIPTIONS,
-        }

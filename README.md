@@ -116,9 +116,9 @@ Use that guide as the canonical source of truth for:
 - what still needs to be hardened for a bulletproof workflow
 - how to think about independent judges, synthetic QA, reviewed benchmarks, latency, and TTFT
 
-The current CLI `eval` command is still a minimal path and should not be mistaken for the final evaluation system described in the guide.
+The current CLI `eval` command is still a pragmatic path and should not be mistaken for the full bulletproof evaluation system described in the guide.
 
-For day-to-day iteration, the default evaluation dataset is currently the mixed seed file `storage/eval_datasets/ui_mixed_seed.json`, while narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
+For day-to-day iteration, the default evaluation dataset is currently the mixed seed file `storage/eval_datasets/ui_mixed_seed.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
 
 ## Architecture
 
