@@ -181,7 +181,21 @@ class RAGPipeline:
             client_kwargs["base_url"] = endpoint
 
         client = OpenAI(**client_kwargs)
-        return sanitize_ragas_llm(llm_factory(judge_model, client=client))
+        llm_kwargs = {
+            "max_tokens": self.config.evaluation.eval_llm_max_tokens,
+        }
+        if endpoint and "generativelanguage.googleapis.com" in endpoint:
+            llm_kwargs["extra_body"] = {
+                "google": {
+                    "thinking_config": {
+                        "thinking_level": self.config.evaluation.eval_reasoning_effort or "minimal",
+                        "include_thoughts": self.config.evaluation.eval_include_thoughts,
+                    }
+                }
+            }
+        elif self.config.evaluation.eval_reasoning_effort:
+            llm_kwargs["reasoning_effort"] = self.config.evaluation.eval_reasoning_effort
+        return sanitize_ragas_llm(llm_factory(judge_model, client=client, **llm_kwargs))
 
     def _build_eval_embeddings(self):
         eval_embeddings = self.config.evaluation.eval_embeddings

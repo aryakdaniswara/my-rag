@@ -55,6 +55,9 @@ evaluation:
   eval_llm: "gemma-4-31b-it"
   eval_llm_endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/"
   eval_llm_api_key_env: "GEMINI_API_KEY"
+  eval_llm_max_tokens: 2048
+  eval_reasoning_effort: "minimal"
+  eval_include_thoughts: false
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/ui_mixed_seed.json"

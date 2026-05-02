@@ -89,6 +89,9 @@ class EvaluationConfig:
     eval_llm: str = "llama-3-8b"
     eval_llm_endpoint: Optional[str] = "http://localhost:8000/v1"
     eval_llm_api_key_env: str = "OPENAI_API_KEY"
+    eval_llm_max_tokens: int = 2048
+    eval_reasoning_effort: Optional[str] = "minimal"
+    eval_include_thoughts: bool = False
     eval_embeddings: str = "microsoft/harrier-oss-v1-0.6b"
     eval_embeddings_endpoint: Optional[str] = None
     dataset_path: Optional[str] = "storage/eval_datasets/ui_mixed_seed.json"
