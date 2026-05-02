@@ -1,5 +1,6 @@
 import argparse
 import json
+import math
 import sys
 from copy import deepcopy
 from datetime import datetime
@@ -129,6 +130,7 @@ def _metric_means(results: dict) -> dict[str, float | None]:
             for value in candidates
             if isinstance(value, (int, float)) and not isinstance(value, bool)
         ]
+        numeric_values = [value for value in numeric_values if math.isfinite(value)]
         summary[metric_name] = (
             sum(numeric_values) / len(numeric_values) if numeric_values else None
         )
@@ -139,6 +141,7 @@ def _primary_score(metric_means: dict[str, float | None]) -> float | None:
     numeric_values = [
         value for value in metric_means.values() if isinstance(value, (int, float))
     ]
+    numeric_values = [value for value in numeric_values if math.isfinite(value)]
     return sum(numeric_values) / len(numeric_values) if numeric_values else None
 
 
@@ -152,7 +155,7 @@ def _build_leaderboards(model_entries: list[dict]) -> dict[str, list[dict]]:
         ranked_entries = []
         for entry in model_entries:
             score = entry.get("metric_means", {}).get(metric_name)
-            if isinstance(score, (int, float)):
+            if isinstance(score, (int, float)) and math.isfinite(score):
                 ranked_entries.append(
                     {
                         "label": entry.get("label"),
@@ -167,7 +170,7 @@ def _build_leaderboards(model_entries: list[dict]) -> dict[str, list[dict]]:
     overall = []
     for entry in model_entries:
         score = entry.get("primary_score")
-        if isinstance(score, (int, float)):
+        if isinstance(score, (int, float)) and math.isfinite(score):
             overall.append(
                 {
                     "label": entry.get("label"),

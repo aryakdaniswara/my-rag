@@ -52,6 +52,9 @@ class SanitizedBaseRagasLLM(BaseRagasLLM):
             False,
         )
 
+    def __getattr__(self, name: str):
+        return getattr(self.inner, name)
+
     def set_run_config(self, run_config):
         if hasattr(self.inner, "set_run_config"):
             self.inner.set_run_config(run_config)
@@ -98,6 +101,9 @@ class SanitizedBaseRagasLLM(BaseRagasLLM):
 @dataclass
 class SanitizedInstructorLLM(InstructorBaseRagasLLM):
     inner: InstructorBaseRagasLLM
+
+    def __getattr__(self, name: str):
+        return getattr(self.inner, name)
 
     def generate(self, prompt: str, response_model):
         result = self.inner.generate(prompt, response_model)
