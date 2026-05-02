@@ -199,13 +199,14 @@ class RAGPipeline:
             )
             return LangchainEmbeddingsWrapper(embeddings)
 
-        from ragas.embeddings import HuggingFaceEmbeddings
-
         device = self.config.embedding.dense_device or self.config.embedding.device
-        return HuggingFaceEmbeddings(
-            model=eval_embeddings,
+        from evaluation.embeddings_adapter import LocalDenseRagasEmbeddings
+
+        return LocalDenseRagasEmbeddings(
+            model_name=eval_embeddings,
             device=device,
             batch_size=self.config.embedding.batch_size,
+            quantize_8bit=self.config.embedding.quantize_8bit,
         )
 
     @staticmethod
