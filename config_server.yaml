@@ -39,7 +39,7 @@ retrieval:
 
 generation:
   llm_endpoint: "http://127.0.0.1:11434/v1"
-  model_name: "qwen3.5:8b" # Primary local candidate; compare against qwen3.5:4b and qwen3.5:2b in separate runs
+  model_name: "qwen3.5:9b" # Primary local candidate; compare against qwen3.5:4b and qwen3.5:2b in separate runs
   max_tokens: 1200
   temperature: 0.2
   reasoning_effort: none # If reasoning is set to high, max token should be adjusted to
