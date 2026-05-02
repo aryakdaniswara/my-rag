@@ -61,6 +61,7 @@ class RAGPipeline:
         storage: MilvusClient = None,
         retriever: Retriever = None,
         llm: LLM = None,
+        preload_retrieval_models: bool = True,
     ):
         self.config = config
         self.ingestion = ingestion or IngestionPipeline(
@@ -97,7 +98,8 @@ class RAGPipeline:
             k=config.retrieval.k,
             hybrid_weight=config.retrieval.hybrid_weight,
         )
-        self.retriever.load_models()
+        if preload_retrieval_models:
+            self.retriever.load_models()
         self.llm = llm or LLM(
             endpoint=config.generation.llm_endpoint,
             model_name=config.generation.model_name,
@@ -184,7 +186,13 @@ class RAGPipeline:
         llm_kwargs = {
             "max_tokens": self.config.evaluation.eval_llm_max_tokens,
         }
-        if endpoint and "generativelanguage.googleapis.com" in endpoint:
+        is_google_openai_endpoint = bool(
+            endpoint and "generativelanguage.googleapis.com" in endpoint
+        )
+        judge_model_lower = judge_model.lower()
+        is_gemini_model = judge_model_lower.startswith("gemini")
+
+        if is_google_openai_endpoint and is_gemini_model:
             llm_kwargs["extra_body"] = {
                 "google": {
                     "thinking_config": {
@@ -1172,6 +1180,150 @@ class RAGPipeline:
             "caveats": [
                 "ttft_ms is not captured for this non-streaming evaluation path",
                 "independent judge configuration depends on evaluation config and available API credentials",
+            ],
+        }
+        if dataset_metadata:
+            report["dataset"].update(dataset_metadata)
+        report["report_path"] = self._write_eval_report(report)
+        return report
+
+    def generate_eval_predictions(
+        self,
+        questions: List[str],
+        ground_truths: Optional[List[str]] = None,
+        dataset_metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        samples = []
+
+        for index, question in enumerate(questions):
+            query_started = time.time()
+
+            retrieval_started = time.time()
+            docs = self.retriever.retrieve(
+                query=question,
+                collection_name=self.config.storage.collection_name,
+                k=self.config.retrieval.k,
+            )
+            docs = docs[: self.config.retrieval.rerank_top_k]
+            retrieval_time_ms = (time.time() - retrieval_started) * 1000
+
+            generation_started = time.time()
+            result = self.query(question, pre_retrieved_docs=docs)
+            generation_time_ms = (time.time() - generation_started) * 1000
+            end_to_end_time_ms = (time.time() - query_started) * 1000
+
+            sample = {
+                "question": question,
+                "answer": result.answer,
+                "context": result.context,
+                "retrieved_contexts": [result.context],
+                "sources": result.sources,
+                "confidence_score": result.confidence_score,
+                "num_docs": len(docs),
+                "timings": {
+                    "retrieval_time_ms": retrieval_time_ms,
+                    "generation_time_ms": generation_time_ms,
+                    "end_to_end_time_ms": end_to_end_time_ms,
+                    "ttft_ms": None,
+                    "stream_completed": None,
+                },
+            }
+            if ground_truths and index < len(ground_truths):
+                sample["ground_truth"] = ground_truths[index]
+            samples.append(sample)
+
+        report = {
+            "generated_at": datetime.now().isoformat(),
+            "mode": "prediction_generation",
+            "models": {
+                "generation_model": self.config.generation.model_name,
+                "generation_endpoint": self.config.generation.llm_endpoint,
+            },
+            "dataset": {
+                "dataset_path": self.config.evaluation.dataset_path,
+                "question_count": len(questions),
+                "has_ground_truths": bool(
+                    ground_truths and any(isinstance(g, str) and g.strip() for g in ground_truths)
+                ),
+            },
+            "timings": {
+                "per_question": [
+                    {"question": sample["question"], **sample["timings"]} for sample in samples
+                ],
+                "summary": self._summarize_timings(
+                    [{"question": sample["question"], **sample["timings"]} for sample in samples]
+                ),
+            },
+            "artifacts": {
+                "samples": samples,
+            },
+            "caveats": [
+                "This artifact contains generated predictions only and has not been RAGAS-scored yet",
+            ],
+        }
+        if dataset_metadata:
+            report["dataset"].update(dataset_metadata)
+        return report
+
+    def score_eval_predictions(
+        self,
+        samples: List[Dict[str, Any]],
+        dataset_metadata: Optional[Dict[str, Any]] = None,
+        prediction_path: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        if self.evaluator is None:
+            self.evaluator = RAGASEvaluator(
+                eval_llm=self._build_eval_llm(),
+                eval_embeddings=self._build_eval_embeddings(),
+                metrics=self.config.evaluation.metrics,
+                answer_relevancy_strictness=self.config.evaluation.answer_relevancy_strictness,
+            )
+
+        questions = [sample["question"] for sample in samples]
+        answers = [sample.get("answer", "") for sample in samples]
+        contexts = [sample.get("retrieved_contexts") or [sample.get("context", "")] for sample in samples]
+        ground_truths = [
+            sample.get("ground_truth") for sample in samples
+        ]
+        has_ground_truths = any(isinstance(gt, str) and gt.strip() for gt in ground_truths)
+        timings = [
+            {"question": sample["question"], **sample.get("timings", {})}
+            for sample in samples
+        ]
+
+        eval_results = self.evaluator.evaluate(
+            questions=questions,
+            contexts=contexts,
+            answers=answers,
+            ground_truths=ground_truths if has_ground_truths else None,
+        )
+
+        report = {
+            "generated_at": datetime.now().isoformat(),
+            "mode": "prediction_scoring",
+            "judge_mode": self.config.evaluation.judge_mode,
+            "models": {
+                "judge_model": self.config.evaluation.eval_llm,
+                "judge_endpoint": self.config.evaluation.eval_llm_endpoint,
+                "evaluation_embeddings": self.config.evaluation.eval_embeddings,
+                "evaluation_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
+            },
+            "dataset": {
+                "dataset_path": self.config.evaluation.dataset_path,
+                "question_count": len(samples),
+                "prediction_path": prediction_path,
+                "has_ground_truths": has_ground_truths,
+            },
+            "timings": {
+                "per_question": timings,
+                "summary": self._summarize_timings(timings),
+            },
+            "results": eval_results,
+            "artifacts": {
+                "samples": samples,
+            },
+            "caveats": [
+                "This report was scored from a saved prediction artifact without rerunning retrieval or generation",
             ],
         }
         if dataset_metadata:

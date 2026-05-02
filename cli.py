@@ -37,6 +37,11 @@ def _load_json(path: Path) -> dict:
         return json.load(f)
 
 
+def _timestamped_path(directory: str | Path, prefix: str) -> Path:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    return Path(directory) / f"{prefix}_{timestamp}.json"
+
+
 def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
     if not path.exists():
         raise FileNotFoundError(f"evaluation dataset not found: {path}")
@@ -109,6 +114,37 @@ def _resolve_eval_inputs(args, parser, rag: RAGPipeline) -> tuple[list[str], lis
         parser.error("eval requires --questions or a dataset")
 
     return questions, ground_truths, dataset_metadata
+
+
+def _load_prediction_samples(path: Path) -> tuple[list[dict], dict]:
+    if not path.exists():
+        raise FileNotFoundError(f"prediction artifact not found: {path}")
+
+    payload = _load_json(path)
+    if not isinstance(payload, dict):
+        raise ValueError(f"prediction artifact must be a JSON object: {path}")
+
+    artifacts = payload.get("artifacts", {})
+    if not isinstance(artifacts, dict):
+        raise ValueError(f"prediction artifact missing 'artifacts' object: {path}")
+
+    samples = artifacts.get("samples")
+    if not isinstance(samples, list) or not samples:
+        raise ValueError(f"prediction artifact missing non-empty artifacts.samples: {path}")
+
+    for idx, sample in enumerate(samples, start=1):
+        if not isinstance(sample, dict):
+            raise ValueError(f"prediction sample {idx} must be a JSON object")
+        question = sample.get("question")
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError(f"prediction sample {idx} is missing a non-empty 'question'")
+
+    dataset_metadata = payload.get("dataset", {})
+    if not isinstance(dataset_metadata, dict):
+        dataset_metadata = {}
+    dataset_metadata = dict(dataset_metadata)
+    dataset_metadata["prediction_artifact_path"] = str(path)
+    return samples, dataset_metadata
 
 
 def _metric_means(results: dict) -> dict[str, float | None]:
@@ -509,6 +545,33 @@ def main():
     )
     eval_parser.add_argument("--output", help="Output file for results")
 
+    eval_generate_parser = subparsers.add_parser(
+        "eval-generate",
+        help="Generate a saved prediction artifact from the main RAG pipeline",
+    )
+    eval_generate_parser.add_argument("--config", required=True, help="Path to config YAML")
+    eval_generate_parser.add_argument("--questions", nargs="*", help="Questions to evaluate")
+    eval_generate_parser.add_argument(
+        "--dataset",
+        help="Optional dataset JSON file. Defaults to evaluation.dataset_path when --questions is omitted.",
+    )
+    eval_generate_parser.add_argument(
+        "--output",
+        help="Output file for saved predictions. Defaults to storage/eval_reports/eval_predictions_<timestamp>.json",
+    )
+
+    eval_score_parser = subparsers.add_parser(
+        "eval-score",
+        help="Score a saved prediction artifact with RAGAS without rerunning retrieval or generation",
+    )
+    eval_score_parser.add_argument("--config", required=True, help="Path to config YAML")
+    eval_score_parser.add_argument(
+        "--predictions",
+        required=True,
+        help="Path to a saved prediction artifact JSON file",
+    )
+    eval_score_parser.add_argument("--output", help="Output file for scored results")
+
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
     ingest_parser.add_argument("--config", required=True, help="Path to config YAML")
     ingest_parser.add_argument("--paths", nargs="+", help="File paths to ingest")
@@ -720,173 +783,209 @@ def main():
         return
 
     config = RAGConfig.from_yaml(args.config)
-    rag = RAGPipeline.from_config(config)
 
-    if args.command == "query":
-        result = rag.query(
-            query=args.query,
-            doc_ids=args.doc_ids,
-            k=args.k,
-        )
-        print(
-            json.dumps(
-                {
+    preload_retrieval_models = args.command != "eval-score"
+    rag = RAGPipeline.from_config(config) if preload_retrieval_models else RAGPipeline(
+        config,
+        preload_retrieval_models=False,
+    )
+
+    try:
+        if args.command == "query":
+            result = rag.query(
+                query=args.query,
+                doc_ids=args.doc_ids,
+                k=args.k,
+            )
+            print(
+                json.dumps(
+                    {
+                        "answer": result.answer,
+                        "context": result.context,
+                        "num_docs": result.metadata["num_docs"],
+                    },
+                    indent=2,
+                )
+            )
+
+        elif args.command == "find-keyword":
+            matches = rag.find_keyword(
+                keyword=args.keyword,
+                doc_id=args.doc_id,
+            )
+            print(
+                json.dumps(
+                    {
+                        "keyword": args.keyword,
+                        "num_matches": len(matches),
+                        "matches": matches,
+                    },
+                    indent=2,
+                )
+            )
+
+        elif args.command == "trace":
+            result = rag.query_with_keyword_check(
+                query=args.query,
+                check_keyword=args.check_keyword,
+                doc_ids=args.doc_ids,
+                k=args.k,
+            )
+            print(json.dumps(result, indent=2, default=str))
+
+        elif args.command == "eval":
+            questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
+
+            if rag.config.evaluation.model_matrix:
+                results = _run_eval_matrix(
+                    rag=rag,
+                    questions=questions,
+                    ground_truths=ground_truths,
+                    dataset_metadata=dataset_metadata,
+                    output_path=args.output,
+                )
+                output = results.get("summary_path") or args.output or "eval_matrix_results.json"
+            else:
+                results = rag.evaluate(
+                    questions=questions,
+                    ground_truths=ground_truths,
+                    dataset_metadata=dataset_metadata,
+                )
+                output = args.output or results.get("report_path") or "eval_results.json"
+            with open(output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, default=str)
+            print(f"Results saved to {output}")
+
+        elif args.command == "eval-generate":
+            questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
+            results = rag.generate_eval_predictions(
+                questions=questions,
+                ground_truths=ground_truths,
+                dataset_metadata=dataset_metadata,
+            )
+            output = args.output or _timestamped_path(
+                rag.config.evaluation.report_dir,
+                "eval_predictions",
+            )
+            with open(output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, default=str)
+            print(f"Prediction artifact saved to {output}")
+
+        elif args.command == "eval-score":
+            prediction_path = Path(args.predictions)
+            samples, dataset_metadata = _load_prediction_samples(prediction_path)
+            results = rag.score_eval_predictions(
+                samples=samples,
+                dataset_metadata=dataset_metadata,
+                prediction_path=str(prediction_path),
+            )
+            output = args.output or results.get("report_path") or "eval_results.json"
+            with open(output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, default=str)
+            print(f"Scored evaluation report saved to {output}")
+
+        elif args.command == "ingest":
+            count = rag.ingest(
+                paths=args.paths,
+                directory=args.directory,
+                doc_id_prefix=args.prefix,
+            )
+            print(f"Indexed {count} chunks")
+
+        elif args.command == "inspect-chunks":
+            chunks = rag.save_chunks_before_embedding(
+                directory=args.directory,
+                output_file=args.output_file
+            )
+
+            if args.filter_keyword:
+                filtered_chunks = [c for c in chunks if args.filter_keyword.lower() in c.text.lower()]
+                print(f"Found {len(filtered_chunks)} chunks containing '{args.filter_keyword}':")
+                for i, chunk in enumerate(filtered_chunks):
+                    print(f"\n--- Chunk {i+1} ---")
+                    print(f"Doc ID: {chunk.doc_id}")
+                    print(f"Breadcrumb: {chunk.breadcrumb}")
+                    print(f"Page: {chunk.page_number}")
+                    print(f"Filename: {chunk.filename}")
+                    print(f"Text Preview: {chunk.text[:200]}...")
+            else:
+                print(f"Total chunks: {len(chunks)}")
+                if args.show_stats:
+                    total_chars = sum(len(c.text) for c in chunks)
+                    avg_chars = total_chars / len(chunks) if chunks else 0
+                    print(f"Total characters: {total_chars}")
+                    print(f"Average characters per chunk: {avg_chars:.2f}")
+                    print(f"Unique documents: {len(set(c.doc_id for c in chunks))}")
+
+                    if chunks:
+                        print("\nFirst few chunks:")
+                        for i, chunk in enumerate(chunks[:3]):
+                            print(f"\n--- Chunk {i+1} ---")
+                            print(f"Doc ID: {chunk.doc_id}")
+                            print(f"Breadcrumb: {chunk.breadcrumb}")
+                            print(f"Page: {chunk.page_number}")
+                            print(f"Filename: {chunk.filename}")
+                            print(f"Text Preview: {chunk.text[:200]}...")
+
+        elif args.command == "debug-query":
+            print(f"Processing query: {args.query}")
+
+            if args.show_stages:
+                print("\n1. Retrieving documents...")
+                docs = rag.retriever.retrieve(
+                    query=args.query,
+                    collection_name=rag.config.storage.collection_name,
+                    k=rag.config.retrieval.k,
+                )
+                print(f"Retrieved {len(docs)} documents after RRF fusion")
+
+                print("\n2. Applying reranking...")
+                reranked_docs = rag.retriever._rerank(args.query, docs)
+                # Slice to rerank_top_k to match the pipeline behavior
+                rerank_top_k = rag.config.retrieval.rerank_top_k
+                reranked_docs = reranked_docs[:rerank_top_k]
+                print(f"Reranked to top {len(reranked_docs)} documents")
+
+                if args.output_format == "detailed":
+                    print("\nDetailed results:")
+                    for i, doc in enumerate(reranked_docs):
+                        print(f"\n--- Document {i+1} (Score: {doc.score:.4f}) ---")
+                        print(f"Doc ID: {doc.doc_id}")
+                        print(f"Breadcrumb: {doc.metadata.get('breadcrumb', 'N/A')}")
+                        print(f"Page: {doc.metadata.get('page_number', 'N/A')}")
+                        print(f"Text Preview: {doc.text[:300]}...")
+                elif args.output_format == "text":
+                    print("\nContext that would be sent to LLM:")
+                    for i, doc in enumerate(reranked_docs):
+                        print(f"\n[Source {doc.metadata.get('breadcrumb', f'Doc_{i+1}')}]")
+                        print(doc.text)
+                else:  # json format
+                    result = {
+                        "query": args.query,
+                        "retrieved_count": len(docs),
+                        "reranked_count": len(reranked_docs),
+                        "documents": [
+                            {
+                                "doc_id": doc.doc_id,
+                                "breadcrumb": doc.metadata.get("breadcrumb", "N/A"),
+                                "page_number": doc.metadata.get("page_number", "N/A"),
+                                "score": doc.score,
+                                "text_preview": doc.text[:300] + "..." if len(doc.text) > 300 else doc.text
+                            }
+                            for doc in reranked_docs
+                        ]
+                    }
+                    print(json.dumps(result, indent=2, default=str))
+            else:
+                # Just run the normal query
+                result = rag.query(query=args.query)
+                print(json.dumps({
                     "answer": result.answer,
                     "context": result.context,
                     "num_docs": result.metadata["num_docs"],
-                },
-                indent=2,
-            )
-        )
-
-    elif args.command == "find-keyword":
-        matches = rag.find_keyword(
-            keyword=args.keyword,
-            doc_id=args.doc_id,
-        )
-        print(
-            json.dumps(
-                {
-                    "keyword": args.keyword,
-                    "num_matches": len(matches),
-                    "matches": matches,
-                },
-                indent=2,
-            )
-        )
-
-    elif args.command == "trace":
-        result = rag.query_with_keyword_check(
-            query=args.query,
-            check_keyword=args.check_keyword,
-            doc_ids=args.doc_ids,
-            k=args.k,
-        )
-        print(json.dumps(result, indent=2, default=str))
-
-    elif args.command == "eval":
-        questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
-
-        if rag.config.evaluation.model_matrix:
-            results = _run_eval_matrix(
-                rag=rag,
-                questions=questions,
-                ground_truths=ground_truths,
-                dataset_metadata=dataset_metadata,
-                output_path=args.output,
-            )
-            output = results.get("summary_path") or args.output or "eval_matrix_results.json"
-        else:
-            results = rag.evaluate(
-                questions=questions,
-                ground_truths=ground_truths,
-                dataset_metadata=dataset_metadata,
-            )
-            output = args.output or results.get("report_path") or "eval_results.json"
-        with open(output, "w", encoding="utf-8") as f:
-            json.dump(results, f, indent=2, default=str)
-        print(f"Results saved to {output}")
-
-    elif args.command == "ingest":
-        count = rag.ingest(
-            paths=args.paths,
-            directory=args.directory,
-            doc_id_prefix=args.prefix,
-        )
-        print(f"Indexed {count} chunks")
-
-    elif args.command == "inspect-chunks":
-        chunks = rag.save_chunks_before_embedding(
-            directory=args.directory,
-            output_file=args.output_file
-        )
-        
-        if args.filter_keyword:
-            filtered_chunks = [c for c in chunks if args.filter_keyword.lower() in c.text.lower()]
-            print(f"Found {len(filtered_chunks)} chunks containing '{args.filter_keyword}':")
-            for i, chunk in enumerate(filtered_chunks):
-                print(f"\n--- Chunk {i+1} ---")
-                print(f"Doc ID: {chunk.doc_id}")
-                print(f"Breadcrumb: {chunk.breadcrumb}")
-                print(f"Page: {chunk.page_number}")
-                print(f"Filename: {chunk.filename}")
-                print(f"Text Preview: {chunk.text[:200]}...")
-        else:
-            print(f"Total chunks: {len(chunks)}")
-            if args.show_stats:
-                total_chars = sum(len(c.text) for c in chunks)
-                avg_chars = total_chars / len(chunks) if chunks else 0
-                print(f"Total characters: {total_chars}")
-                print(f"Average characters per chunk: {avg_chars:.2f}")
-                print(f"Unique documents: {len(set(c.doc_id for c in chunks))}")
-                
-                if chunks:
-                    print("\nFirst few chunks:")
-                    for i, chunk in enumerate(chunks[:3]):
-                        print(f"\n--- Chunk {i+1} ---")
-                        print(f"Doc ID: {chunk.doc_id}")
-                        print(f"Breadcrumb: {chunk.breadcrumb}")
-                        print(f"Page: {chunk.page_number}")
-                        print(f"Filename: {chunk.filename}")
-                        print(f"Text Preview: {chunk.text[:200]}...")
-
-    elif args.command == "debug-query":
-        print(f"Processing query: {args.query}")
-        
-        if args.show_stages:
-            print("\n1. Retrieving documents...")
-            docs = rag.retriever.retrieve(
-                query=args.query,
-                collection_name=rag.config.storage.collection_name,
-                k=rag.config.retrieval.k,
-            )
-            print(f"Retrieved {len(docs)} documents after RRF fusion")
-            
-            print("\n2. Applying reranking...")
-            reranked_docs = rag.retriever._rerank(args.query, docs)
-            # Slice to rerank_top_k to match the pipeline behavior
-            rerank_top_k = rag.config.retrieval.rerank_top_k
-            reranked_docs = reranked_docs[:rerank_top_k]
-            print(f"Reranked to top {len(reranked_docs)} documents")
-            
-            if args.output_format == "detailed":
-                print("\nDetailed results:")
-                for i, doc in enumerate(reranked_docs):
-                    print(f"\n--- Document {i+1} (Score: {doc.score:.4f}) ---")
-                    print(f"Doc ID: {doc.doc_id}")
-                    print(f"Breadcrumb: {doc.metadata.get('breadcrumb', 'N/A')}")
-                    print(f"Page: {doc.metadata.get('page_number', 'N/A')}")
-                    print(f"Text Preview: {doc.text[:300]}...")
-            elif args.output_format == "text":
-                print("\nContext that would be sent to LLM:")
-                for i, doc in enumerate(reranked_docs):
-                    print(f"\n[Source {doc.metadata.get('breadcrumb', f'Doc_{i+1}')}]")
-                    print(doc.text)
-            else:  # json format
-                result = {
-                    "query": args.query,
-                    "retrieved_count": len(docs),
-                    "reranked_count": len(reranked_docs),
-                    "documents": [
-                        {
-                            "doc_id": doc.doc_id,
-                            "breadcrumb": doc.metadata.get("breadcrumb", "N/A"),
-                            "page_number": doc.metadata.get("page_number", "N/A"),
-                            "score": doc.score,
-                            "text_preview": doc.text[:300] + "..." if len(doc.text) > 300 else doc.text
-                        }
-                        for doc in reranked_docs
-                    ]
-                }
-                print(json.dumps(result, indent=2, default=str))
-        else:
-            # Just run the normal query
-            result = rag.query(query=args.query)
-            print(json.dumps({
-                "answer": result.answer,
-                "context": result.context,
-                "num_docs": result.metadata["num_docs"],
-            }, indent=2))
+                }, indent=2))
+    finally:
+        rag.close()
 
 
 if __name__ == "__main__":
