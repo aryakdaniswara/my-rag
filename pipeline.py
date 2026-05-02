@@ -199,9 +199,14 @@ class RAGPipeline:
             )
             return LangchainEmbeddingsWrapper(embeddings)
 
-        from ragas.embeddings.base import HuggingfaceEmbeddings
+        from ragas.embeddings import HuggingFaceEmbeddings
 
-        return HuggingfaceEmbeddings(model_name=eval_embeddings)
+        device = self.config.embedding.dense_device or self.config.embedding.device
+        return HuggingFaceEmbeddings(
+            model=eval_embeddings,
+            device=device,
+            batch_size=self.config.embedding.batch_size,
+        )
 
     @staticmethod
     def _summarize_timings(records: List[Dict[str, Any]]) -> Dict[str, Optional[float]]:
