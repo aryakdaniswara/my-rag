@@ -1,6 +1,7 @@
 import argparse
 import json
 import math
+import re
 import sys
 from copy import deepcopy
 from datetime import datetime
@@ -40,6 +41,13 @@ def _load_json(path: Path) -> dict:
 def _timestamped_path(directory: str | Path, prefix: str) -> Path:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     return Path(directory) / f"{prefix}_{timestamp}.json"
+
+
+def _slugify_label(value: str | None) -> str | None:
+    if not value:
+        return None
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())
+    return slug.strip("._-") or None
 
 
 def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
@@ -145,6 +153,37 @@ def _load_prediction_samples(path: Path) -> tuple[list[dict], dict]:
     dataset_metadata = dict(dataset_metadata)
     dataset_metadata["prediction_artifact_path"] = str(path)
     return samples, dataset_metadata
+
+
+def _apply_eval_generate_overrides(config: RAGConfig, args) -> str | None:
+    label = args.label
+    if args.model:
+        config.generation.model_name = args.model
+    if args.endpoint:
+        config.generation.llm_endpoint = args.endpoint
+    if args.max_tokens is not None:
+        config.generation.max_tokens = args.max_tokens
+    if args.temperature is not None:
+        config.generation.temperature = args.temperature
+    if args.reasoning_effort is not None:
+        config.generation.reasoning_effort = args.reasoning_effort
+
+    return label or config.generation.model_name
+
+
+def _apply_eval_score_overrides(config: RAGConfig, args) -> None:
+    if args.judge_model:
+        config.evaluation.eval_llm = args.judge_model
+    if args.judge_endpoint:
+        config.evaluation.eval_llm_endpoint = args.judge_endpoint
+    if args.judge_mode:
+        config.evaluation.judge_mode = args.judge_mode
+    if args.judge_api_key_env:
+        config.evaluation.eval_llm_api_key_env = args.judge_api_key_env
+    if args.eval_embeddings:
+        config.evaluation.eval_embeddings = args.eval_embeddings
+    if args.eval_embeddings_endpoint:
+        config.evaluation.eval_embeddings_endpoint = args.eval_embeddings_endpoint
 
 
 def _metric_means(results: dict) -> dict[str, float | None]:
@@ -559,6 +598,15 @@ def main():
         "--output",
         help="Output file for saved predictions. Defaults to storage/eval_reports/eval_predictions_<timestamp>.json",
     )
+    eval_generate_parser.add_argument("--model", help="Override generation model for this run")
+    eval_generate_parser.add_argument("--endpoint", help="Override generation endpoint for this run")
+    eval_generate_parser.add_argument("--label", help="Optional label used in the saved artifact filename")
+    eval_generate_parser.add_argument("--max-tokens", type=int, help="Override generation max tokens")
+    eval_generate_parser.add_argument("--temperature", type=float, help="Override generation temperature")
+    eval_generate_parser.add_argument(
+        "--reasoning-effort",
+        help="Override generation reasoning effort for this run",
+    )
 
     eval_score_parser = subparsers.add_parser(
         "eval-score",
@@ -571,6 +619,25 @@ def main():
         help="Path to a saved prediction artifact JSON file",
     )
     eval_score_parser.add_argument("--output", help="Output file for scored results")
+    eval_score_parser.add_argument("--judge-model", help="Override evaluation judge model")
+    eval_score_parser.add_argument("--judge-endpoint", help="Override evaluation judge endpoint")
+    eval_score_parser.add_argument(
+        "--judge-mode",
+        choices=["api", "local", "reuse_generation"],
+        help="Override evaluation judge mode",
+    )
+    eval_score_parser.add_argument(
+        "--judge-api-key-env",
+        help="Override environment variable used for the evaluation judge API key",
+    )
+    eval_score_parser.add_argument(
+        "--eval-embeddings",
+        help="Override evaluation embeddings model",
+    )
+    eval_score_parser.add_argument(
+        "--eval-embeddings-endpoint",
+        help="Override evaluation embeddings endpoint",
+    )
 
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
     ingest_parser.add_argument("--config", required=True, help="Path to config YAML")
@@ -783,6 +850,11 @@ def main():
         return
 
     config = RAGConfig.from_yaml(args.config)
+    output_label = None
+    if args.command == "eval-generate":
+        output_label = _apply_eval_generate_overrides(config, args)
+    elif args.command == "eval-score":
+        _apply_eval_score_overrides(config, args)
 
     preload_retrieval_models = args.command != "eval-score"
     rag = RAGPipeline.from_config(config) if preload_retrieval_models else RAGPipeline(
@@ -863,9 +935,13 @@ def main():
                 ground_truths=ground_truths,
                 dataset_metadata=dataset_metadata,
             )
+            prediction_prefix = "eval_predictions"
+            output_slug = _slugify_label(output_label)
+            if output_slug:
+                prediction_prefix = f"{prediction_prefix}_{output_slug}"
             output = args.output or _timestamped_path(
                 rag.config.evaluation.report_dir,
-                "eval_predictions",
+                prediction_prefix,
             )
             with open(output, "w", encoding="utf-8") as f:
                 json.dump(results, f, indent=2, default=str)
