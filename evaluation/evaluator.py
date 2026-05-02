@@ -99,17 +99,30 @@ class RAGASEvaluator:
         ]
         selected_metrics = [metric_map[m] for m in effective_metrics]
 
-        dataset = Dataset.from_list(
-            [
-                {"question": q, "contexts": c, "answer": a, "ground_truth": g or ""}
-                for q, c, a, g in zip(
-                    questions,
-                    contexts,
-                    answers,
-                    ground_truths or [None] * len(questions),
-                )
-            ]
-        )
+        dataset_rows = []
+        for q, c, a, g in zip(
+            questions,
+            contexts,
+            answers,
+            ground_truths or [None] * len(questions),
+        ):
+            reference = g or ""
+            # Keep both legacy and newer RAGAS field names so the wrapper
+            # remains compatible across installed versions.
+            dataset_rows.append(
+                {
+                    "question": q,
+                    "user_input": q,
+                    "contexts": c,
+                    "retrieved_contexts": c,
+                    "answer": a,
+                    "response": a,
+                    "ground_truth": reference,
+                    "reference": reference,
+                }
+            )
+
+        dataset = Dataset.from_list(dataset_rows)
 
         eval_dataset = EvaluationDataset.from_hf_dataset(dataset)
 
@@ -144,7 +157,12 @@ class RAGASEvaluator:
             }
         except Exception as e:
             logger.error(f"RAGAS evaluation failed: {e}")
-            return {"error": str(e)}
+            return {
+                "error": str(e),
+                "requested_metrics": self.metrics,
+                "used_metrics": effective_metrics,
+                "dataset_columns": list(dataset.column_names),
+            }
 
     def _categorize_failures(
         self, questions, metrics_df, retrieval_logs, rerank_logs

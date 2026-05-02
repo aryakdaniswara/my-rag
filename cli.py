@@ -89,6 +89,152 @@ def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
     return questions, (ground_truths if has_any_ground_truth else None), metadata
 
 
+def _resolve_eval_inputs(args, parser, rag: RAGPipeline) -> tuple[list[str], list[str] | None, dict | None]:
+    questions = args.questions
+    ground_truths = None
+    dataset_metadata = None
+
+    if args.synthetic:
+        if not args.paths and not args.directory:
+            parser.error("eval --synthetic requires --paths or --directory")
+        qa_pairs = rag.generate_synthetic_qa(
+            paths=args.paths,
+            directory=args.directory,
+            num_qa_per_doc=rag.config.evaluation.num_synthetic_qa,
+        )
+        questions = [p["question"] for p in qa_pairs]
+        ground_truths = [p["answer"] for p in qa_pairs]
+        print(f"Generated {len(questions)} synthetic questions")
+    elif not questions:
+        dataset_path_value = args.dataset or rag.config.evaluation.dataset_path
+        if not dataset_path_value:
+            parser.error(
+                "eval requires --questions, --synthetic, or evaluation.dataset_path"
+            )
+        dataset_path = Path(dataset_path_value)
+        questions, ground_truths, dataset_metadata = _load_eval_dataset(dataset_path)
+        print(f"Loaded {len(questions)} evaluation samples from {dataset_path}")
+
+    if not questions:
+        parser.error("eval requires --questions, --synthetic, or a dataset")
+
+    return questions, ground_truths, dataset_metadata
+
+
+def _metric_means(results: dict) -> dict[str, float | None]:
+    metrics = results.get("metrics")
+    if not isinstance(metrics, dict):
+        return {}
+
+    summary: dict[str, float | None] = {}
+    for metric_name, raw_values in metrics.items():
+        if isinstance(raw_values, dict):
+            candidates = raw_values.values()
+        elif isinstance(raw_values, list):
+            candidates = raw_values
+        else:
+            candidates = [raw_values]
+
+        numeric_values = [
+            float(value)
+            for value in candidates
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        ]
+        summary[metric_name] = (
+            sum(numeric_values) / len(numeric_values) if numeric_values else None
+        )
+    return summary
+
+
+def _build_matrix_entry(report: dict, label: str) -> dict:
+    results_block = report.get("results", {}) if isinstance(report.get("results"), dict) else {}
+    timings = report.get("timings", {}).get("summary", {})
+    return {
+        "label": label,
+        "generation_model": report.get("models", {}).get("generation_model"),
+        "generation_endpoint": report.get("models", {}).get("generation_endpoint"),
+        "judge_model": report.get("models", {}).get("judge_model"),
+        "dataset_path": report.get("dataset", {}).get("dataset_path"),
+        "question_count": report.get("dataset", {}).get("question_count"),
+        "metric_means": _metric_means(results_block),
+        "error": results_block.get("error"),
+        "requested_metrics": results_block.get("requested_metrics"),
+        "used_metrics": results_block.get("used_metrics"),
+        "timings": timings,
+        "report_path": report.get("report_path"),
+    }
+
+
+def _run_eval_matrix(
+    rag: RAGPipeline,
+    questions: list[str],
+    ground_truths: list[str] | None,
+    dataset_metadata: dict | None,
+    output_path: str | None,
+) -> dict:
+    model_specs = rag.config.evaluation.model_matrix
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    summary_path = (
+        Path(output_path)
+        if output_path
+        else Path(rag.config.evaluation.report_dir) / f"eval_matrix_{timestamp}.json"
+    )
+
+    aggregate = {
+        "generated_at": datetime.now().isoformat(),
+        "mode": "matrix",
+        "status": "running",
+        "base_generation_endpoint": rag.config.generation.llm_endpoint,
+        "judge_mode": rag.config.evaluation.judge_mode,
+        "judge_model": rag.config.evaluation.eval_llm,
+        "dataset": {
+            "dataset_path": rag.config.evaluation.dataset_path,
+            "question_count": len(questions),
+        },
+        "models": [],
+        "completed_models": 0,
+        "total_models": len(model_specs),
+    }
+    if dataset_metadata:
+        aggregate["dataset"].update(dataset_metadata)
+    _write_json(summary_path, aggregate)
+
+    for index, spec in enumerate(model_specs, start=1):
+        run_config = deepcopy(rag.config)
+        run_config.generation.model_name = spec.model_name
+        if spec.llm_endpoint is not None:
+            run_config.generation.llm_endpoint = spec.llm_endpoint
+        if spec.max_tokens is not None:
+            run_config.generation.max_tokens = spec.max_tokens
+        if spec.temperature is not None:
+            run_config.generation.temperature = spec.temperature
+        if spec.reasoning_effort is not None:
+            run_config.generation.reasoning_effort = spec.reasoning_effort
+
+        label = spec.label or spec.model_name
+        print(f"[{index}/{len(model_specs)}] Evaluating {label}")
+        run_rag = RAGPipeline(run_config)
+        report = run_rag.evaluate(
+            questions=questions,
+            ground_truths=ground_truths,
+            dataset_metadata=dataset_metadata,
+        )
+
+        aggregate["models"].append(_build_matrix_entry(report, label))
+        aggregate["completed_models"] = len(aggregate["models"])
+        aggregate["status"] = (
+            "completed"
+            if aggregate["completed_models"] == aggregate["total_models"]
+            else "running"
+        )
+        aggregate["updated_at"] = datetime.now().isoformat()
+        _write_json(summary_path, aggregate)
+
+    aggregate["summary_path"] = str(summary_path)
+    _write_json(summary_path, aggregate)
+    return aggregate
+
+
 def _default_rebuild_root(base_config_path: str, timestamp: str) -> Path:
     base_path = Path(base_config_path)
     return base_path.parent / "storage" / "rebuilds" / timestamp
@@ -540,39 +686,24 @@ def main():
         print(json.dumps(result, indent=2, default=str))
 
     elif args.command == "eval":
-        questions = args.questions
-        ground_truths = None
-        dataset_metadata = None
-        if args.synthetic:
-            if not args.paths and not args.directory:
-                parser.error("eval --synthetic requires --paths or --directory")
-            qa_pairs = rag.generate_synthetic_qa(
-                paths=args.paths,
-                directory=args.directory,
-                num_qa_per_doc=rag.config.evaluation.num_synthetic_qa,
+        questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
+
+        if rag.config.evaluation.model_matrix:
+            results = _run_eval_matrix(
+                rag=rag,
+                questions=questions,
+                ground_truths=ground_truths,
+                dataset_metadata=dataset_metadata,
+                output_path=args.output,
             )
-            questions = [p["question"] for p in qa_pairs]
-            ground_truths = [p["answer"] for p in qa_pairs]
-            print(f"Generated {len(questions)} synthetic questions")
-        elif not questions:
-            dataset_path_value = args.dataset or rag.config.evaluation.dataset_path
-            if not dataset_path_value:
-                parser.error(
-                    "eval requires --questions, --synthetic, or evaluation.dataset_path"
-                )
-            dataset_path = Path(dataset_path_value)
-            questions, ground_truths, dataset_metadata = _load_eval_dataset(dataset_path)
-            print(f"Loaded {len(questions)} evaluation samples from {dataset_path}")
-
-        if not questions:
-            parser.error("eval requires --questions, --synthetic, or a dataset")
-
-        results = rag.evaluate(
-            questions=questions,
-            ground_truths=ground_truths,
-            dataset_metadata=dataset_metadata,
-        )
-        output = args.output or results.get("report_path") or "eval_results.json"
+            output = results.get("summary_path") or args.output or "eval_matrix_results.json"
+        else:
+            results = rag.evaluate(
+                questions=questions,
+                ground_truths=ground_truths,
+                dataset_metadata=dataset_metadata,
+            )
+            output = args.output or results.get("report_path") or "eval_results.json"
         with open(output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)
         print(f"Results saved to {output}")

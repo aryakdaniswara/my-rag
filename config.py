@@ -68,6 +68,15 @@ class GenerationConfig:
 
 @dataclass
 class EvaluationConfig:
+    @dataclass
+    class ModelSpec:
+        model_name: str
+        llm_endpoint: Optional[str] = None
+        max_tokens: Optional[int] = None
+        temperature: Optional[float] = None
+        reasoning_effort: Optional[str] = None
+        label: Optional[str] = None
+
     metrics: List[str] = field(
         default_factory=lambda: [
             "faithfulness",
@@ -85,6 +94,7 @@ class EvaluationConfig:
     dataset_path: Optional[str] = "storage/eval_datasets/ui_mixed_seed.json"
     report_dir: str = "storage/eval_reports"
     num_synthetic_qa: int = 3
+    model_matrix: List["EvaluationConfig.ModelSpec"] = field(default_factory=list)
 
 
 @dataclass
@@ -157,11 +167,19 @@ class RAGConfig:
             ingestion_data.setdefault("pdf_chunking_strategy", legacy_chunking_strategy)
             ingestion_data.setdefault("html_chunking_strategy", legacy_chunking_strategy)
 
+        evaluation_data = dict(data.get("evaluation", {}))
+        model_matrix_data = evaluation_data.pop("model_matrix", []) or []
+
         return cls(
             ingestion=IngestionConfig(**ingestion_data),
             embedding=EmbeddingConfig(**data.get("embedding", {})),
             storage=StorageConfig(**data.get("storage", {})),
             retrieval=RetrievalConfig(**data.get("retrieval", {})),
             generation=GenerationConfig(**data.get("generation", {})),
-            evaluation=EvaluationConfig(**data.get("evaluation", {})),
+            evaluation=EvaluationConfig(
+                **evaluation_data,
+                model_matrix=[
+                    EvaluationConfig.ModelSpec(**item) for item in model_matrix_data
+                ],
+            ),
         )

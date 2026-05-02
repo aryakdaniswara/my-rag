@@ -1032,6 +1032,7 @@ class RAGPipeline:
         answers = []
         timings = []
         sources = []
+        samples = []
 
         for q in questions:
             query_started = time.time()
@@ -1066,14 +1067,23 @@ class RAGPipeline:
             contexts.append([result.context])
             answers.append(result.answer)
             sources.append(result.sources)
-            timings.append(
+            timing_entry = {
+                "question": q,
+                "retrieval_time_ms": retrieval_time_ms,
+                "generation_time_ms": generation_time_ms,
+                "end_to_end_time_ms": end_to_end_time_ms,
+                "ttft_ms": None,
+                "stream_completed": None,
+            }
+            timings.append(timing_entry)
+            samples.append(
                 {
                     "question": q,
-                    "retrieval_time_ms": retrieval_time_ms,
-                    "generation_time_ms": generation_time_ms,
-                    "end_to_end_time_ms": end_to_end_time_ms,
-                    "ttft_ms": None,
-                    "stream_completed": None,
+                    "answer": result.answer,
+                    "context": result.context,
+                    "sources": result.sources,
+                    "num_docs": len(docs),
+                    "timings": timing_entry,
                 }
             )
 
@@ -1108,7 +1118,10 @@ class RAGPipeline:
             },
             "results": eval_results,
             "artifacts": {
+                "questions": questions,
+                "answers": answers,
                 "sources": sources,
+                "samples": samples,
             },
             "caveats": [
                 "ttft_ms is not captured for this non-streaming evaluation path",
