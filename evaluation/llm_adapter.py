@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import Optional, List, Any
 
 from langchain_core.outputs import ChatGeneration, Generation, LLMResult
-from ragas.llms.base import BaseRagasLLM
+from ragas.llms.base import BaseRagasLLM, InstructorBaseRagasLLM
 
 
 _THOUGHT_BLOCK_RE = re.compile(r"<thought>.*?</thought>", re.DOTALL | re.IGNORECASE)
@@ -38,19 +38,24 @@ def _sanitize_llm_result(result: LLMResult) -> LLMResult:
 
 
 @dataclass
-class SanitizedRagasLLM(BaseRagasLLM):
+class SanitizedBaseRagasLLM(BaseRagasLLM):
     inner: BaseRagasLLM
-    run_config: object = field(init=False, repr=False)
+    run_config: Any = field(init=False, repr=False)
     multiple_completion_supported: bool = field(init=False, repr=False)
-    cache: Optional[object] = field(default=None, init=False, repr=False)
+    cache: Optional[Any] = field(default=None, init=False, repr=False)
 
     def __post_init__(self):
-        self.run_config = self.inner.run_config
-        self.multiple_completion_supported = self.inner.multiple_completion_supported
+        self.run_config = getattr(self.inner, "run_config", self.run_config)
+        self.multiple_completion_supported = getattr(
+            self.inner,
+            "multiple_completion_supported",
+            False,
+        )
 
     def set_run_config(self, run_config):
-        self.inner.set_run_config(run_config)
-        self.run_config = self.inner.run_config
+        if hasattr(self.inner, "set_run_config"):
+            self.inner.set_run_config(run_config)
+        self.run_config = getattr(self.inner, "run_config", run_config)
 
     def is_finished(self, response: LLMResult) -> bool:
         return self.inner.is_finished(response)
@@ -88,3 +93,30 @@ class SanitizedRagasLLM(BaseRagasLLM):
             callbacks=callbacks,
         )
         return _sanitize_llm_result(result)
+
+
+@dataclass
+class SanitizedInstructorLLM(InstructorBaseRagasLLM):
+    inner: InstructorBaseRagasLLM
+
+    def generate(self, prompt: str, response_model):
+        result = self.inner.generate(prompt, response_model)
+        return self._sanitize_model(result)
+
+    async def agenerate(self, prompt: str, response_model):
+        result = await self.inner.agenerate(prompt, response_model)
+        return self._sanitize_model(result)
+
+    @staticmethod
+    def _sanitize_model(result):
+        # Instructor path already returns parsed Pydantic models when successful,
+        # so we just pass them through unchanged.
+        return result
+
+
+def sanitize_ragas_llm(inner):
+    if isinstance(inner, BaseRagasLLM):
+        return SanitizedBaseRagasLLM(inner)
+    if isinstance(inner, InstructorBaseRagasLLM):
+        return SanitizedInstructorLLM(inner)
+    return inner

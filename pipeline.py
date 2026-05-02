@@ -174,14 +174,14 @@ class RAGPipeline:
 
         from openai import OpenAI
         from ragas.llms import llm_factory
-        from evaluation.llm_adapter import SanitizedRagasLLM
+        from evaluation.llm_adapter import sanitize_ragas_llm
 
         client_kwargs = {"api_key": api_key}
         if endpoint:
             client_kwargs["base_url"] = endpoint
 
         client = OpenAI(**client_kwargs)
-        return SanitizedRagasLLM(llm_factory(judge_model, client=client))
+        return sanitize_ragas_llm(llm_factory(judge_model, client=client))
 
     def _build_eval_embeddings(self):
         eval_embeddings = self.config.evaluation.eval_embeddings
