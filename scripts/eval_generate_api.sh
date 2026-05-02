@@ -15,7 +15,7 @@ if [ -z "$LABEL" ]; then
   LABEL=$(printf '%s' "$MODEL" | tr ':/' '__')
 fi
 
-LOG_DIR="/app/storage/eval_reports"
+LOG_DIR="/app/storage/eval_logs"
 LOG_PATH="$LOG_DIR/eval_generate_${LABEL}.log"
 
 mkdir -p "$LOG_DIR"

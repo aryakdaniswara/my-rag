@@ -19,7 +19,7 @@ if [ -z "$LABEL" ]; then
   LABEL=$(basename "$PREDICTIONS_PATH" .json)
 fi
 
-LOG_DIR="/app/storage/eval_reports"
+LOG_DIR="/app/storage/eval_logs"
 LOG_PATH="$LOG_DIR/eval_score_${LABEL}.log"
 
 mkdir -p "$LOG_DIR"
