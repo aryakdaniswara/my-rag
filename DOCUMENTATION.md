@@ -450,7 +450,7 @@ To improve performance, reduce LLM costs, and ensure 100% accuracy for strictly 
    - We perform a cosine similarity search against `faq_collection`.
    - **Threshold Match (> 0.90)**: The semantic router SHORT-CIRCUITS the pipeline. The verified answer is returned instantly (~0.1s latency). No chunks are fetched, Jina is not invoked, and the generation LLM is completely bypassed.
    - **Fallback (< 0.90)**: The query proceeds through the normal Dual-Routing architecture (Dense + Sparse -> RRF -> Reranker -> LLM).
-3. **Automated Bootstrapping**: Utilizing the existing `SyntheticQAGenerator` module to crawl regulatory PDFs, generate anticipated Q&A pairs, and stage them for human review before insertion into the `faq_collection`.
+3. **Automated Bootstrapping**: Using curated evaluation datasets and human review before inserting anticipated Q&A pairs into the `faq_collection`.
 
 ---
 

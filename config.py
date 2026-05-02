@@ -93,7 +93,7 @@ class EvaluationConfig:
     eval_embeddings_endpoint: Optional[str] = None
     dataset_path: Optional[str] = "storage/eval_datasets/ui_mixed_seed.json"
     report_dir: str = "storage/eval_reports"
-    num_synthetic_qa: int = 3
+    answer_relevancy_strictness: int = 1
     model_matrix: List["EvaluationConfig.ModelSpec"] = field(default_factory=list)
 
 

@@ -61,4 +61,4 @@ evaluation:
   eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/ui_mixed_seed.json"
   report_dir: "storage/eval_reports"
-  num_synthetic_qa: 3
+  answer_relevancy_strictness: 1

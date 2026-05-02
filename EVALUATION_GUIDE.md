@@ -585,10 +585,8 @@ Current deployment caveat:
 Current run layout:
 
 - `evaluation/configs/eval_base_api_judge.yaml` as the canonical comparison baseline
-- `evaluation/configs/config_eval_qwen35_8b.yaml` for the `qwen3.5:8b` run
-- `evaluation/configs/config_eval_qwen35_4b.yaml` for the `qwen3.5:4b` run
-- `evaluation/configs/config_eval_qwen35_2b.yaml` for the `qwen3.5:2b` run
-- the per-model configs now inherit from `evaluation/configs/eval_base_api_judge.yaml` and override only the generation model under test
+- `evaluation/configs/eval_matrix_qwen35.yaml` for the shared `qwen3.5` comparison run
+- the matrix config now inherits from `evaluation/configs/eval_base_api_judge.yaml` and lists the generation models under test in one file
 - `config_server.yaml` remains the deployment/runtime config and is no longer the evaluation inheritance root
 - all three configs should keep the same judge settings so the comparison stays fair
 
@@ -821,7 +819,7 @@ The following behaviors are true today and should shape how you interpret evalua
 - the existing CLI `eval` path is minimal and should not yet be treated as the final bulletproof workflow
 - the current bootstrap dataset artifact is `storage/eval_datasets/snapshot_chunk_synthetic_qa.json`, generated from `snapshot-chunk.json`
 - the current default benchmark artifact is `storage/eval_datasets/ui_mixed_seed.json`
-- the CLI now supports three practical input paths: `--questions`, `--synthetic`, or the configured `evaluation.dataset_path`
+- the CLI now supports two practical input paths: `--questions` or the configured `evaluation.dataset_path`
 - synthetic QA generation is useful for bootstrapping, but it is not yet a fully provenance-rich benchmark builder
 - the current documentation should point here for evaluation truth instead of duplicating methodology elsewhere
 

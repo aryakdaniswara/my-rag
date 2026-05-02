@@ -36,7 +36,11 @@ class RAGASEvaluator:
     """RAGAS evaluation wrapper with detailed failure analysis."""
 
     def __init__(
-        self, eval_llm=None, eval_embeddings=None, metrics: Optional[List[str]] = None
+        self,
+        eval_llm=None,
+        eval_embeddings=None,
+        metrics: Optional[List[str]] = None,
+        answer_relevancy_strictness: int = 1,
     ):
         self.eval_llm = eval_llm
         self.eval_embeddings = eval_embeddings
@@ -46,6 +50,24 @@ class RAGASEvaluator:
             "context_precision",
             "context_recall",
         ]
+        self.answer_relevancy_strictness = max(1, int(answer_relevancy_strictness or 1))
+
+    def _build_metric_map(self):
+        from ragas.metrics import (
+            Faithfulness,
+            ResponseRelevancy,
+            ContextPrecision,
+            LLMContextRecall,
+        )
+
+        return {
+            "faithfulness": Faithfulness(),
+            "answer_relevancy": ResponseRelevancy(
+                strictness=self.answer_relevancy_strictness
+            ),
+            "context_precision": ContextPrecision(),
+            "context_recall": LLMContextRecall(),
+        }
 
     @staticmethod
     def explain_metrics() -> str:
@@ -71,12 +93,6 @@ class RAGASEvaluator:
         """Run RAGAS evaluation and perform failure categorization."""
         try:
             from ragas import evaluate
-            from ragas.metrics import (
-                Faithfulness,
-                ResponseRelevancy,
-                ContextPrecision,
-                LLMContextRecall,
-            )
             from ragas import EvaluationDataset
             from datasets import Dataset
         except ImportError:
@@ -84,12 +100,7 @@ class RAGASEvaluator:
                 "RAGAS evaluation dependencies are not installed in this environment"
             )
 
-        metric_map = {
-            "faithfulness": Faithfulness(),
-            "answer_relevancy": ResponseRelevancy(),
-            "context_precision": ContextPrecision(),
-            "context_recall": LLMContextRecall(),
-        }
+        metric_map = self._build_metric_map()
 
         has_ground_truths = bool(
             ground_truths and any(isinstance(g, str) and g.strip() for g in ground_truths)
@@ -157,12 +168,84 @@ class RAGASEvaluator:
             }
         except Exception as e:
             logger.error(f"RAGAS evaluation failed: {e}")
+            partial = self._evaluate_metrics_individually(
+                evaluate_fn=evaluate,
+                eval_dataset=eval_dataset,
+                effective_metrics=effective_metrics,
+                metric_map=metric_map,
+                questions=questions,
+                retrieval_logs=retrieval_logs,
+                rerank_logs=rerank_logs,
+            )
+            if partial is not None:
+                partial["error"] = str(e)
+                partial["dataset_columns"] = list(dataset.column_names)
+                partial.setdefault("metric_caveats", []).append(
+                    "batch evaluation failed; results were recovered per metric where possible"
+                )
+                return partial
             return {
                 "error": str(e),
                 "requested_metrics": self.metrics,
                 "used_metrics": effective_metrics,
                 "dataset_columns": list(dataset.column_names),
             }
+
+    def _evaluate_metrics_individually(
+        self,
+        evaluate_fn,
+        eval_dataset,
+        effective_metrics: List[str],
+        metric_map: Dict[str, Any],
+        questions: List[str],
+        retrieval_logs: Optional[List[Dict]] = None,
+        rerank_logs: Optional[List[Dict]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        collected_metrics: Dict[str, Any] = {}
+        metric_errors: Dict[str, str] = {}
+        any_success = False
+
+        for metric_name in effective_metrics:
+            metric = metric_map[metric_name]
+            try:
+                result = evaluate_fn(
+                    dataset=eval_dataset,
+                    metrics=[metric],
+                    llm=self.eval_llm,
+                    embeddings=self.eval_embeddings,
+                )
+                metrics_df = result.to_pandas()
+                if metric_name in metrics_df.columns:
+                    collected_metrics[metric_name] = metrics_df[metric_name].tolist()
+                    any_success = True
+            except Exception as metric_exc:
+                logger.error(
+                    "RAGAS per-metric fallback failed for %s: %s",
+                    metric_name,
+                    metric_exc,
+                )
+                metric_errors[metric_name] = str(metric_exc)
+
+        if not any_success:
+            return None
+
+        import pandas as pd
+
+        metrics_df = pd.DataFrame(collected_metrics)
+        analysis = self._categorize_failures(
+            questions, metrics_df, retrieval_logs, rerank_logs
+        )
+        metric_descriptions = {
+            key: value for key, value in METRIC_DESCRIPTIONS.items() if key in collected_metrics
+        }
+        return {
+            "metrics": metrics_df.to_dict(),
+            "failure_analysis": analysis,
+            "metric_descriptions": metric_descriptions,
+            "requested_metrics": self.metrics,
+            "used_metrics": list(collected_metrics.keys()),
+            "metric_errors": metric_errors,
+        }
 
     def _categorize_failures(
         self, questions, metrics_df, retrieval_logs, rerank_logs

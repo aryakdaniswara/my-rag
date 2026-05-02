@@ -23,7 +23,6 @@ from storage import MilvusClient
 from retrieval import Retriever
 from generation import LLM
 from evaluation import RAGASEvaluator
-from evaluation.synthetic_qa import SyntheticQAGenerator
 from debugging import ChunkInspector, RetrievalTracer
 from ingestion.state import IngestionState
 
@@ -145,13 +144,14 @@ class RAGPipeline:
 
         from openai import OpenAI
         from ragas.llms import llm_factory
+        from evaluation.llm_adapter import SanitizedRagasLLM
 
         client_kwargs = {"api_key": api_key}
         if endpoint:
             client_kwargs["base_url"] = endpoint
 
         client = OpenAI(**client_kwargs)
-        return llm_factory(judge_model, client=client)
+        return SanitizedRagasLLM(llm_factory(judge_model, client=client))
 
     def _build_eval_embeddings(self):
         eval_embeddings = self.config.evaluation.eval_embeddings
@@ -1027,6 +1027,7 @@ class RAGPipeline:
                 eval_llm=self._build_eval_llm(),
                 eval_embeddings=self._build_eval_embeddings(),
                 metrics=self.config.evaluation.metrics,
+                answer_relevancy_strictness=self.config.evaluation.answer_relevancy_strictness,
             )
 
         contexts = []
@@ -1134,26 +1135,3 @@ class RAGPipeline:
         report["report_path"] = self._write_eval_report(report)
         return report
 
-    def generate_synthetic_qa(
-        self,
-        paths: List[str] = None,
-        directory: str = None,
-        num_qa_per_doc: int = 3,
-    ) -> List[Dict[str, str]]:
-        """Generate synthetic Q&A pairs from documents."""
-        if not paths and not directory:
-            raise ValueError("Must provide paths or directory")
-
-        if paths:
-            chunks = []
-            for i, path in enumerate(paths):
-                file_chunks = self.ingestion.process_file(path, doc_id=f"doc_{i}")
-                chunks.extend([c.text for c in file_chunks])
-        else:
-            dir_chunks = self.ingestion.process_directory(directory)
-            chunks = [c.text for c in dir_chunks]
-
-        generator = SyntheticQAGenerator(self.llm)
-        qa_pairs = generator.generate(chunks, num_qa_per_doc)
-
-        return qa_pairs

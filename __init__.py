@@ -20,7 +20,6 @@ from storage import MilvusClient
 from retrieval import Retriever, RetrievedDocument
 from generation import LLM, GenerationResult
 from evaluation import RAGASEvaluator, METRIC_DESCRIPTIONS
-from evaluation.synthetic_qa import SyntheticQAGenerator
 from debugging import ChunkInspector, RetrievalTracer, ChunkMatch
 
 __version__ = "0.1.0"
@@ -49,7 +48,6 @@ __all__ = [
     "GenerationResult",
     "RAGASEvaluator",
     "METRIC_DESCRIPTIONS",
-    "SyntheticQAGenerator",
     "ChunkInspector",
     "RetrievalTracer",
     "ChunkMatch",

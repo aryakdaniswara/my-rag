@@ -94,29 +94,18 @@ def _resolve_eval_inputs(args, parser, rag: RAGPipeline) -> tuple[list[str], lis
     ground_truths = None
     dataset_metadata = None
 
-    if args.synthetic:
-        if not args.paths and not args.directory:
-            parser.error("eval --synthetic requires --paths or --directory")
-        qa_pairs = rag.generate_synthetic_qa(
-            paths=args.paths,
-            directory=args.directory,
-            num_qa_per_doc=rag.config.evaluation.num_synthetic_qa,
-        )
-        questions = [p["question"] for p in qa_pairs]
-        ground_truths = [p["answer"] for p in qa_pairs]
-        print(f"Generated {len(questions)} synthetic questions")
-    elif not questions:
+    if not questions:
         dataset_path_value = args.dataset or rag.config.evaluation.dataset_path
         if not dataset_path_value:
             parser.error(
-                "eval requires --questions, --synthetic, or evaluation.dataset_path"
+                "eval requires --questions or evaluation.dataset_path"
             )
         dataset_path = Path(dataset_path_value)
         questions, ground_truths, dataset_metadata = _load_eval_dataset(dataset_path)
         print(f"Loaded {len(questions)} evaluation samples from {dataset_path}")
 
     if not questions:
-        parser.error("eval requires --questions, --synthetic, or a dataset")
+        parser.error("eval requires --questions or a dataset")
 
     return questions, ground_truths, dataset_metadata
 
@@ -261,12 +250,33 @@ def _run_eval_matrix(
 
         label = spec.label or spec.model_name
         print(f"[{index}/{len(model_specs)}] Evaluating {label}")
-        run_rag = RAGPipeline(run_config)
-        report = run_rag.evaluate(
-            questions=questions,
-            ground_truths=ground_truths,
-            dataset_metadata=dataset_metadata,
-        )
+        try:
+            run_rag = RAGPipeline(run_config)
+            report = run_rag.evaluate(
+                questions=questions,
+                ground_truths=ground_truths,
+                dataset_metadata=dataset_metadata,
+            )
+        except Exception as exc:
+            report = {
+                "generated_at": datetime.now().isoformat(),
+                "models": {
+                    "generation_model": run_config.generation.model_name,
+                    "generation_endpoint": run_config.generation.llm_endpoint,
+                    "judge_model": run_config.evaluation.eval_llm,
+                },
+                "dataset": {
+                    "dataset_path": run_config.evaluation.dataset_path,
+                    "question_count": len(questions),
+                },
+                "timings": {"summary": {}},
+                "results": {
+                    "error": str(exc),
+                    "requested_metrics": run_config.evaluation.metrics,
+                    "used_metrics": [],
+                },
+                "report_path": None,
+            }
 
         matrix_entry = _build_matrix_entry(report, label)
         aggregate["models"].append(matrix_entry)
@@ -483,18 +493,13 @@ def main():
         "--k", type=int, default=5, help="Number of documents to retrieve"
     )
 
-    eval_parser = subparsers.add_parser("eval", help="Evaluate RAG with synthetic QA")
+    eval_parser = subparsers.add_parser("eval", help="Evaluate RAG using a dataset file")
     eval_parser.add_argument("--config", required=True, help="Path to config YAML")
     eval_parser.add_argument("--questions", nargs="*", help="Questions to evaluate")
     eval_parser.add_argument(
         "--dataset",
         help="Optional dataset JSON file. Defaults to evaluation.dataset_path when --questions is omitted.",
     )
-    eval_parser.add_argument(
-        "--synthetic", action="store_true", help="Generate synthetic QA"
-    )
-    eval_parser.add_argument("--paths", nargs="*", help="Files used for synthetic QA generation")
-    eval_parser.add_argument("--directory", help="Directory used for synthetic QA generation")
     eval_parser.add_argument("--output", help="Output file for results")
 
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
