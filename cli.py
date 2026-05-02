@@ -3,9 +3,13 @@ import json
 import math
 import re
 import sys
+import time
+from urllib.parse import urlparse
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
+
+import httpx
 
 from pipeline import RAGPipeline
 from config import RAGConfig
@@ -104,12 +108,20 @@ def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
 
 
 def _resolve_eval_inputs(args, parser, rag: RAGPipeline) -> tuple[list[str], list[str] | None, dict | None]:
+    return _resolve_eval_inputs_from_dataset_path(
+        args,
+        parser,
+        rag.config.evaluation.dataset_path,
+    )
+
+
+def _resolve_eval_inputs_from_dataset_path(args, parser, default_dataset_path: str | None) -> tuple[list[str], list[str] | None, dict | None]:
     questions = args.questions
     ground_truths = None
     dataset_metadata = None
 
     if not questions:
-        dataset_path_value = args.dataset or rag.config.evaluation.dataset_path
+        dataset_path_value = args.dataset or default_dataset_path
         if not dataset_path_value:
             parser.error(
                 "eval requires --questions or evaluation.dataset_path"
@@ -184,6 +196,129 @@ def _apply_eval_score_overrides(config: RAGConfig, args) -> None:
         config.evaluation.eval_embeddings = args.eval_embeddings
     if args.eval_embeddings_endpoint:
         config.evaluation.eval_embeddings_endpoint = args.eval_embeddings_endpoint
+
+
+def _derive_ollama_generate_url(llm_endpoint: str) -> str:
+    endpoint = llm_endpoint.rstrip("/")
+    if endpoint.endswith("/v1"):
+        return endpoint[:-3] + "/api/generate"
+    if endpoint.endswith("/api"):
+        return endpoint + "/generate"
+
+    parsed = urlparse(endpoint)
+    base = f"{parsed.scheme}://{parsed.netloc}" if parsed.scheme and parsed.netloc else endpoint
+    return base.rstrip("/") + "/api/generate"
+
+
+def _unload_ollama_model(llm_endpoint: str, model_name: str) -> None:
+    unload_url = _derive_ollama_generate_url(llm_endpoint)
+    payload = {
+        "model": model_name,
+        "keep_alive": 0,
+        "stream": False,
+    }
+    try:
+        with httpx.Client(timeout=60.0) as client:
+            response = client.post(unload_url, json=payload)
+            response.raise_for_status()
+        print(f"Requested Ollama unload for model {model_name} via {unload_url}")
+    except Exception as exc:
+        print(f"Warning: failed to unload Ollama model {model_name}: {exc}")
+
+
+def _generate_eval_predictions_via_api(
+    config: RAGConfig,
+    api_base_url: str,
+    questions: list[str],
+    ground_truths: list[str] | None = None,
+    dataset_metadata: dict | None = None,
+    generation_override: dict | None = None,
+) -> dict:
+    api_url = f"{api_base_url.rstrip('/')}/query"
+    samples = []
+    timing_rows = []
+
+    with httpx.Client(timeout=300.0) as client:
+        for index, question in enumerate(questions):
+            started = time.time()
+            payload: dict[str, object] = {"query": question}
+            if generation_override:
+                payload["config_override"] = {"generation": generation_override}
+
+            response = client.post(api_url, json=payload)
+            response.raise_for_status()
+            body = response.json()
+            end_to_end_time_ms = (time.time() - started) * 1000
+
+            sample = {
+                "question": question,
+                "answer": body.get("answer", ""),
+                "context": body.get("context", ""),
+                "retrieved_contexts": [body.get("context", "")],
+                "sources": body.get("sources", []),
+                "confidence_score": body.get("metadata", {}).get("confidence_score"),
+                "num_docs": body.get("metadata", {}).get("num_docs"),
+                "timings": {
+                    "retrieval_time_ms": None,
+                    "generation_time_ms": None,
+                    "end_to_end_time_ms": end_to_end_time_ms,
+                    "ttft_ms": None,
+                    "stream_completed": None,
+                },
+            }
+            if ground_truths and index < len(ground_truths):
+                sample["ground_truth"] = ground_truths[index]
+            samples.append(sample)
+            timing_rows.append(
+                {
+                    "question": question,
+                    **sample["timings"],
+                }
+            )
+
+    report = {
+        "generated_at": datetime.now().isoformat(),
+        "mode": "prediction_generation_api",
+        "api_base_url": api_base_url,
+        "models": {
+            "generation_model": generation_override.get("model_name", config.generation.model_name)
+            if generation_override
+            else config.generation.model_name,
+            "generation_endpoint": api_base_url,
+            "upstream_generation_endpoint": generation_override.get("llm_endpoint", config.generation.llm_endpoint)
+            if generation_override
+            else config.generation.llm_endpoint,
+        },
+        "dataset": {
+            "dataset_path": config.evaluation.dataset_path,
+            "question_count": len(questions),
+            "has_ground_truths": bool(
+                ground_truths and any(isinstance(g, str) and g.strip() for g in ground_truths)
+            ),
+        },
+        "timings": {
+            "per_question": timing_rows,
+            "summary": {
+                "retrieval_time_ms_avg": None,
+                "generation_time_ms_avg": None,
+                "end_to_end_time_ms_avg": (
+                    sum(row["end_to_end_time_ms"] for row in timing_rows) / len(timing_rows)
+                    if timing_rows else None
+                ),
+                "ttft_ms_avg": None,
+            },
+        },
+        "artifacts": {
+            "samples": samples,
+        },
+        "caveats": [
+            "Predictions were generated through the live /query API and reused the running RAG service",
+            "Per-stage retrieval and generation timings are not currently exposed by the API path",
+        ],
+    }
+    if dataset_metadata:
+        report["dataset"].update(dataset_metadata)
+    return report
 
 
 def _metric_means(results: dict) -> dict[str, float | None]:
@@ -600,6 +735,11 @@ def main():
     )
     eval_generate_parser.add_argument("--model", help="Override generation model for this run")
     eval_generate_parser.add_argument("--endpoint", help="Override generation endpoint for this run")
+    eval_generate_parser.add_argument(
+        "--api-base-url",
+        default="http://127.0.0.1:8000",
+        help="Base URL of the live RAG API used for generation",
+    )
     eval_generate_parser.add_argument("--label", help="Optional label used in the saved artifact filename")
     eval_generate_parser.add_argument("--max-tokens", type=int, help="Override generation max tokens")
     eval_generate_parser.add_argument("--temperature", type=float, help="Override generation temperature")
@@ -850,11 +990,58 @@ def main():
         return
 
     config = RAGConfig.from_yaml(args.config)
+    base_generation_model = config.generation.model_name
+    base_generation_endpoint = config.generation.llm_endpoint
     output_label = None
     if args.command == "eval-generate":
         output_label = _apply_eval_generate_overrides(config, args)
     elif args.command == "eval-score":
         _apply_eval_score_overrides(config, args)
+
+    if args.command == "eval-generate":
+        questions, ground_truths, dataset_metadata = _resolve_eval_inputs_from_dataset_path(
+            args,
+            parser,
+            config.evaluation.dataset_path,
+        )
+        generation_override = {
+            "model_name": config.generation.model_name,
+            "llm_endpoint": config.generation.llm_endpoint,
+            "max_tokens": config.generation.max_tokens,
+            "temperature": config.generation.temperature,
+            "reasoning_effort": config.generation.reasoning_effort,
+        }
+        results = _generate_eval_predictions_via_api(
+            config=config,
+            api_base_url=args.api_base_url,
+            questions=questions,
+            ground_truths=ground_truths,
+            dataset_metadata=dataset_metadata,
+            generation_override=generation_override,
+        )
+        prediction_prefix = "eval_predictions"
+        output_slug = _slugify_label(output_label)
+        if output_slug:
+            prediction_prefix = f"{prediction_prefix}_{output_slug}"
+        output = args.output or _timestamped_path(
+            config.evaluation.report_dir,
+            prediction_prefix,
+        )
+        with open(output, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2, default=str)
+        print(f"Prediction artifact saved to {output}")
+        should_unload_custom_model = bool(
+            args.model and (
+                config.generation.model_name != base_generation_model
+                or config.generation.llm_endpoint != base_generation_endpoint
+            )
+        )
+        if should_unload_custom_model:
+            _unload_ollama_model(
+                llm_endpoint=config.generation.llm_endpoint,
+                model_name=config.generation.model_name,
+            )
+        return
 
     preload_retrieval_models = args.command != "eval-score"
     rag = RAGPipeline.from_config(config) if preload_retrieval_models else RAGPipeline(
@@ -927,25 +1114,6 @@ def main():
             with open(output, "w", encoding="utf-8") as f:
                 json.dump(results, f, indent=2, default=str)
             print(f"Results saved to {output}")
-
-        elif args.command == "eval-generate":
-            questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
-            results = rag.generate_eval_predictions(
-                questions=questions,
-                ground_truths=ground_truths,
-                dataset_metadata=dataset_metadata,
-            )
-            prediction_prefix = "eval_predictions"
-            output_slug = _slugify_label(output_label)
-            if output_slug:
-                prediction_prefix = f"{prediction_prefix}_{output_slug}"
-            output = args.output or _timestamped_path(
-                rag.config.evaluation.report_dir,
-                prediction_prefix,
-            )
-            with open(output, "w", encoding="utf-8") as f:
-                json.dump(results, f, indent=2, default=str)
-            print(f"Prediction artifact saved to {output}")
 
         elif args.command == "eval-score":
             prediction_path = Path(args.predictions)

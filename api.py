@@ -13,6 +13,7 @@ import httpx
 
 from pipeline import RAGPipeline
 from config import RAGConfig
+from generation import LLM
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -247,6 +248,40 @@ def _load_runtime_config() -> RAGConfig:
     if not os.path.exists(config_path):
         raise HTTPException(status_code=503, detail="Runtime config not found")
     return RAGConfig.from_yaml(config_path)
+
+
+def _extract_generation_override(config_override: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(config_override, dict):
+        return {}
+
+    generation_override = config_override.get("generation")
+    if isinstance(generation_override, dict):
+        return generation_override
+
+    direct_keys = {
+        "llm_endpoint",
+        "model_name",
+        "max_tokens",
+        "temperature",
+        "reasoning_effort",
+        "system_prompt",
+    }
+    return {key: value for key, value in config_override.items() if key in direct_keys}
+
+
+def _build_request_llm(config_override: Optional[Dict[str, Any]] = None) -> LLM:
+    runtime_config = _load_runtime_config()
+    generation = runtime_config.generation
+    generation_override = _extract_generation_override(config_override)
+
+    return LLM(
+        endpoint=generation_override.get("llm_endpoint", generation.llm_endpoint),
+        model_name=generation_override.get("model_name", generation.model_name),
+        max_tokens=generation_override.get("max_tokens", generation.max_tokens),
+        temperature=generation_override.get("temperature", generation.temperature),
+        reasoning_effort=generation_override.get("reasoning_effort", generation.reasoning_effort),
+        system_prompt=generation_override.get("system_prompt", generation.system_prompt),
+    )
 
 
 def _llm_proxy() -> httpx.AsyncClient:
@@ -509,23 +544,52 @@ async def query_rag(request: QueryRequest, response: Response):
         raise HTTPException(status_code=503, detail="RAG Pipeline not initialized")
 
     try:
-        result = rag_pipeline.query(
-            request.query,
-            metadata_filter=request.metadata_filter,
-        )
-        clean_answer = strip_thought_process(result.answer)
+        if request.config_override:
+            docs = rag_pipeline.retriever.retrieve(
+                query=request.query,
+                collection_name=rag_pipeline.config.storage.collection_name,
+                metadata_filter=request.metadata_filter,
+                k=rag_pipeline.config.retrieval.k,
+            )
+            docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+            request_llm = _build_request_llm(request.config_override)
+            llm_result = request_llm.generate(
+                prompt=request.query,
+                retrieved_docs=docs,
+                context=None if docs else "No context provided.",
+            )
+            clean_answer = strip_thought_process(llm_result.answer)
+            confidence_score = rag_pipeline._compute_retrieval_strength(docs)
+            metadata = {
+                "query": request.query,
+                "num_docs": len(docs),
+                "confidence_score": confidence_score,
+                "generation_override_applied": True,
+            }
+            sources = llm_result.sources
+            context = llm_result.context
+        else:
+            result = rag_pipeline.query(
+                request.query,
+                metadata_filter=request.metadata_filter,
+            )
+            clean_answer = strip_thought_process(result.answer)
+            confidence_score = result.confidence_score
+            metadata = {
+                **result.metadata,
+                "confidence_score": result.confidence_score
+            }
+            sources = result.sources
+            context = result.context
 
         # Set confidence header
-        response.headers["X-Confidence-Rate"] = str(result.confidence_score)
+        response.headers["X-Confidence-Rate"] = str(confidence_score)
 
         return {
             "answer": clean_answer,
-            "context": result.context,
-            "sources": result.sources,
-            "metadata": {
-                **result.metadata,
-                "confidence_score": result.confidence_score
-            },
+            "context": context,
+            "sources": sources,
+            "metadata": metadata,
         }
     except Exception as e:
         logger.error(f"Query failed: {e}", exc_info=True)
@@ -542,6 +606,39 @@ async def query_rag_stream(request: QueryRequest):
         raise HTTPException(status_code=503, detail="RAG Pipeline not initialized")
 
     try:
+        if request.config_override:
+            docs = rag_pipeline.retriever.retrieve(
+                query=request.query,
+                collection_name=rag_pipeline.config.storage.collection_name,
+                metadata_filter=request.metadata_filter,
+                k=rag_pipeline.config.retrieval.k,
+            )
+            docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+            request_llm = _build_request_llm(request.config_override)
+
+            def _override_stream():
+                metadata_payload = {
+                    "num_docs": len(docs),
+                    "query": request.query,
+                    "generation_override_applied": True,
+                }
+                yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
+                yield f"data: {json.dumps({'type': 'sources', 'content': [{'pdf_url': doc.metadata.get('pdf_url'), 'page_url': doc.metadata.get('page_url'), 'scraped_at': doc.metadata.get('scraped_at'), 'page': doc.metadata.get('page_number', 'Unknown')} for doc in docs]})}\n\n"
+                for token in request_llm.generate_stream(prompt=request.query, retrieved_docs=docs):
+                    yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                confidence_score = rag_pipeline._compute_retrieval_strength(docs)
+                yield f"data: {json.dumps({'type': 'confidence', 'content': {'confidence_score': confidence_score, 'query': request.query}})}\n\n"
+
+            return StreamingResponse(
+                _override_stream(),
+                media_type="text/event-stream",
+                headers={
+                    "X-Accel-Buffering": "no",
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive",
+                }
+            )
+
         return StreamingResponse(
             rag_pipeline.query_stream(
                 request.query,
