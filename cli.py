@@ -248,7 +248,11 @@ def _generate_eval_predictions_via_api(
             response = client.post(api_url, json=payload)
             response.raise_for_status()
             body = response.json()
+            metadata = body.get("metadata", {})
             end_to_end_time_ms = (time.time() - started) * 1000
+            retrieval_time_ms = metadata.get("retrieval_time_ms")
+            generation_time_ms = metadata.get("generation_time_ms")
+            api_end_to_end_time_ms = metadata.get("end_to_end_time_ms")
 
             sample = {
                 "question": question,
@@ -256,12 +260,12 @@ def _generate_eval_predictions_via_api(
                 "context": body.get("context", ""),
                 "retrieved_contexts": [body.get("context", "")],
                 "sources": body.get("sources", []),
-                "confidence_score": body.get("metadata", {}).get("confidence_score"),
-                "num_docs": body.get("metadata", {}).get("num_docs"),
+                "confidence_score": metadata.get("confidence_score"),
+                "num_docs": metadata.get("num_docs"),
                 "timings": {
-                    "retrieval_time_ms": None,
-                    "generation_time_ms": None,
-                    "end_to_end_time_ms": end_to_end_time_ms,
+                    "retrieval_time_ms": retrieval_time_ms,
+                    "generation_time_ms": generation_time_ms,
+                    "end_to_end_time_ms": api_end_to_end_time_ms or end_to_end_time_ms,
                     "ttft_ms": None,
                     "stream_completed": None,
                 },
@@ -299,8 +303,26 @@ def _generate_eval_predictions_via_api(
         "timings": {
             "per_question": timing_rows,
             "summary": {
-                "retrieval_time_ms_avg": None,
-                "generation_time_ms_avg": None,
+                "retrieval_time_ms_avg": (
+                    sum(
+                        float(row["retrieval_time_ms"])
+                        for row in timing_rows
+                        if row.get("retrieval_time_ms") is not None
+                    )
+                    / len([row for row in timing_rows if row.get("retrieval_time_ms") is not None])
+                    if any(row.get("retrieval_time_ms") is not None for row in timing_rows)
+                    else None
+                ),
+                "generation_time_ms_avg": (
+                    sum(
+                        float(row["generation_time_ms"])
+                        for row in timing_rows
+                        if row.get("generation_time_ms") is not None
+                    )
+                    / len([row for row in timing_rows if row.get("generation_time_ms") is not None])
+                    if any(row.get("generation_time_ms") is not None for row in timing_rows)
+                    else None
+                ),
                 "end_to_end_time_ms_avg": (
                     sum(row["end_to_end_time_ms"] for row in timing_rows) / len(timing_rows)
                     if timing_rows else None
@@ -313,7 +335,7 @@ def _generate_eval_predictions_via_api(
         },
         "caveats": [
             "Predictions were generated through the live /query API and reused the running RAG service",
-            "Per-stage retrieval and generation timings are not currently exposed by the API path",
+            "End-to-end timing falls back to client-side round-trip time if the API metadata omits it",
         ],
     }
     if dataset_metadata:

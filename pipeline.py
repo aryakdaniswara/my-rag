@@ -973,9 +973,12 @@ class RAGPipeline:
         """Streaming version of the RAG pipeline query."""
 
         try:
+            query_started = time.time()
             if pre_retrieved_docs:
                 docs = pre_retrieved_docs
+                retrieval_time_ms = None
             else:
+                retrieval_started = time.time()
                 docs = self.retriever.retrieve(
                     query=query,
                     collection_name=self.config.storage.collection_name,
@@ -985,11 +988,13 @@ class RAGPipeline:
                 )
                 rerank_top_k = self.config.retrieval.rerank_top_k
                 docs = docs[:rerank_top_k]
+                retrieval_time_ms = (time.time() - retrieval_started) * 1000
 
             # Yield search metadata before the streamed answer begins.
             metadata_payload = {
                 "num_docs": len(docs),
-                "query": query
+                "query": query,
+                "retrieval_time_ms": retrieval_time_ms,
             }
             logger.info(f"Streaming metadata: {metadata_payload}")
             yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
@@ -1007,11 +1012,15 @@ class RAGPipeline:
             yield f"data: {json.dumps({'type': 'sources', 'content': sources})}\n\n"
 
             # Stream the LLM response.
+            generation_started = time.time()
             for token in self.llm.generate_stream(prompt=query, retrieved_docs=docs):
                 yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
 
+            generation_time_ms = (time.time() - generation_started) * 1000
+            end_to_end_time_ms = (time.time() - query_started) * 1000
             confidence_score = self._compute_retrieval_strength(docs)
             yield f"data: {json.dumps({'type': 'confidence', 'content': {'confidence_score': confidence_score, 'query': query}})}\n\n"
+            yield f"data: {json.dumps({'type': 'timings', 'content': {'retrieval_time_ms': retrieval_time_ms, 'generation_time_ms': generation_time_ms, 'end_to_end_time_ms': end_to_end_time_ms, 'query': query}})}\n\n"
 
         except Exception as e:
             logger.error(f"Streaming query failed: {e}", exc_info=True)

@@ -8,6 +8,7 @@ import os
 import re
 import logging
 import json
+import time
 
 import httpx
 
@@ -544,20 +545,27 @@ async def query_rag(request: QueryRequest, response: Response):
         raise HTTPException(status_code=503, detail="RAG Pipeline not initialized")
 
     try:
+        query_started = time.time()
+        retrieval_started = time.time()
+        docs = rag_pipeline.retriever.retrieve(
+            query=request.query,
+            collection_name=rag_pipeline.config.storage.collection_name,
+            metadata_filter=request.metadata_filter,
+            k=rag_pipeline.config.retrieval.k,
+        )
+        docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+        retrieval_time_ms = (time.time() - retrieval_started) * 1000
+
+        generation_started = time.time()
         if request.config_override:
-            docs = rag_pipeline.retriever.retrieve(
-                query=request.query,
-                collection_name=rag_pipeline.config.storage.collection_name,
-                metadata_filter=request.metadata_filter,
-                k=rag_pipeline.config.retrieval.k,
-            )
-            docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
             request_llm = _build_request_llm(request.config_override)
             llm_result = request_llm.generate(
                 prompt=request.query,
                 retrieved_docs=docs,
                 context=None if docs else "No context provided.",
             )
+            generation_time_ms = (time.time() - generation_started) * 1000
+            end_to_end_time_ms = (time.time() - query_started) * 1000
             clean_answer = strip_thought_process(llm_result.answer)
             confidence_score = rag_pipeline._compute_retrieval_strength(docs)
             metadata = {
@@ -565,25 +573,38 @@ async def query_rag(request: QueryRequest, response: Response):
                 "num_docs": len(docs),
                 "confidence_score": confidence_score,
                 "generation_override_applied": True,
+                "retrieval_time_ms": retrieval_time_ms,
+                "generation_time_ms": generation_time_ms,
+                "end_to_end_time_ms": end_to_end_time_ms,
             }
             sources = llm_result.sources
             context = llm_result.context
         else:
-            result = rag_pipeline.query(
-                request.query,
-                metadata_filter=request.metadata_filter,
+            llm_result = rag_pipeline.llm.generate(
+                prompt=request.query,
+                retrieved_docs=docs,
+                context=None if docs else "No context provided.",
             )
-            clean_answer = strip_thought_process(result.answer)
-            confidence_score = result.confidence_score
+            generation_time_ms = (time.time() - generation_started) * 1000
+            end_to_end_time_ms = (time.time() - query_started) * 1000
+            clean_answer = strip_thought_process(llm_result.answer)
+            confidence_score = rag_pipeline._compute_retrieval_strength(docs)
             metadata = {
-                **result.metadata,
-                "confidence_score": result.confidence_score
+                "query": request.query,
+                "num_docs": len(docs),
+                "confidence_score": confidence_score,
+                "retrieval_time_ms": retrieval_time_ms,
+                "generation_time_ms": generation_time_ms,
+                "end_to_end_time_ms": end_to_end_time_ms,
             }
-            sources = result.sources
-            context = result.context
+            sources = llm_result.sources
+            context = llm_result.context
 
         # Set confidence header
         response.headers["X-Confidence-Rate"] = str(confidence_score)
+        response.headers["X-Retrieval-Time-Ms"] = f"{retrieval_time_ms:.3f}"
+        response.headers["X-Generation-Time-Ms"] = f"{generation_time_ms:.3f}"
+        response.headers["X-End-To-End-Time-Ms"] = f"{end_to_end_time_ms:.3f}"
 
         return {
             "answer": clean_answer,
@@ -607,6 +628,8 @@ async def query_rag_stream(request: QueryRequest):
 
     try:
         if request.config_override:
+            query_started = time.time()
+            retrieval_started = time.time()
             docs = rag_pipeline.retriever.retrieve(
                 query=request.query,
                 collection_name=rag_pipeline.config.storage.collection_name,
@@ -614,6 +637,7 @@ async def query_rag_stream(request: QueryRequest):
                 k=rag_pipeline.config.retrieval.k,
             )
             docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+            retrieval_time_ms = (time.time() - retrieval_started) * 1000
             request_llm = _build_request_llm(request.config_override)
 
             def _override_stream():
@@ -621,13 +645,18 @@ async def query_rag_stream(request: QueryRequest):
                     "num_docs": len(docs),
                     "query": request.query,
                     "generation_override_applied": True,
+                    "retrieval_time_ms": retrieval_time_ms,
                 }
                 yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
                 yield f"data: {json.dumps({'type': 'sources', 'content': [{'pdf_url': doc.metadata.get('pdf_url'), 'page_url': doc.metadata.get('page_url'), 'scraped_at': doc.metadata.get('scraped_at'), 'page': doc.metadata.get('page_number', 'Unknown')} for doc in docs]})}\n\n"
+                generation_started = time.time()
                 for token in request_llm.generate_stream(prompt=request.query, retrieved_docs=docs):
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+                generation_time_ms = (time.time() - generation_started) * 1000
+                end_to_end_time_ms = (time.time() - query_started) * 1000
                 confidence_score = rag_pipeline._compute_retrieval_strength(docs)
                 yield f"data: {json.dumps({'type': 'confidence', 'content': {'confidence_score': confidence_score, 'query': request.query}})}\n\n"
+                yield f"data: {json.dumps({'type': 'timings', 'content': {'retrieval_time_ms': retrieval_time_ms, 'generation_time_ms': generation_time_ms, 'end_to_end_time_ms': end_to_end_time_ms, 'query': request.query, 'generation_override_applied': True}})}\n\n"
 
             return StreamingResponse(
                 _override_stream(),
