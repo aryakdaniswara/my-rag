@@ -146,9 +146,56 @@ def _metric_means(results: dict) -> dict[str, float | None]:
     return summary
 
 
+def _primary_score(metric_means: dict[str, float | None]) -> float | None:
+    numeric_values = [
+        value for value in metric_means.values() if isinstance(value, (int, float))
+    ]
+    return sum(numeric_values) / len(numeric_values) if numeric_values else None
+
+
+def _build_leaderboards(model_entries: list[dict]) -> dict[str, list[dict]]:
+    metric_names: set[str] = set()
+    for entry in model_entries:
+        metric_names.update(entry.get("metric_means", {}).keys())
+
+    leaderboards: dict[str, list[dict]] = {}
+    for metric_name in sorted(metric_names):
+        ranked_entries = []
+        for entry in model_entries:
+            score = entry.get("metric_means", {}).get(metric_name)
+            if isinstance(score, (int, float)):
+                ranked_entries.append(
+                    {
+                        "label": entry.get("label"),
+                        "generation_model": entry.get("generation_model"),
+                        "score": score,
+                        "report_path": entry.get("report_path"),
+                    }
+                )
+        ranked_entries.sort(key=lambda item: item["score"], reverse=True)
+        leaderboards[metric_name] = ranked_entries
+
+    overall = []
+    for entry in model_entries:
+        score = entry.get("primary_score")
+        if isinstance(score, (int, float)):
+            overall.append(
+                {
+                    "label": entry.get("label"),
+                    "generation_model": entry.get("generation_model"),
+                    "score": score,
+                    "report_path": entry.get("report_path"),
+                }
+            )
+    overall.sort(key=lambda item: item["score"], reverse=True)
+    leaderboards["overall"] = overall
+    return leaderboards
+
+
 def _build_matrix_entry(report: dict, label: str) -> dict:
     results_block = report.get("results", {}) if isinstance(report.get("results"), dict) else {}
     timings = report.get("timings", {}).get("summary", {})
+    metric_means = _metric_means(results_block)
     return {
         "label": label,
         "generation_model": report.get("models", {}).get("generation_model"),
@@ -156,7 +203,8 @@ def _build_matrix_entry(report: dict, label: str) -> dict:
         "judge_model": report.get("models", {}).get("judge_model"),
         "dataset_path": report.get("dataset", {}).get("dataset_path"),
         "question_count": report.get("dataset", {}).get("question_count"),
-        "metric_means": _metric_means(results_block),
+        "metric_means": metric_means,
+        "primary_score": _primary_score(metric_means),
         "error": results_block.get("error"),
         "requested_metrics": results_block.get("requested_metrics"),
         "used_metrics": results_block.get("used_metrics"),
@@ -220,18 +268,37 @@ def _run_eval_matrix(
             dataset_metadata=dataset_metadata,
         )
 
-        aggregate["models"].append(_build_matrix_entry(report, label))
+        matrix_entry = _build_matrix_entry(report, label)
+        aggregate["models"].append(matrix_entry)
         aggregate["completed_models"] = len(aggregate["models"])
         aggregate["status"] = (
             "completed"
             if aggregate["completed_models"] == aggregate["total_models"]
             else "running"
         )
+        aggregate["leaderboards"] = _build_leaderboards(aggregate["models"])
         aggregate["updated_at"] = datetime.now().isoformat()
         _write_json(summary_path, aggregate)
+        score_display = (
+            f"{matrix_entry['primary_score']:.4f}"
+            if isinstance(matrix_entry.get("primary_score"), (int, float))
+            else "n/a"
+        )
+        print(
+            f"Completed {label}: primary_score={score_display}, "
+            f"report={matrix_entry.get('report_path')}"
+        )
 
+    aggregate["leaderboards"] = _build_leaderboards(aggregate["models"])
     aggregate["summary_path"] = str(summary_path)
     _write_json(summary_path, aggregate)
+    top_overall = aggregate["leaderboards"].get("overall", [])
+    if top_overall:
+        winner = top_overall[0]
+        print(
+            f"Top overall: {winner['label']} "
+            f"({winner['score']:.4f})"
+        )
     return aggregate
 
 
