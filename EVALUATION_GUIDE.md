@@ -277,15 +277,13 @@ Important caveat:
 
 This section matters because prompt provenance changes how confidently we can explain the scores.
 
-### What Is Not the Live RAGAS Prompt Source
-
-`generation/prompts.py` contains `RAGAS_EVALUATION_PROMPT`, but that is not the live prompt source used by the current evaluator path.
-
-Treat it as a legacy or placeholder prompt, not the actual RAGAS metric prompt implementation.
-
 ### What Is the Live Prompt Source
 
 The active prompt logic comes from the installed `ragas` package.
+
+Local runtime snapshot verified in this repo:
+
+- installed `ragas` version: `0.4.3`
 
 For the currently configured metrics in this repo, the live prompt classes are in these package files:
 
@@ -307,6 +305,161 @@ These prompt classes are implemented as structured `PydanticPrompt` objects with
 - built-in examples
 
 That is the real prompt source the evaluator should be explained from.
+
+### What The Installed Prompts Actually Ask The Judge To Do
+
+For this repo's current installed `ragas` source, the active prompt behavior is:
+
+- `Faithfulness`
+  - `StatementGeneratorPrompt`
+  - asks the judge to break the answer into fully understandable statements
+  - explicitly tells the judge to avoid pronouns in those statements
+  - output is structured JSON statements
+- `Faithfulness`
+  - `NLIStatementPrompt`
+  - asks the judge to decide whether each statement can be directly inferred from the retrieved context
+  - output is a per-statement `0` or `1` verdict plus a reason
+- `Answer Relevancy`
+  - `ResponseRelevancePrompt`
+  - asks the judge to generate a question that the answer appears to answer
+  - also asks whether the answer is noncommittal, evasive, vague, or ambiguous
+  - the metric then combines that output with embedding similarity
+- `Context Precision`
+  - `ContextPrecisionPrompt`
+  - asks the judge whether a given retrieved context was useful in arriving at the answer
+  - output is a binary useful/not-useful verdict with a reason
+  - the metric then turns those verdicts into an average-precision-style ranking score
+- `Context Recall`
+  - `ContextRecallClassificationPrompt`
+  - asks the judge to analyze each sentence in the reference answer and classify whether it is attributable to the retrieved context
+  - output is a per-statement binary attribution with a reason
+  - the metric score is the fraction of answer statements supported by retrieval
+
+This is the practical guide to the live prompt flow:
+
+1. `Faithfulness` runs in two prompt stages: statement generation first, then context inference checking.
+2. `Answer Relevancy` uses one judge prompt plus embeddings, so it is not a pure LLM-only metric.
+3. `Context Precision` and `Context Recall` both rely on binary classification prompts, but they answer different questions:
+   - precision asks whether retrieved chunks were useful
+   - recall asks whether the reference answer is supported by the retrieved context
+
+If you want to verify the exact prompt wording again later, reopen these installed files directly rather than assuming the upstream docs and your local package are perfectly identical.
+
+### Exact Render Format Used At Runtime
+
+The local `ragas 0.4.3` install does not send only the short `instruction` string.
+
+For these metrics, the prompt is rendered through:
+
+- `.venv/Lib/site-packages/ragas/prompt/pydantic_prompt.py`
+- `PydanticPrompt.to_string(data)`
+
+The verified render shape is:
+
+```text
+{instruction}
+Please return the output in a JSON format that complies with the following schema as specified in JSON Schema:
+{output_json_schema}Do not use single quotes in your response but double quotes,properly escaped with a backslash.
+
+--------EXAMPLES-----------
+{few_shot_examples}
+
+-----------------------------
+
+Now perform the same with the following input
+input: {current_input_json}
+Output:
+```
+
+That means the exact prompt the judge sees is made of:
+
+- the metric instruction
+- the output JSON schema generated from the metric output model
+- the built-in few-shot examples from the prompt class
+- the current metric input serialized as JSON
+- the trailing `Output:` marker
+
+### How To Reproduce The Exact Rendered Prompt Locally
+
+Use the installed prompt classes directly and call `to_string(...)`.
+
+Example pattern:
+
+```python
+from ragas.metrics._answer_relevance import ResponseRelevancePrompt, ResponseRelevanceInput
+
+prompt = ResponseRelevancePrompt().to_string(
+    ResponseRelevanceInput(
+        response="Peraturan Rektor Universitas Indonesia Nomor 2 Tahun 2025 mengatur tentang Biaya Pendidikan."
+    )
+)
+print(prompt)
+```
+
+For the currently configured metrics in this repo, the exact render entrypoints are:
+
+- `Faithfulness` statement decomposition
+  - `StatementGeneratorPrompt().to_string(StatementGeneratorInput(...))`
+- `Faithfulness` statement grounding
+  - `NLIStatementPrompt().to_string(NLIStatementInput(...))`
+- `Answer Relevancy`
+  - `ResponseRelevancePrompt().to_string(ResponseRelevanceInput(...))`
+- `Context Precision`
+  - `ContextPrecisionPrompt().to_string(QAC(...))`
+- `Context Recall`
+  - `ContextRecallClassificationPrompt().to_string(QCA(...))`
+
+### Exact Rendered Sample Prompt Verified In This Repo
+
+The following is a full rendered sample prompt captured from the local `ragas 0.4.3` install for `Answer Relevancy`.
+
+Sample input used:
+
+- response: `Peraturan Rektor Universitas Indonesia Nomor 2 Tahun 2025 mengatur tentang Biaya Pendidikan.`
+
+Exact rendered prompt:
+
+```text
+Generate a question for the given answer and Identify if answer is noncommittal. Give noncommittal as 1 if the answer is noncommittal and 0 if the answer is committal. A noncommittal answer is one that is evasive, vague, or ambiguous. For example, "I don't know" or "I'm not sure" are noncommittal answers
+Please return the output in a JSON format that complies with the following schema as specified in JSON Schema:
+{"properties": {"question": {"title": "Question", "type": "string"}, "noncommittal": {"title": "Noncommittal", "type": "integer"}}, "required": ["question", "noncommittal"], "title": "ResponseRelevanceOutput", "type": "object"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.
+
+--------EXAMPLES-----------
+Example 1
+Input: {
+    "response": "Albert Einstein was born in Germany."
+}
+Output: {
+    "question": "Where was Albert Einstein born?",
+    "noncommittal": 0
+}
+
+Example 2
+Input: {
+    "response": "I don't know about the  groundbreaking feature of the smartphone invented in 2023 as am unaware of information beyond 2022. "
+}
+Output: {
+    "question": "What was the groundbreaking feature of the smartphone invented in 2023?",
+    "noncommittal": 1
+}
+-----------------------------
+
+Now perform the same with the following input
+input: {
+    "response": "Peraturan Rektor Universitas Indonesia Nomor 2 Tahun 2025 mengatur tentang Biaya Pendidikan."
+}
+Output:
+```
+
+This sample is enough to show the exact runtime pattern:
+
+1. the short instruction is only the first line
+2. `ragas` appends a JSON schema
+3. `ragas` appends built-in examples
+4. `ragas` appends the current JSON input
+5. the final LLM call is made from that full rendered string
+
+The same rendering pipeline applies to the other metrics in this repo; only the instruction text, schema, examples, and input model differ.
 
 ### Is It Sourced from Actual RAGAS Documentation?
 
