@@ -42,6 +42,12 @@ Generate saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` thro
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+The current default comparison dataset is:
+
+```text
+storage/eval_datasets/ui_reviewed_synth_v2.json
+```
+
 Generate predictions through the live API, then score later:
 
 ```sh

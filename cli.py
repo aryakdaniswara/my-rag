@@ -1128,9 +1128,11 @@ def main():
             "eval_predictions",
             output_label,
         )
-        with open(output, "w", encoding="utf-8") as f:
+        output_path = Path(output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)
-        print(f"Prediction artifact saved to {output}")
+        print(f"Prediction artifact saved to {output_path}")
         should_unload_custom_model = bool(
             args.model and (
                 config.generation.model_name != base_generation_model
@@ -1212,9 +1214,11 @@ def main():
                     dataset_metadata=dataset_metadata,
                 )
                 output = args.output or results.get("report_path") or "eval_results.json"
-            with open(output, "w", encoding="utf-8") as f:
+            output_path = Path(output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(results, f, indent=2, default=str)
-            print(f"Results saved to {output}")
+            print(f"Results saved to {output_path}")
 
         elif args.command == "eval-score":
             prediction_path = Path(args.predictions)
@@ -1225,9 +1229,11 @@ def main():
                 prediction_path=str(prediction_path),
             )
             output = args.output or results.get("report_path") or "eval_results.json"
-            with open(output, "w", encoding="utf-8") as f:
+            output_path = Path(output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(results, f, indent=2, default=str)
-            print(f"Scored evaluation report saved to {output}")
+            print(f"Scored evaluation report saved to {output_path}")
 
         elif args.command == "ingest":
             count = rag.ingest(

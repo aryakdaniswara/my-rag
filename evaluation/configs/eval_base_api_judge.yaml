@@ -60,7 +60,7 @@ evaluation:
   eval_include_thoughts: false
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
-  dataset_path: "storage/eval_datasets/ui_mixed_seed.json"
+  dataset_path: "storage/eval_datasets/ui_reviewed_synth_v2.json"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
   answer_relevancy_strictness: 1

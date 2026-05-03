@@ -119,7 +119,7 @@ Use that guide as the canonical source of truth for:
 
 Scored reports now default to `storage/eval_results` and saved prediction artifacts now default to `storage/eval_predictions`.
 
-For day-to-day iteration, the default evaluation dataset is currently the mixed seed file `storage/eval_datasets/ui_mixed_seed.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
+For day-to-day iteration, the default evaluation dataset is currently the reviewed file `storage/eval_datasets/ui_reviewed_synth_v2.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. The older `storage/eval_datasets/ui_mixed_seed.json` is still useful as a lighter seed benchmark for quick smoke checks. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
 
 ## Architecture
 
