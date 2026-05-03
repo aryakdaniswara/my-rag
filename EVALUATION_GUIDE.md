@@ -229,6 +229,12 @@ Or use the helper script:
 sh /app/scripts/eval_matrix.sh
 ```
 
+If you want generate-only artifacts for all three models first, then score them later, use:
+
+```sh
+sh /app/scripts/eval_generate_matrix.sh
+```
+
 The matrix output writes:
 
 - one scored report per model

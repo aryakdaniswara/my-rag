@@ -36,6 +36,12 @@ Matrix eval for `qwen3.5:2b`, `qwen3.5:4b`, `qwen3.5:9b`:
 python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
 ```
 
+Generate saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` through the live API:
+
+```sh
+sh /app/scripts/eval_generate_matrix.sh
+```
+
 Generate predictions through the live API, then score later:
 
 ```sh
