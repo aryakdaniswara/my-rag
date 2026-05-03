@@ -12,6 +12,11 @@ exec >>"$LOG_PATH" 2>&1
 
 echo "[$(date -Iseconds)] Starting eval-generate matrix with config=$CONFIG_PATH api_base_url=$API_BASE_URL"
 
+PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
+  --mode generate \
+  --config "$CONFIG_PATH" \
+  --api-base-url "$API_BASE_URL"
+
 run_model() {
   MODEL="$1"
   LABEL="$2"

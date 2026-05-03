@@ -49,10 +49,11 @@ Score the latest saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:
 sh /app/scripts/eval_score_matrix.sh
 ```
 
-All eval wrapper scripts now run a lightweight preflight first:
+All eval scripts now run a lightweight preflight first, including the matrix entrypoints:
 
 - generate checks config, dataset, prediction output dir, and RAG API `/health`
 - score checks config, prediction artifact, report output dir, and judge `/models`
+- full eval checks config, dataset, report output dir, generation `/models`, and judge `/models` when `judge_mode: api`
 
 ## Judge Endpoint From Env
 

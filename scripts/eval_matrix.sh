@@ -11,6 +11,10 @@ exec >>"$LOG_PATH" 2>&1
 
 echo "[$(date -Iseconds)] Starting eval matrix with config=$CONFIG_PATH"
 
+PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
+  --mode full \
+  --config "$CONFIG_PATH"
+
 PYTHONUNBUFFERED=1 python cli.py eval \
   --config "$CONFIG_PATH"
 
