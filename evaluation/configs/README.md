@@ -6,6 +6,7 @@ This folder is the source of truth for reusable evaluation configs.
 
 - `eval_base_api_judge.yaml`
   - Canonical baseline for local generation under test with an API judge.
+  - Extends `config_server.yaml` so eval inherits the live server retrieval and judge settings.
 - `eval_matrix_qwen35.yaml`
   - Runs one dataset across `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b`.
 - `eval_example_local_judge.yaml`
@@ -46,6 +47,26 @@ Score the latest saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh
+```
+
+All eval wrapper scripts now run a lightweight preflight first:
+
+- generate checks config, dataset, prediction output dir, and RAG API `/health`
+- score checks config, prediction artifact, report output dir, and judge `/models`
+
+## Judge Endpoint From Env
+
+`config_server.yaml` now supports environment expansion for the judge endpoint:
+
+```yaml
+evaluation:
+  eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"
+```
+
+Set the env var before running eval commands, for example:
+
+```sh
+export EVAL_LLM_ENDPOINT="http://YOUR_REMOTE_IP:11434/v1"
 ```
 
 The current default comparison dataset is:

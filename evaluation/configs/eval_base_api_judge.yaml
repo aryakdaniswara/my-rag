@@ -1,66 +1,8 @@
-# Evaluation baseline: local generation under test, fixed Gemini judge, shared retrieval/index baseline.
-#
-# Use this as the canonical base for model-to-model comparisons.
-# It intentionally mirrors the current server-side retrieval/index setup,
-# but lives outside the deployment config so evaluation runs do not inherit
-# unrelated production concerns by accident.
-ingestion:
-  chunk_size: 1000
-  chunk_overlap: 120
-  pdf_min_chunk_tokens: 300
-  pdf_max_chunk_tokens: 1000
-  pdf_split_overlap_tokens: 120
-  pdf_parser: "docling"
-  pdf_chunking_strategy: "hierarchical"
-  html_parser: "trafilatura"
-  html_chunking_strategy: "standard"
-  save_snapshots: true
-  incremental: true
-  state_path: "storage/ingestion_state_rebuild_20260422_132325.json"
-
-embedding:
-  dense_model: "microsoft/harrier-oss-v1-0.6b"
-  sparse_model: "opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte"
-  device: "cuda"
-  dense_device: "cuda:0"
-  sparse_device: "cuda:0"
-  batch_size: 1
-  quantize_8bit: true
-
-storage:
-  milvus_uri: "http://127.0.0.1:19530"
-  collection_base_name: "documents"
-  collection_name: "documents_rebuild_20260422_132325"
-  db_name: "default"
-  metric_type: "COSINE"
-
-retrieval:
-  k: 15
-  rerank_top_k: 10
-  hybrid_weight: 0.5
-  reranker_model: null
-  reranker_endpoint: "http://127.0.0.1:8012/v1/rerank"
-  min_score: 0.0
-
-generation:
-  llm_endpoint: "http://127.0.0.1:11434/v1"
-  model_name: "qwen3.5:9b"
-  max_tokens: 1200
-  temperature: 0.2
-  reasoning_effort: none
+# Evaluation baseline: extend the live server config so eval uses the same
+# retrieval/index/runtime defaults unless an eval-specific override is needed.
+extends: "../../config_server.yaml"
 
 evaluation:
-  metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
-  judge_mode: "api"
-  eval_llm: "gemma-4-31b-it"
-  eval_llm_endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/"
-  eval_llm_api_key_env: "GEMINI_API_KEY"
-  eval_llm_max_tokens: 2048
-  eval_reasoning_effort: "minimal"
-  eval_include_thoughts: false
-  eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
-  eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/ui_reviewed_synth_v2.json"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
-  answer_relevancy_strictness: 1

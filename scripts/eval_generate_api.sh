@@ -25,6 +25,11 @@ echo "[$(date -Iseconds)] Starting eval-generate for model=$MODEL label=$LABEL"
 echo "Config: $CONFIG_PATH"
 echo "API base URL: $API_BASE_URL"
 
+PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
+  --mode generate \
+  --config "$CONFIG_PATH" \
+  --api-base-url "$API_BASE_URL"
+
 PYTHONUNBUFFERED=1 python cli.py eval-generate \
   --config "$CONFIG_PATH" \
   --api-base-url "$API_BASE_URL" \

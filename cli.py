@@ -1,6 +1,7 @@
 import argparse
 import json
 import math
+import os
 import re
 import sys
 import time
@@ -19,8 +20,17 @@ from storage import MilvusClient
 def _load_yaml(path: str) -> dict:
     import yaml
 
+    def _expand_env_vars(value):
+        if isinstance(value, str):
+            return os.path.expandvars(value)
+        if isinstance(value, list):
+            return [_expand_env_vars(item) for item in value]
+        if isinstance(value, dict):
+            return {key: _expand_env_vars(item) for key, item in value.items()}
+        return value
+
     with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+        return _expand_env_vars(yaml.safe_load(f) or {})
 
 
 def _write_yaml(path: Path, data: dict) -> None:

@@ -48,7 +48,7 @@ evaluation:
   metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
   judge_mode: "api"
   eval_llm: "qwen3.6:27b"
-  eval_llm_endpoint: "http://YOUR_REMOTE_IP_HERE:11434/v1"
+  eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"
   eval_llm_api_key_env: "IGNORE"
   eval_include_thoughts: false
   eval_reasoning_effort: "none"

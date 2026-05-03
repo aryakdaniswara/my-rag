@@ -50,6 +50,11 @@ exec >>"$LOG_PATH" 2>&1
 echo "[$(date -Iseconds)] Starting eval-score for predictions=$PREDICTIONS_PATH label=$LABEL"
 echo "Config: $CONFIG_PATH"
 
+PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
+  --mode score \
+  --config "$CONFIG_PATH" \
+  --predictions "$PREDICTIONS_PATH"
+
 PYTHONUNBUFFERED=1 python cli.py eval-score \
   --config "$CONFIG_PATH" \
   --predictions "$PREDICTIONS_PATH"

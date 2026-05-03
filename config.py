@@ -1,8 +1,19 @@
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, List, Optional
 
 from generation.prompts import DEFAULT_SYSTEM_PROMPT
+
+
+def _expand_env_vars(value: Any) -> Any:
+    if isinstance(value, str):
+        return os.path.expandvars(value)
+    if isinstance(value, list):
+        return [_expand_env_vars(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _expand_env_vars(item) for key, item in value.items()}
+    return value
 
 
 @dataclass
@@ -130,7 +141,7 @@ class RAGConfig:
                 raise ValueError(f"Config inheritance cycle detected at: {resolved_path}")
 
             with open(resolved_path, "r", encoding="utf-8") as f:
-                loaded = yaml.safe_load(f) or {}
+                loaded = _expand_env_vars(yaml.safe_load(f) or {})
 
             if not isinstance(loaded, dict):
                 raise ValueError(f"Config file must contain a YAML mapping: {resolved_path}")
