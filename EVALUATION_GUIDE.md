@@ -255,6 +255,11 @@ The active default dataset in this repo is:
 
 - `storage/eval_datasets/ui_mixed_seed.json`
 
+Additional reviewed datasets now exist alongside it:
+
+- `storage/eval_datasets/ui_reviewed_synth_v2.json`
+- `storage/eval_datasets/ui_refusal_diagnostic_v1.json`
+
 Important properties of the current file:
 
 - it is a synthetic seed benchmark, not a final benchmark
@@ -275,6 +280,8 @@ For this repo, the safest reading is:
 - treat `ui_mixed_seed.json` as the current seed benchmark
 - keep using it as a stable baseline
 - avoid presenting its scores as proof that retrieval is broadly solved
+- treat `ui_reviewed_synth_v2.json` as the cleaner reviewed benchmark for future main comparisons
+- treat `ui_refusal_diagnostic_v1.json` as a separate diagnostic split for refusal and out-of-scope behavior
 
 ## Reasoning Control
 
@@ -479,6 +486,8 @@ For current comparison work in this repo:
 Recommended benchmark positioning:
 
 - keep `ui_mixed_seed.json` as the default seed benchmark for now
+- keep `ui_reviewed_synth_v2.json` separate until you are ready to promote it
+- keep `ui_refusal_diagnostic_v1.json` out of the headline score path
 - use it for regression checks and stable model-to-model comparisons
 - do not use it alone as the final scorecard for overall retrieval quality claims
 
@@ -490,6 +499,7 @@ Recommended benchmark structure:
 
 - `seed/regression` split
 - `reviewed benchmark` split
+- `diagnostic refusal/scope` split
 
 The `seed/regression` split should:
 
@@ -503,6 +513,14 @@ The `reviewed benchmark` split should include explicit sample categories:
 - multi-chunk or cross-section answerable
 - answerable but wording-shifted from source text
 - insufficient-evidence or should-refuse
+
+The separate diagnostic refusal/scope split should hold:
+
+- adjacent-but-unsupported questions
+- truly absent facts
+- out-of-scope or wrong-institution questions
+
+That split is useful for product-safety and scope behavior, but it should not be merged into the headline mean that you use for the main benchmark.
 
 For reviewed samples, require:
 
