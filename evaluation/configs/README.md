@@ -42,6 +42,12 @@ Generate saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` thro
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+Score the latest saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` without regenerating:
+
+```sh
+sh /app/scripts/eval_score_matrix.sh
+```
+
 The current default comparison dataset is:
 
 ```text

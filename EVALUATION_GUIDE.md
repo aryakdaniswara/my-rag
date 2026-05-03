@@ -235,6 +235,12 @@ If you want generate-only artifacts for all three models first, then score them 
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+To score the latest saved predictions for all three models without rerunning generation, use:
+
+```sh
+sh /app/scripts/eval_score_matrix.sh
+```
+
 The matrix output writes:
 
 - one scored report per model
