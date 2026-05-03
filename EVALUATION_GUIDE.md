@@ -249,6 +249,33 @@ Recommended files:
 - `eval_matrix_qwen35.yaml`
   - shared multi-model comparison config
 
+## Current Benchmark Shape
+
+The active default dataset in this repo is:
+
+- `storage/eval_datasets/ui_mixed_seed.json`
+
+Important properties of the current file:
+
+- it is a synthetic seed benchmark, not a final benchmark
+- its rows are still labeled `synthetic_unreviewed`
+- many samples are effectively single-chunk QA tied to a known `chunk_id`
+- many reference answers stay very close to the source chunk wording
+
+This makes the dataset useful for:
+
+- smoke tests
+- regression checks
+- model-to-model comparisons under a fixed setup
+
+This does not make it a strong final scorecard for general retrieval quality.
+
+For this repo, the safest reading is:
+
+- treat `ui_mixed_seed.json` as the current seed benchmark
+- keep using it as a stable baseline
+- avoid presenting its scores as proof that retrieval is broadly solved
+
 ## Reasoning Control
 
 There are two separate reasoning knobs.
@@ -329,6 +356,98 @@ For the current metrics, the main prompt classes are:
 
 That matters because metric behavior should be explained from the installed runtime source, not from placeholder text in this repo.
 
+## Benchmark Bias And Interpretation Limits
+
+The current seed benchmark is intentionally useful, but it is not neutral.
+
+Why retrieval metrics can skew high:
+
+- many questions and references were generated from the same source chunk that is later being retrieved
+- the chunking regime uses large chunks with substantial overlap
+- earlier runs used a looser `top_k`, which makes it easier for the source chunk to appear somewhere in the retrieved set
+- many questions are answerable from one chunk without requiring cross-chunk synthesis
+
+Practical effect:
+
+- `context_recall` can look very strong because the retrieved set only needs to include the source-like chunk
+- `context_precision` can also look very strong because the useful chunk is already near the top and neighboring overlapped chunks may look supportive too
+
+This does not mean the scores are fake. It means the benchmark is friendlier to chunk-origin recovery than to harder retrieval behavior such as:
+
+- multi-chunk synthesis
+- evidence spread across sections
+- paraphrased questions that are farther from source wording
+- refusal behavior when the corpus does not support a direct answer
+
+When comparing runs, record retrieval settings alongside the score interpretation:
+
+- `top_k`
+- chunk size
+- chunk overlap
+- whether the benchmark is meant to test retrieval, ranking, generation, or refusal behavior
+
+If those settings change, score comparisons become less meaningful even if the judge stays fixed.
+
+## Failure Analysis Heuristic
+
+The `failure_analysis` block in scored reports is produced by this repo's wrapper logic in `evaluation/evaluator.py`.
+
+It is not a native RAGAS diagnosis layer.
+
+Current rules:
+
+- `context_recall < 0.5` => `Possible Retrieval Issue`
+- `context_precision < 0.5` => `Possible Reranking Issue`
+- `faithfulness < 0.5` or `answer_relevancy < 0.5` => `Possible Generation Issue`
+
+Important details:
+
+- this is threshold-based, not `0.0`-only
+- `0.4` and `0.49` are flagged
+- `0.5` is not flagged by the current implementation because the check is `< 0.5`
+
+This block is best treated as a triage hint, not as proof of root cause.
+
+In particular, if the benchmark setup makes retrieval metrics unusually high, more weak samples will fall into the `Possible Generation Issue` bucket even when the real limitation is partly:
+
+- dataset design
+- reference-answer shape
+- chunk overlap
+- retrieval setup that makes source-chunk recovery too easy
+
+Example:
+
+- a sample with `context_recall = 1.0`, `context_precision = 1.0`, and `answer_relevancy = 0.0` will be labeled `Possible Generation Issue`
+- that label only means the heuristic saw no retrieval-side threshold failure before it saw the low answer-side score
+
+## Answer Relevancy Caveat For Safe Refusal
+
+`answer_relevancy` is useful, but it can punish behavior that is actually desirable for this product.
+
+RAGAS answer relevancy penalizes noncommittal answers. In this repo, that means a cautious refusal or a narrow "I cannot confirm this from the retrieved context" style answer may score very low even when the model is behaving safely.
+
+That matters because this product generally prefers:
+
+- refusing unsupported claims
+- staying within retrieved evidence
+- avoiding hallucinated completion of missing facts
+
+So a very low `answer_relevancy` score does not automatically mean the product behaved badly.
+
+It can instead mean:
+
+- the model was cautious
+- the context was insufficient for a direct answer
+- the benchmark expected a direct answer where the product chose to avoid guessing
+
+When reviewing low-scoring samples, check whether the answer was:
+
+- wrong and unsupported
+- off-topic
+- or intentionally cautious in a way the product should allow
+
+Do not collapse those into one bucket just because the metric value is low.
+
 ## Practical Interpretation Rules
 
 When reading results:
@@ -343,6 +462,8 @@ Avoid these mistakes:
 - do not treat one metric as a universal quality score
 - do not compare runs if you changed both the system under test and the judge at the same time
 - do not present synthetic-only results as final proof
+- do not treat the current seed benchmark as a neutral proof of retrieval quality
+- do not assume low `answer_relevancy` always means harmful product behavior
 - do not ignore latency when two models have similar quality
 
 ## Recommendation For This Repo
@@ -354,3 +475,46 @@ For current comparison work in this repo:
 3. Change only the generation model across `qwen3.5:2b`, `4b`, and `9b`.
 4. Compare the top `summary.metric_means` and total runtime first.
 5. Open the detailed samples only after the top-line numbers suggest a real difference.
+
+Recommended benchmark positioning:
+
+- keep `ui_mixed_seed.json` as the default seed benchmark for now
+- use it for regression checks and stable model-to-model comparisons
+- do not use it alone as the final scorecard for overall retrieval quality claims
+
+## Benchmark V2 Roadmap
+
+The next benchmark version should add a reviewed split without deleting the current seed set.
+
+Recommended benchmark structure:
+
+- `seed/regression` split
+- `reviewed benchmark` split
+
+The `seed/regression` split should:
+
+- preserve the current synthetic single-chunk-friendly set
+- remain useful for fast stability checks
+- stay separate from stronger quality claims
+
+The `reviewed benchmark` split should include explicit sample categories:
+
+- single-chunk answerable
+- multi-chunk or cross-section answerable
+- answerable but wording-shifted from source text
+- insufficient-evidence or should-refuse
+
+For reviewed samples, require:
+
+- human review of question wording
+- human review of the reference answer
+- explicit labeling of expected refusal-sensitive behavior
+- references written as target answers, not just chunk-near restatements
+
+When reporting reviewed benchmark results, always note:
+
+- `top_k`
+- chunk size and overlap regime
+- whether the benchmark was intended to test retrieval, ranking, generation, or refusal behavior
+
+This roadmap keeps the current benchmark useful while giving future work a clearer target than "just raise the scores."
