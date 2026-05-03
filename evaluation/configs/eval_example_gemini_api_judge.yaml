@@ -1,0 +1,14 @@
+extends: "./eval_base_api_judge.yaml"
+
+generation:
+  llm_endpoint: "http://127.0.0.1:11434/v1"
+  model_name: "qwen3.5:9b"
+  reasoning_effort: none
+
+evaluation:
+  judge_mode: "api"
+  eval_llm: "gemini-2.5-flash"
+  eval_llm_endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  eval_llm_api_key_env: "GEMINI_API_KEY"
+  eval_reasoning_effort: "none"
+  eval_include_thoughts: false

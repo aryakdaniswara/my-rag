@@ -47,6 +47,18 @@ def _timestamped_path(directory: str | Path, prefix: str) -> Path:
     return Path(directory) / f"{prefix}_{timestamp}.json"
 
 
+def _artifact_path_for_label(
+    directory: str | Path,
+    prefix: str,
+    label: str | None = None,
+) -> Path:
+    base_prefix = prefix
+    slug = _slugify_label(label)
+    if slug:
+        base_prefix = f"{base_prefix}_{slug}"
+    return _timestamped_path(directory, base_prefix)
+
+
 def _slugify_label(value: str | None) -> str | None:
     if not value:
         return None
@@ -164,6 +176,15 @@ def _load_prediction_samples(path: Path) -> tuple[list[dict], dict]:
         dataset_metadata = {}
     dataset_metadata = dict(dataset_metadata)
     dataset_metadata["prediction_artifact_path"] = str(path)
+    payload_models = payload.get("models", {})
+    if isinstance(payload_models, dict):
+        for key in (
+            "generation_model",
+            "generation_endpoint",
+            "generation_reasoning_effort",
+        ):
+            if key in payload_models:
+                dataset_metadata[key] = payload_models[key]
     return samples, dataset_metadata
 
 
@@ -196,6 +217,10 @@ def _apply_eval_score_overrides(config: RAGConfig, args) -> None:
         config.evaluation.eval_embeddings = args.eval_embeddings
     if args.eval_embeddings_endpoint:
         config.evaluation.eval_embeddings_endpoint = args.eval_embeddings_endpoint
+    if args.judge_reasoning_effort is not None:
+        config.evaluation.eval_reasoning_effort = args.judge_reasoning_effort
+    if args.judge_include_thoughts:
+        config.evaluation.eval_include_thoughts = True
 
 
 def _derive_ollama_generate_url(llm_endpoint: str) -> str:
@@ -237,6 +262,7 @@ def _generate_eval_predictions_via_api(
     api_url = f"{api_base_url.rstrip('/')}/query"
     samples = []
     timing_rows = []
+    run_started = time.time()
 
     with httpx.Client(timeout=300.0) as client:
         for index, question in enumerate(questions):
@@ -283,6 +309,37 @@ def _generate_eval_predictions_via_api(
     report = {
         "generated_at": datetime.now().isoformat(),
         "mode": "prediction_generation_api",
+        "summary": {
+            "question_count": len(questions),
+            "timings": {
+                "retrieval_time_ms_avg": (
+                    sum(
+                        float(row["retrieval_time_ms"])
+                        for row in timing_rows
+                        if row.get("retrieval_time_ms") is not None
+                    )
+                    / len([row for row in timing_rows if row.get("retrieval_time_ms") is not None])
+                    if any(row.get("retrieval_time_ms") is not None for row in timing_rows)
+                    else None
+                ),
+                "generation_time_ms_avg": (
+                    sum(
+                        float(row["generation_time_ms"])
+                        for row in timing_rows
+                        if row.get("generation_time_ms") is not None
+                    )
+                    / len([row for row in timing_rows if row.get("generation_time_ms") is not None])
+                    if any(row.get("generation_time_ms") is not None for row in timing_rows)
+                    else None
+                ),
+                "end_to_end_time_ms_avg": (
+                    sum(row["end_to_end_time_ms"] for row in timing_rows) / len(timing_rows)
+                    if timing_rows else None
+                ),
+                "ttft_ms_avg": None,
+                "total_runtime_ms": (time.time() - run_started) * 1000,
+            },
+        },
         "api_base_url": api_base_url,
         "models": {
             "generation_model": generation_override.get("model_name", config.generation.model_name)
@@ -292,6 +349,9 @@ def _generate_eval_predictions_via_api(
             "upstream_generation_endpoint": generation_override.get("llm_endpoint", config.generation.llm_endpoint)
             if generation_override
             else config.generation.llm_endpoint,
+            "generation_reasoning_effort": generation_override.get("reasoning_effort", config.generation.reasoning_effort)
+            if generation_override
+            else config.generation.reasoning_effort,
         },
         "dataset": {
             "dataset_path": config.evaluation.dataset_path,
@@ -424,6 +484,7 @@ def _build_matrix_entry(report: dict, label: str) -> dict:
         "label": label,
         "generation_model": report.get("models", {}).get("generation_model"),
         "generation_endpoint": report.get("models", {}).get("generation_endpoint"),
+        "generation_reasoning_effort": report.get("models", {}).get("generation_reasoning_effort"),
         "judge_model": report.get("models", {}).get("judge_model"),
         "dataset_path": report.get("dataset", {}).get("dataset_path"),
         "question_count": report.get("dataset", {}).get("question_count"),
@@ -445,11 +506,12 @@ def _run_eval_matrix(
     output_path: str | None,
 ) -> dict:
     model_specs = rag.config.evaluation.model_matrix
+    run_started = time.time()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     summary_path = (
         Path(output_path)
         if output_path
-        else Path(rag.config.evaluation.report_dir) / f"eval_matrix_{timestamp}.json"
+        else Path(rag.config.evaluation.report_dir) / f"eval_matrix_summary_{timestamp}.json"
     )
 
     aggregate = {
@@ -466,6 +528,11 @@ def _run_eval_matrix(
         "models": [],
         "completed_models": 0,
         "total_models": len(model_specs),
+        "summary": {
+            "question_count": len(questions),
+            "best_overall": None,
+            "timings": {},
+        },
     }
     if dataset_metadata:
         aggregate["dataset"].update(dataset_metadata)
@@ -539,11 +606,17 @@ def _run_eval_matrix(
         )
 
     aggregate["leaderboards"] = _build_leaderboards(aggregate["models"])
+    aggregate["summary"]["timings"]["total_runtime_ms"] = (time.time() - run_started) * 1000
+    aggregate["summary"]["timings"]["total_runtime_seconds"] = (
+        aggregate["summary"]["timings"]["total_runtime_ms"] / 1000.0
+    )
     aggregate["summary_path"] = str(summary_path)
     _write_json(summary_path, aggregate)
     top_overall = aggregate["leaderboards"].get("overall", [])
     if top_overall:
         winner = top_overall[0]
+        aggregate["summary"]["best_overall"] = winner
+        _write_json(summary_path, aggregate)
         print(
             f"Top overall: {winner['label']} "
             f"({winner['score']:.4f})"
@@ -753,7 +826,7 @@ def main():
     )
     eval_generate_parser.add_argument(
         "--output",
-        help="Output file for saved predictions. Defaults to storage/eval_reports/eval_predictions_<timestamp>.json",
+        help="Output file for saved predictions. Defaults to evaluation.prediction_dir/eval_predictions_<model>_<timestamp>.json",
     )
     eval_generate_parser.add_argument("--model", help="Override generation model for this run")
     eval_generate_parser.add_argument("--endpoint", help="Override generation endpoint for this run")
@@ -799,6 +872,15 @@ def main():
     eval_score_parser.add_argument(
         "--eval-embeddings-endpoint",
         help="Override evaluation embeddings endpoint",
+    )
+    eval_score_parser.add_argument(
+        "--judge-reasoning-effort",
+        help="Override judge reasoning effort. Use 'none' to disable reasoning where supported.",
+    )
+    eval_score_parser.add_argument(
+        "--judge-include-thoughts",
+        action="store_true",
+        help="Request judge thoughts when the backend supports them",
     )
 
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
@@ -1041,13 +1123,10 @@ def main():
             dataset_metadata=dataset_metadata,
             generation_override=generation_override,
         )
-        prediction_prefix = "eval_predictions"
-        output_slug = _slugify_label(output_label)
-        if output_slug:
-            prediction_prefix = f"{prediction_prefix}_{output_slug}"
-        output = args.output or _timestamped_path(
-            config.evaluation.report_dir,
-            prediction_prefix,
+        output = args.output or _artifact_path_for_label(
+            config.evaluation.prediction_dir,
+            "eval_predictions",
+            output_label,
         )
         with open(output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)

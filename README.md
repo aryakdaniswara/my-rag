@@ -113,10 +113,11 @@ Evaluation guidance now lives in [EVALUATION_GUIDE.md](./EVALUATION_GUIDE.md).
 Use that guide as the canonical source of truth for:
 
 - what the current repo can evaluate today
-- what still needs to be hardened for a bulletproof workflow
-- how to think about independent judges, synthetic QA, reviewed benchmarks, latency, and TTFT
+- what each metric means technically
+- how to run single-model, saved-prediction, and matrix evals
+- how to configure local judging versus Gemini API judging, including reasoning toggles
 
-The current CLI `eval` command is still a pragmatic path and should not be mistaken for the full bulletproof evaluation system described in the guide.
+Scored reports now default to `storage/eval_results` and saved prediction artifacts now default to `storage/eval_predictions`.
 
 For day-to-day iteration, the default evaluation dataset is currently the mixed seed file `storage/eval_datasets/ui_mixed_seed.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
 

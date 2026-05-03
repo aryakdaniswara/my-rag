@@ -117,9 +117,9 @@ For a responsive user experience, the system supports real-time token streaming:
   - **Reranking Failure**: Relevant info was in top-50 but ranked too low.
   - **Generation Failure**: Correct context was present, but the LLM failed to use it.
 - **Synthetic QA**: A module that uses the LLM to generate "Ground Truth" Q&A pairs from your documents.
-- **Canonical Guide**: Evaluation methodology, current limitations, target hardening design, judge independence, dataset provenance, and latency/TTFT guidance now live in `EVALUATION_GUIDE.md`.
-- **Live Prompt Source**: The actual evaluation prompt logic is not stored in this repo. It comes from the installed `ragas` library, and `EVALUATION_GUIDE.md` now documents the exact prompt classes, the verified `PydanticPrompt.to_string(...)` render format, and a fully rendered local sample prompt.
-- **Important Current Limitation**: The current runtime evaluation path is still not the final bulletproof design. Evaluation config is now wired through the runtime, but the shipped defaults are intentionally local-first, so they are weaker than a truly independent API-judge setup.
+- **Canonical Guide**: Evaluation workflow, metric semantics, config examples, artifact layout, and reasoning toggles now live in `EVALUATION_GUIDE.md`.
+- **Live Prompt Source**: The actual evaluation prompt logic is not stored in this repo. It comes from the installed `ragas` library, and `EVALUATION_GUIDE.md` points to the live package files used at runtime.
+- **Artifact Layout**: Scored results default to `storage/eval_results`, while raw saved predictions default to `storage/eval_predictions`.
 - **Current Iteration Dataset**: The default benchmark is `storage/eval_datasets/ui_mixed_seed.json`, with the broader snapshot-grounded dataset kept as a bootstrap artifact and narrower slice datasets kept for targeted checks.
 
 ---
@@ -354,19 +354,20 @@ python cli.py trace --config config_rag.yaml --query "..." --check-keyword "acti
 
 Use `EVALUATION_GUIDE.md` as the canonical evaluation document.
 
-The current CLI command remains a minimal path:
+Common commands:
 
 ```bash
-python cli.py eval --config config_rag.yaml --questions "Example question"
+python cli.py eval --config config_rag.yaml
+python cli.py eval-generate --config config_rag.yaml --model qwen3.5:4b --label qwen35_4b
+python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_<timestamp>.json
 ```
 
-Treat that CLI path as a basic starting point, not as the full bulletproof evaluation workflow. The guide documents the current gaps and the target design for:
+The guide documents:
 
-- independent judge configuration
-- snapshot-grounded synthetic datasets
-- reviewed benchmark subsets
-- stable result bundles
-- latency and TTFT tracking
+- what each RAGAS metric means
+- where the live prompt logic actually comes from
+- how to compare `qwen3.5:2b`, `4b`, and `9b`
+- how reasoning toggles work for local generation and Gemini API judging
 
 ---
 

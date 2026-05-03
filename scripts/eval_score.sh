@@ -1,24 +1,46 @@
 #!/bin/sh
 set -eu
 
-PREDICTIONS_PATH="${1:-}"
-LABEL="${2:-}"
+MODE="${1:-}"
+VALUE="${2:-}"
 CONFIG_PATH="${3:-config_server.yaml}"
 
-if [ -z "$PREDICTIONS_PATH" ]; then
-  echo "Usage: sh /app/scripts/eval_score.sh <predictions_path> [label] [config_path]"
+usage() {
+  echo "Usage:"
+  echo "  sh /app/scripts/eval_score.sh --predictions <predictions_path> [config_path]"
+  echo "  sh /app/scripts/eval_score.sh --latest <label> [config_path]"
   exit 1
+}
+
+if [ -z "$MODE" ] || [ -z "$VALUE" ]; then
+  usage
 fi
+
+case "$MODE" in
+  --predictions)
+    PREDICTIONS_PATH="$VALUE"
+    ;;
+  --latest)
+    LABEL="$VALUE"
+    PREDICTIONS_PATH=$(
+      ls -1t "/app/storage/eval_predictions"/eval_predictions_"$LABEL"_*.json 2>/dev/null | head -n 1
+    )
+    if [ -z "${PREDICTIONS_PATH:-}" ]; then
+      echo "No prediction artifact found for label: $LABEL"
+      exit 1
+    fi
+    ;;
+  *)
+    usage
+    ;;
+esac
 
 if [ ! -f "$PREDICTIONS_PATH" ]; then
   echo "Predictions file not found: $PREDICTIONS_PATH"
   exit 1
 fi
 
-if [ -z "$LABEL" ]; then
-  LABEL=$(basename "$PREDICTIONS_PATH" .json)
-fi
-
+LABEL=$(basename "$PREDICTIONS_PATH" .json)
 LOG_DIR="/app/storage/eval_logs"
 LOG_PATH="$LOG_DIR/eval_score_${LABEL}.log"
 

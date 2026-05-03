@@ -60,9 +60,9 @@ RUN pip uninstall -y opencv-python opencv-python-headless opencv-contrib-python 
 # Copy project source
 COPY . .
 
-# Create runtime storage directories used by rebuilds, evaluation reports,
+# Create runtime storage directories used by rebuilds, evaluation artifacts,
 # and bootstrapped evaluation datasets when bind mounts are absent.
-RUN mkdir -p /app/storage/snapshots /app/storage/rebuilds /app/storage/eval_reports /app/storage/eval_datasets /app/uploads
+RUN mkdir -p /app/storage/snapshots /app/storage/rebuilds /app/storage/eval_results /app/storage/eval_predictions /app/storage/eval_datasets /app/uploads
 
 EXPOSE 8000
 

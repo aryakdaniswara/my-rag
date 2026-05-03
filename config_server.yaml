@@ -42,7 +42,7 @@ generation:
   model_name: "qwen3.5:9b" # Primary local candidate; compare against qwen3.5:4b and qwen3.5:2b in separate runs
   max_tokens: 1200
   temperature: 0.2
-  reasoning_effort: none # If reasoning is set to high, max token should be adjusted to
+  reasoning_effort: none # Set to high/medium/low/none depending on the backend you are testing.
 
 evaluation:
   metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
@@ -55,5 +55,6 @@ evaluation:
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/ui_mixed_seed.json"
-  report_dir: "storage/eval_reports"
+  report_dir: "storage/eval_results"
+  prediction_dir: "storage/eval_predictions"
   answer_relevancy_strictness: 1

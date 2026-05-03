@@ -85,8 +85,10 @@ services:
       - ./storage/snapshots:/app/storage/snapshots
       # Evaluation: curated/bootstrapped datasets used by eval runs
       - ./storage/eval_datasets:/app/storage/eval_datasets
-      # Evaluation: persisted eval report bundles
-      - ./storage/eval_reports:/app/storage/eval_reports
+      # Evaluation: persisted scored report bundles
+      - ./storage/eval_results:/app/storage/eval_results
+      # Evaluation: saved raw prediction artifacts for later scoring
+      - ./storage/eval_predictions:/app/storage/eval_predictions
       # Rebuild bundles and detached rebuild logs
       - ./storage/rebuilds:/app/storage/rebuilds
       # Uploads: directory for user-uploaded documents

@@ -61,5 +61,6 @@ evaluation:
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/ui_mixed_seed.json"
-  report_dir: "storage/eval_reports"
+  report_dir: "storage/eval_results"
+  prediction_dir: "storage/eval_predictions"
   answer_relevancy_strictness: 1

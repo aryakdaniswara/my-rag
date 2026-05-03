@@ -3,6 +3,7 @@ from typing import List, Dict, Any, Optional
 import logging
 import json
 import os
+import re
 import uuid
 import time
 from datetime import datetime
@@ -191,18 +192,25 @@ class RAGPipeline:
         )
         judge_model_lower = judge_model.lower()
         is_gemini_model = judge_model_lower.startswith("gemini")
+        eval_reasoning_effort = self.config.evaluation.eval_reasoning_effort
+        reasoning_disabled = (
+            isinstance(eval_reasoning_effort, str)
+            and eval_reasoning_effort.strip().lower() in {"none", "off", "disabled"}
+        )
 
-        if is_google_openai_endpoint and is_gemini_model:
+        if is_google_openai_endpoint and is_gemini_model and reasoning_disabled:
+            llm_kwargs["reasoning_effort"] = "none"
+        elif is_google_openai_endpoint and is_gemini_model:
             llm_kwargs["extra_body"] = {
                 "google": {
                     "thinking_config": {
-                        "thinking_level": self.config.evaluation.eval_reasoning_effort or "minimal",
+                        "thinking_level": eval_reasoning_effort or "minimal",
                         "include_thoughts": self.config.evaluation.eval_include_thoughts,
                     }
                 }
             }
-        elif self.config.evaluation.eval_reasoning_effort:
-            llm_kwargs["reasoning_effort"] = self.config.evaluation.eval_reasoning_effort
+        elif eval_reasoning_effort:
+            llm_kwargs["reasoning_effort"] = eval_reasoning_effort
         return sanitize_ragas_llm(llm_factory(judge_model, client=client, **llm_kwargs))
 
     def _build_eval_embeddings(self):
@@ -284,11 +292,84 @@ class RAGPipeline:
             "ttft_ms_avg": _avg("ttft_ms"),
         }
 
-    def _write_eval_report(self, report: Dict[str, Any]) -> str:
+    @staticmethod
+    def _slugify_eval_part(value: Optional[str], fallback: str) -> str:
+        if not value:
+            return fallback
+        slug = re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())
+        return slug.strip("._-") or fallback
+
+    @staticmethod
+    def _extract_metric_means(eval_results: Dict[str, Any]) -> Dict[str, Optional[float]]:
+        metrics = eval_results.get("metrics")
+        if not isinstance(metrics, dict):
+            return {}
+
+        metric_means: Dict[str, Optional[float]] = {}
+        for metric_name, raw_values in metrics.items():
+            if isinstance(raw_values, dict):
+                candidates = raw_values.values()
+            elif isinstance(raw_values, list):
+                candidates = raw_values
+            else:
+                candidates = [raw_values]
+
+            numeric_values = []
+            for value in candidates:
+                if isinstance(value, (int, float)) and not isinstance(value, bool):
+                    numeric_values.append(float(value))
+
+            metric_means[metric_name] = (
+                sum(numeric_values) / len(numeric_values) if numeric_values else None
+            )
+        return metric_means
+
+    @staticmethod
+    def _build_eval_summary(
+        eval_results: Dict[str, Any],
+        timings_summary: Dict[str, Any],
+        question_count: int,
+        total_runtime_ms: Optional[float] = None,
+    ) -> Dict[str, Any]:
+        metric_means = RAGPipeline._extract_metric_means(eval_results)
+        primary_metric_values = [
+            value for value in metric_means.values() if isinstance(value, (int, float))
+        ]
+        overall_mean = (
+            sum(primary_metric_values) / len(primary_metric_values)
+            if primary_metric_values
+            else None
+        )
+
+        summary = {
+            "question_count": question_count,
+            "used_metrics": eval_results.get("used_metrics"),
+            "metric_means": metric_means,
+            "overall_mean_score": overall_mean,
+            "timings": dict(timings_summary),
+            "failure_count": len(eval_results.get("failure_analysis", []) or []),
+            "metric_caveats": eval_results.get("metric_caveats", []),
+            "error": eval_results.get("error"),
+        }
+        if total_runtime_ms is not None:
+            summary["timings"]["total_runtime_ms"] = total_runtime_ms
+            summary["timings"]["total_runtime_seconds"] = total_runtime_ms / 1000.0
+        return summary
+
+    def _write_eval_report(
+        self,
+        report: Dict[str, Any],
+        artifact_kind: str = "report",
+        label: Optional[str] = None,
+    ) -> str:
         report_dir = Path(self.config.evaluation.report_dir)
         report_dir.mkdir(parents=True, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = report_dir / f"eval_report_{timestamp}.json"
+        model_part = self._slugify_eval_part(
+            label or report.get("models", {}).get("generation_model"),
+            "unknown_model",
+        )
+        output_path = report_dir / f"eval_{artifact_kind}_{model_part}_{timestamp}.json"
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False, default=str)
         return str(output_path)
@@ -1083,6 +1164,7 @@ class RAGPipeline:
         dataset_metadata: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """Evaluate the RAG pipeline using RAGAS metrics."""
+        eval_started = time.time()
         if self.evaluator is None:
             self.evaluator = RAGASEvaluator(
                 eval_llm=self._build_eval_llm(),
@@ -1159,14 +1241,26 @@ class RAGPipeline:
             rerank_logs=rerank_logs,
         )
 
+        timings_summary = self._summarize_timings(timings)
+        total_runtime_ms = (time.time() - eval_started) * 1000
+
         report = {
             "generated_at": datetime.now().isoformat(),
+            "summary": self._build_eval_summary(
+                eval_results=eval_results,
+                timings_summary=timings_summary,
+                question_count=len(questions),
+                total_runtime_ms=total_runtime_ms,
+            ),
             "judge_mode": self.config.evaluation.judge_mode,
             "models": {
                 "generation_model": self.config.generation.model_name,
                 "generation_endpoint": self.config.generation.llm_endpoint,
+                "generation_reasoning_effort": self.config.generation.reasoning_effort,
                 "judge_model": self.config.evaluation.eval_llm,
                 "judge_endpoint": self.config.evaluation.eval_llm_endpoint,
+                "judge_reasoning_effort": self.config.evaluation.eval_reasoning_effort,
+                "judge_include_thoughts": self.config.evaluation.eval_include_thoughts,
                 "evaluation_embeddings": self.config.evaluation.eval_embeddings,
                 "evaluation_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
             },
@@ -1177,7 +1271,7 @@ class RAGPipeline:
             },
             "timings": {
                 "per_question": timings,
-                "summary": self._summarize_timings(timings),
+                "summary": timings_summary,
             },
             "results": eval_results,
             "artifacts": {
@@ -1193,7 +1287,11 @@ class RAGPipeline:
         }
         if dataset_metadata:
             report["dataset"].update(dataset_metadata)
-        report["report_path"] = self._write_eval_report(report)
+        report["report_path"] = self._write_eval_report(
+            report,
+            artifact_kind="report",
+            label=self.config.generation.model_name,
+        )
         return report
 
     def generate_eval_predictions(
@@ -1202,6 +1300,7 @@ class RAGPipeline:
         ground_truths: Optional[List[str]] = None,
         dataset_metadata: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
+        prediction_started = time.time()
         samples = []
 
         for index, question in enumerate(questions):
@@ -1241,12 +1340,26 @@ class RAGPipeline:
                 sample["ground_truth"] = ground_truths[index]
             samples.append(sample)
 
+        timings_summary = self._summarize_timings(
+            [{"question": sample["question"], **sample["timings"]} for sample in samples]
+        )
+        total_runtime_ms = (time.time() - prediction_started) * 1000
+
         report = {
             "generated_at": datetime.now().isoformat(),
             "mode": "prediction_generation",
+            "summary": {
+                "question_count": len(questions),
+                "timings": {
+                    **timings_summary,
+                    "total_runtime_ms": total_runtime_ms,
+                    "total_runtime_seconds": total_runtime_ms / 1000.0,
+                },
+            },
             "models": {
                 "generation_model": self.config.generation.model_name,
                 "generation_endpoint": self.config.generation.llm_endpoint,
+                "generation_reasoning_effort": self.config.generation.reasoning_effort,
             },
             "dataset": {
                 "dataset_path": self.config.evaluation.dataset_path,
@@ -1259,9 +1372,7 @@ class RAGPipeline:
                 "per_question": [
                     {"question": sample["question"], **sample["timings"]} for sample in samples
                 ],
-                "summary": self._summarize_timings(
-                    [{"question": sample["question"], **sample["timings"]} for sample in samples]
-                ),
+                "summary": timings_summary,
             },
             "artifacts": {
                 "samples": samples,
@@ -1280,6 +1391,7 @@ class RAGPipeline:
         dataset_metadata: Optional[Dict[str, Any]] = None,
         prediction_path: Optional[str] = None,
     ) -> Dict[str, Any]:
+        scoring_started = time.time()
         if self.evaluator is None:
             self.evaluator = RAGASEvaluator(
                 eval_llm=self._build_eval_llm(),
@@ -1307,13 +1419,30 @@ class RAGPipeline:
             ground_truths=ground_truths if has_ground_truths else None,
         )
 
+        timings_summary = self._summarize_timings(timings)
+        total_runtime_ms = (time.time() - scoring_started) * 1000
+        generation_model = None
+        if dataset_metadata:
+            generation_model = dataset_metadata.get("generation_model")
+        if not generation_model:
+            generation_model = self.config.generation.model_name
+
         report = {
             "generated_at": datetime.now().isoformat(),
             "mode": "prediction_scoring",
             "judge_mode": self.config.evaluation.judge_mode,
+            "summary": self._build_eval_summary(
+                eval_results=eval_results,
+                timings_summary=timings_summary,
+                question_count=len(samples),
+                total_runtime_ms=total_runtime_ms,
+            ),
             "models": {
+                "generation_model": generation_model,
                 "judge_model": self.config.evaluation.eval_llm,
                 "judge_endpoint": self.config.evaluation.eval_llm_endpoint,
+                "judge_reasoning_effort": self.config.evaluation.eval_reasoning_effort,
+                "judge_include_thoughts": self.config.evaluation.eval_include_thoughts,
                 "evaluation_embeddings": self.config.evaluation.eval_embeddings,
                 "evaluation_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
             },
@@ -1325,7 +1454,7 @@ class RAGPipeline:
             },
             "timings": {
                 "per_question": timings,
-                "summary": self._summarize_timings(timings),
+                "summary": timings_summary,
             },
             "results": eval_results,
             "artifacts": {
@@ -1337,6 +1466,10 @@ class RAGPipeline:
         }
         if dataset_metadata:
             report["dataset"].update(dataset_metadata)
-        report["report_path"] = self._write_eval_report(report)
+        report["report_path"] = self._write_eval_report(
+            report,
+            artifact_kind="score",
+            label=generation_model,
+        )
         return report
 
