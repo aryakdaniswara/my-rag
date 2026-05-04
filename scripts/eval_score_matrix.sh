@@ -2,6 +2,8 @@
 set -eu
 
 CONFIG_PATH="${1:-config_server.yaml}"
+EVAL_LABELS="${EVAL_LABELS:-qwen35_2b qwen35_4b qwen35_9b}"
+RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 
 LOG_DIR="/app/storage/eval_logs"
 LOG_PATH="$LOG_DIR/eval_score_matrix_$(date +%Y%m%d_%H%M%S).log"
@@ -31,10 +33,6 @@ preflight_label() {
     --predictions "$PREDICTIONS_PATH"
 }
 
-preflight_label "qwen35_2b"
-preflight_label "qwen35_4b"
-preflight_label "qwen35_9b"
-
 run_label() {
   LABEL="$1"
 
@@ -43,8 +41,17 @@ run_label() {
   echo "[$(date -Iseconds)] Finished scoring latest predictions for label=$LABEL"
 }
 
-run_label "qwen35_2b"
-run_label "qwen35_4b"
-run_label "qwen35_9b"
+for BASE_LABEL in $EVAL_LABELS; do
+  if [ -n "$RERANK_TOP_K_VALUES" ]; then
+    for RERANK_TOP_K in $RERANK_TOP_K_VALUES; do
+      LABEL="${BASE_LABEL}_rerank${RERANK_TOP_K}"
+      preflight_label "$LABEL"
+      run_label "$LABEL"
+    done
+  else
+    preflight_label "$BASE_LABEL"
+    run_label "$BASE_LABEL"
+  fi
+done
 
 echo "[$(date -Iseconds)] Finished eval-score matrix with config=$CONFIG_PATH"

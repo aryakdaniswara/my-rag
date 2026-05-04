@@ -7,6 +7,10 @@ This folder is the source of truth for reusable evaluation configs.
 - `eval_matrix_qwen35.yaml`
   - Runs one dataset across `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b`.
   - Extends `config_server.yaml` directly so matrix runs track the live server config.
+  - Each `evaluation.model_matrix` entry can also override `retrieval_k` and `rerank_top_k` when you want the matrix to compare retrieval settings as well as generation models.
+- `eval_matrix_qwen35_rerank_topk.yaml`
+  - Runs one dataset across `qwen3.5:4b` with `rerank_top_k` values `3`, `5`, `8`, and `10`.
+  - Useful when you want to isolate retrieval-context size without changing the generation model.
 - `eval_example_local_judge.yaml`
   - Example for local-only evaluation where the judge reuses the same local backend.
 - `eval_example_gemini_api_judge.yaml`
@@ -35,16 +39,47 @@ Matrix eval for `qwen3.5:2b`, `qwen3.5:4b`, `qwen3.5:9b`:
 python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
 ```
 
+Matrix eval with rerank chunk-count variants:
+
+```yaml
+evaluation:
+  model_matrix:
+    - label: "qwen35_4b_rerank3"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 3
+    - label: "qwen35_4b_rerank5"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 5
+    - label: "qwen35_4b_rerank8"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 8
+    - label: "qwen35_4b_rerank10"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 10
+```
+
 Generate saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` through the live API:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+Generate the same matrix while sweeping reranked chunk counts:
+
+```sh
+RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_generate_matrix.sh
+```
+
 Score the latest saved predictions for `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` without regenerating:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh
+```
+
+Score the latest rerank sweep artifacts:
+
+```sh
+RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_score_matrix.sh
 ```
 
 All eval scripts now run a lightweight preflight first, including the matrix entrypoints:
@@ -77,8 +112,8 @@ storage/eval_datasets/ui_reviewed_synth_v2.json
 Generate predictions through the live API, then score later:
 
 ```sh
-python cli.py eval-generate --config config_server.yaml --model qwen3.5:4b --label qwen35_4b
-python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_<timestamp>.json
+python cli.py eval-generate --config config_server.yaml --model qwen3.5:4b --label qwen35_4b_rerank8 --rerank-top-k 8
+python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_rerank8_<timestamp>.json
 ```
 
 ## Output Folders

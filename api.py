@@ -270,6 +270,18 @@ def _extract_generation_override(config_override: Optional[Dict[str, Any]]) -> D
     return {key: value for key, value in config_override.items() if key in direct_keys}
 
 
+def _extract_retrieval_override(config_override: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(config_override, dict):
+        return {}
+
+    retrieval_override = config_override.get("retrieval")
+    if isinstance(retrieval_override, dict):
+        return retrieval_override
+
+    direct_keys = {"k", "rerank_top_k"}
+    return {key: value for key, value in config_override.items() if key in direct_keys}
+
+
 def _build_request_llm(config_override: Optional[Dict[str, Any]] = None) -> LLM:
     runtime_config = _load_runtime_config()
     generation = runtime_config.generation
@@ -283,6 +295,19 @@ def _build_request_llm(config_override: Optional[Dict[str, Any]] = None) -> LLM:
         reasoning_effort=generation_override.get("reasoning_effort", generation.reasoning_effort),
         system_prompt=generation_override.get("system_prompt", generation.system_prompt),
     )
+
+
+def _resolve_request_retrieval(config_override: Optional[Dict[str, Any]] = None) -> Dict[str, int]:
+    runtime_config = _load_runtime_config()
+    retrieval = runtime_config.retrieval
+    retrieval_override = _extract_retrieval_override(config_override)
+
+    return {
+        "k": int(retrieval_override.get("k", retrieval.k)),
+        "rerank_top_k": int(
+            retrieval_override.get("rerank_top_k", retrieval.rerank_top_k)
+        ),
+    }
 
 
 def _llm_proxy() -> httpx.AsyncClient:
@@ -546,14 +571,15 @@ async def query_rag(request: QueryRequest, response: Response):
 
     try:
         query_started = time.time()
+        retrieval_settings = _resolve_request_retrieval(request.config_override)
         retrieval_started = time.time()
         docs = rag_pipeline.retriever.retrieve(
             query=request.query,
             collection_name=rag_pipeline.config.storage.collection_name,
             metadata_filter=request.metadata_filter,
-            k=rag_pipeline.config.retrieval.k,
+            k=retrieval_settings["k"],
         )
-        docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+        docs = docs[: retrieval_settings["rerank_top_k"]]
         retrieval_time_ms = (time.time() - retrieval_started) * 1000
 
         generation_started = time.time()
@@ -573,6 +599,8 @@ async def query_rag(request: QueryRequest, response: Response):
                 "num_docs": len(docs),
                 "confidence_score": confidence_score,
                 "generation_override_applied": True,
+                "retrieval_k": retrieval_settings["k"],
+                "rerank_top_k": retrieval_settings["rerank_top_k"],
                 "retrieval_time_ms": retrieval_time_ms,
                 "generation_time_ms": generation_time_ms,
                 "end_to_end_time_ms": end_to_end_time_ms,
@@ -593,6 +621,8 @@ async def query_rag(request: QueryRequest, response: Response):
                 "query": request.query,
                 "num_docs": len(docs),
                 "confidence_score": confidence_score,
+                "retrieval_k": retrieval_settings["k"],
+                "rerank_top_k": retrieval_settings["rerank_top_k"],
                 "retrieval_time_ms": retrieval_time_ms,
                 "generation_time_ms": generation_time_ms,
                 "end_to_end_time_ms": end_to_end_time_ms,
@@ -629,14 +659,15 @@ async def query_rag_stream(request: QueryRequest):
     try:
         if request.config_override:
             query_started = time.time()
+            retrieval_settings = _resolve_request_retrieval(request.config_override)
             retrieval_started = time.time()
             docs = rag_pipeline.retriever.retrieve(
                 query=request.query,
                 collection_name=rag_pipeline.config.storage.collection_name,
                 metadata_filter=request.metadata_filter,
-                k=rag_pipeline.config.retrieval.k,
+                k=retrieval_settings["k"],
             )
-            docs = docs[: rag_pipeline.config.retrieval.rerank_top_k]
+            docs = docs[: retrieval_settings["rerank_top_k"]]
             retrieval_time_ms = (time.time() - retrieval_started) * 1000
             request_llm = _build_request_llm(request.config_override)
 
@@ -645,6 +676,8 @@ async def query_rag_stream(request: QueryRequest):
                     "num_docs": len(docs),
                     "query": request.query,
                     "generation_override_applied": True,
+                    "retrieval_k": retrieval_settings["k"],
+                    "rerank_top_k": retrieval_settings["rerank_top_k"],
                     "retrieval_time_ms": retrieval_time_ms,
                 }
                 yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
@@ -656,7 +689,7 @@ async def query_rag_stream(request: QueryRequest):
                 end_to_end_time_ms = (time.time() - query_started) * 1000
                 confidence_score = rag_pipeline._compute_retrieval_strength(docs)
                 yield f"data: {json.dumps({'type': 'confidence', 'content': {'confidence_score': confidence_score, 'query': request.query}})}\n\n"
-                yield f"data: {json.dumps({'type': 'timings', 'content': {'retrieval_time_ms': retrieval_time_ms, 'generation_time_ms': generation_time_ms, 'end_to_end_time_ms': end_to_end_time_ms, 'query': request.query, 'generation_override_applied': True}})}\n\n"
+                yield f"data: {json.dumps({'type': 'timings', 'content': {'retrieval_time_ms': retrieval_time_ms, 'generation_time_ms': generation_time_ms, 'end_to_end_time_ms': end_to_end_time_ms, 'query': request.query, 'generation_override_applied': True, 'retrieval_k': retrieval_settings['k'], 'rerank_top_k': retrieval_settings['rerank_top_k']}})}\n\n"
 
             return StreamingResponse(
                 _override_stream(),

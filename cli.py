@@ -210,6 +210,10 @@ def _apply_eval_generate_overrides(config: RAGConfig, args) -> str | None:
         config.generation.temperature = args.temperature
     if args.reasoning_effort is not None:
         config.generation.reasoning_effort = args.reasoning_effort
+    if args.retrieval_k is not None:
+        config.retrieval.k = args.retrieval_k
+    if args.rerank_top_k is not None:
+        config.retrieval.rerank_top_k = args.rerank_top_k
 
     return label or config.generation.model_name
 
@@ -318,6 +322,7 @@ def _generate_eval_predictions_via_api(
     ground_truths: list[str] | None = None,
     dataset_metadata: dict | None = None,
     generation_override: dict | None = None,
+    retrieval_override: dict | None = None,
 ) -> dict:
     api_url = f"{api_base_url.rstrip('/')}/query"
     samples = []
@@ -328,8 +333,12 @@ def _generate_eval_predictions_via_api(
         for index, question in enumerate(questions):
             started = time.time()
             payload: dict[str, object] = {"query": question}
-            if generation_override:
-                payload["config_override"] = {"generation": generation_override}
+            if generation_override or retrieval_override:
+                payload["config_override"] = {}
+                if generation_override:
+                    payload["config_override"]["generation"] = generation_override
+                if retrieval_override:
+                    payload["config_override"]["retrieval"] = retrieval_override
 
             response = client.post(api_url, json=payload)
             response.raise_for_status()
@@ -617,6 +626,10 @@ def _run_eval_matrix(
             run_config.generation.temperature = spec.temperature
         if spec.reasoning_effort is not None:
             run_config.generation.reasoning_effort = spec.reasoning_effort
+        if spec.retrieval_k is not None:
+            run_config.retrieval.k = spec.retrieval_k
+        if spec.rerank_top_k is not None:
+            run_config.retrieval.rerank_top_k = spec.rerank_top_k
 
         label = spec.label or spec.model_name
         print(f"[{index}/{len(model_specs)}] Evaluating {label}")
@@ -914,6 +927,16 @@ def main():
         "--reasoning-effort",
         help="Override generation reasoning effort for this run",
     )
+    eval_generate_parser.add_argument(
+        "--retrieval-k",
+        type=int,
+        help="Override retrieval.k for this generation run",
+    )
+    eval_generate_parser.add_argument(
+        "--rerank-top-k",
+        type=int,
+        help="Override retrieval.rerank_top_k for this generation run",
+    )
 
     eval_score_parser = subparsers.add_parser(
         "eval-score",
@@ -1188,6 +1211,10 @@ def main():
             "temperature": config.generation.temperature,
             "reasoning_effort": config.generation.reasoning_effort,
         }
+        retrieval_override = {
+            "k": config.retrieval.k,
+            "rerank_top_k": config.retrieval.rerank_top_k,
+        }
         results = _generate_eval_predictions_via_api(
             config=config,
             api_base_url=args.api_base_url,
@@ -1195,6 +1222,7 @@ def main():
             ground_truths=ground_truths,
             dataset_metadata=dataset_metadata,
             generation_override=generation_override,
+            retrieval_override=retrieval_override,
         )
         output = args.output or _artifact_path_for_label(
             config.evaluation.prediction_dir,

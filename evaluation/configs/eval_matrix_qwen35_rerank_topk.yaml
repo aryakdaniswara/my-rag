@@ -1,0 +1,17 @@
+# Matrix evaluation config: one model, one judge, many rerank_top_k values.
+extends: "../../config_server.yaml"
+
+evaluation:
+  model_matrix:
+    - label: "qwen35_4b_rerank3"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 3
+    - label: "qwen35_4b_rerank5"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 5
+    - label: "qwen35_4b_rerank8"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 8
+    - label: "qwen35_4b_rerank10"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 10

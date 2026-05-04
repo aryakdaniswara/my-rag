@@ -82,6 +82,8 @@ class EvaluationConfig:
         max_tokens: Optional[int] = None
         temperature: Optional[float] = None
         reasoning_effort: Optional[str] = None
+        retrieval_k: Optional[int] = None
+        rerank_top_k: Optional[int] = None
         label: Optional[str] = None
 
     metrics: List[str] = field(
