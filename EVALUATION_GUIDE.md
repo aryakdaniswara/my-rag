@@ -181,7 +181,7 @@ Current limitation:
 This reruns retrieval, generation, and scoring in one command.
 
 ```sh
-python cli.py eval --config evaluation/configs/eval_base_api_judge.yaml
+python cli.py eval --config config_server.yaml
 ```
 
 Use this when:
@@ -196,7 +196,7 @@ Generate predictions:
 
 ```sh
 python cli.py eval-generate \
-  --config evaluation/configs/eval_base_api_judge.yaml \
+  --config config_server.yaml \
   --model qwen3.5:4b \
   --label qwen35_4b
 ```
@@ -252,8 +252,6 @@ Reusable examples now live in `evaluation/configs/`.
 
 Recommended files:
 
-- `eval_base_api_judge.yaml`
-  - canonical baseline for model comparisons
 - `eval_example_local_judge.yaml`
   - local-only judging example
 - `eval_example_gemini_api_judge.yaml`

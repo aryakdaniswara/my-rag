@@ -1,8 +1,0 @@
-# Evaluation baseline: extend the live server config so eval uses the same
-# retrieval/index/runtime defaults unless an eval-specific override is needed.
-extends: "../../config_server.yaml"
-
-evaluation:
-  dataset_path: "storage/eval_datasets/ui_reviewed_synth_v2.json"
-  report_dir: "storage/eval_results"
-  prediction_dir: "storage/eval_predictions"

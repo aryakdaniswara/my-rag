@@ -233,6 +233,59 @@ def _apply_eval_score_overrides(config: RAGConfig, args) -> None:
         config.evaluation.eval_include_thoughts = True
 
 
+def _runtime_settings_snapshot(config: RAGConfig, config_path: str | None = None) -> dict:
+    return {
+        "config_path": config_path,
+        "collection": {
+            "collection_name": config.storage.collection_name,
+            "collection_base_name": config.storage.collection_base_name,
+            "milvus_uri": config.storage.milvus_uri,
+            "db_name": config.storage.db_name,
+            "metric_type": config.storage.metric_type,
+        },
+        "retrieval": {
+            "k": config.retrieval.k,
+            "rerank_top_k": config.retrieval.rerank_top_k,
+            "hybrid_weight": config.retrieval.hybrid_weight,
+            "min_score": config.retrieval.min_score,
+            "reranker_model": config.retrieval.reranker_model,
+            "reranker_endpoint": config.retrieval.reranker_endpoint,
+        },
+        "embeddings": {
+            "dense_model": config.embedding.dense_model,
+            "sparse_model": config.embedding.sparse_model,
+            "device": config.embedding.device,
+            "dense_device": config.embedding.dense_device,
+            "sparse_device": config.embedding.sparse_device,
+            "batch_size": config.embedding.batch_size,
+            "quantize_8bit": config.embedding.quantize_8bit,
+        },
+        "generation": {
+            "model_name": config.generation.model_name,
+            "llm_endpoint": config.generation.llm_endpoint,
+            "max_tokens": config.generation.max_tokens,
+            "temperature": config.generation.temperature,
+            "reasoning_effort": config.generation.reasoning_effort,
+        },
+        "evaluation": {
+            "judge_mode": config.evaluation.judge_mode,
+            "metrics": list(config.evaluation.metrics),
+            "eval_llm": config.evaluation.eval_llm,
+            "eval_llm_endpoint": config.evaluation.eval_llm_endpoint,
+            "eval_llm_api_key_env": config.evaluation.eval_llm_api_key_env,
+            "eval_llm_max_tokens": config.evaluation.eval_llm_max_tokens,
+            "eval_reasoning_effort": config.evaluation.eval_reasoning_effort,
+            "eval_include_thoughts": config.evaluation.eval_include_thoughts,
+            "eval_embeddings": config.evaluation.eval_embeddings,
+            "eval_embeddings_endpoint": config.evaluation.eval_embeddings_endpoint,
+            "dataset_path": config.evaluation.dataset_path,
+            "report_dir": config.evaluation.report_dir,
+            "prediction_dir": config.evaluation.prediction_dir,
+            "answer_relevancy_strictness": config.evaluation.answer_relevancy_strictness,
+        },
+    }
+
+
 def _derive_ollama_generate_url(llm_endpoint: str) -> str:
     endpoint = llm_endpoint.rstrip("/")
     if endpoint.endswith("/v1"):
@@ -319,6 +372,10 @@ def _generate_eval_predictions_via_api(
     report = {
         "generated_at": datetime.now().isoformat(),
         "mode": "prediction_generation_api",
+        "runtime_settings": _runtime_settings_snapshot(
+            config,
+            getattr(config, "source_config_path", None),
+        ),
         "summary": {
             "question_count": len(questions),
             "timings": {
@@ -528,6 +585,10 @@ def _run_eval_matrix(
         "generated_at": datetime.now().isoformat(),
         "mode": "matrix",
         "status": "running",
+        "runtime_settings": _runtime_settings_snapshot(
+            rag.config,
+            getattr(rag.config, "source_config_path", None),
+        ),
         "base_generation_endpoint": rag.config.generation.llm_endpoint,
         "judge_mode": rag.config.evaluation.judge_mode,
         "judge_model": rag.config.evaluation.eval_llm,
@@ -573,6 +634,10 @@ def _run_eval_matrix(
         except Exception as exc:
             report = {
                 "generated_at": datetime.now().isoformat(),
+                "runtime_settings": _runtime_settings_snapshot(
+                    run_config,
+                    getattr(run_config, "source_config_path", None),
+                ),
                 "models": {
                     "generation_model": run_config.generation.model_name,
                     "generation_endpoint": run_config.generation.llm_endpoint,
@@ -1104,6 +1169,7 @@ def main():
         return
 
     config = RAGConfig.from_yaml(args.config)
+    setattr(config, "source_config_path", args.config)
     base_generation_model = config.generation.model_name
     base_generation_endpoint = config.generation.llm_endpoint
     output_label = None

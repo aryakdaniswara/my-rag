@@ -1,5 +1,5 @@
 # Matrix evaluation config: one dataset, one judge, many generation models.
-extends: "./eval_base_api_judge.yaml"
+extends: "../../config_server.yaml"
 
 evaluation:
   model_matrix:
@@ -9,5 +9,4 @@ evaluation:
       model_name: "qwen3.5:4b"
     - label: "qwen3.5:9b"
       model_name: "qwen3.5:9b"
-
 

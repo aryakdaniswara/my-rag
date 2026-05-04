@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-evaluation/configs/eval_base_api_judge.yaml}"
+CONFIG_PATH="${1:-config_server.yaml}"
 
 LOG_DIR="/app/storage/eval_logs"
 LOG_PATH="$LOG_DIR/eval_score_matrix_$(date +%Y%m%d_%H%M%S).log"

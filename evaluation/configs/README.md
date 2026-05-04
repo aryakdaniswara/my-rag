@@ -4,11 +4,9 @@ This folder is the source of truth for reusable evaluation configs.
 
 ## Files
 
-- `eval_base_api_judge.yaml`
-  - Canonical baseline for local generation under test with an API judge.
-  - Extends `config_server.yaml` so eval inherits the live server retrieval and judge settings.
 - `eval_matrix_qwen35.yaml`
   - Runs one dataset across `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b`.
+  - Extends `config_server.yaml` directly so matrix runs track the live server config.
 - `eval_example_local_judge.yaml`
   - Example for local-only evaluation where the judge reuses the same local backend.
 - `eval_example_gemini_api_judge.yaml`
@@ -28,7 +26,7 @@ This folder is the source of truth for reusable evaluation configs.
 Single model eval:
 
 ```sh
-python cli.py eval --config evaluation/configs/eval_base_api_judge.yaml
+python cli.py eval --config config_server.yaml
 ```
 
 Matrix eval for `qwen3.5:2b`, `qwen3.5:4b`, `qwen3.5:9b`:
@@ -79,7 +77,7 @@ storage/eval_datasets/ui_reviewed_synth_v2.json
 Generate predictions through the live API, then score later:
 
 ```sh
-python cli.py eval-generate --config evaluation/configs/eval_base_api_judge.yaml --model qwen3.5:4b --label qwen35_4b
+python cli.py eval-generate --config config_server.yaml --model qwen3.5:4b --label qwen35_4b
 python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_<timestamp>.json
 ```
 
@@ -92,3 +90,5 @@ Scored reports include the generation model in the filename, for example:
 
 - `storage/eval_results/eval_report_qwen3.5_4b_20260503_...json`
 - `storage/eval_results/eval_score_qwen3.5_4b_20260503_...json`
+
+Every prediction/report artifact now includes a `runtime_settings` block so you can inspect the collection, retrieval `k`, `rerank_top_k`, reranker endpoint, embedding setup, generation settings, judge settings, dataset path, and config path used for that run.

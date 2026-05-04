@@ -145,6 +145,70 @@ class RAGPipeline:
         except Exception as exc:
             logger.warning("Failed during final CUDA cleanup: %s", exc)
 
+    def _runtime_settings_snapshot(self) -> Dict[str, Any]:
+        return {
+            "config_path": getattr(self.config, "source_config_path", None),
+            "collection": {
+                "collection_name": self.config.storage.collection_name,
+                "collection_base_name": self.config.storage.collection_base_name,
+                "milvus_uri": self.config.storage.milvus_uri,
+                "db_name": self.config.storage.db_name,
+                "metric_type": self.config.storage.metric_type,
+            },
+            "ingestion": {
+                "state_path": self.config.ingestion.state_path,
+                "pdf_parser": self.config.ingestion.pdf_parser,
+                "pdf_chunking_strategy": self.config.ingestion.pdf_chunking_strategy,
+                "html_parser": self.config.ingestion.html_parser,
+                "html_chunking_strategy": self.config.ingestion.html_chunking_strategy,
+                "chunk_size": self.config.ingestion.chunk_size,
+                "chunk_overlap": self.config.ingestion.chunk_overlap,
+                "pdf_min_chunk_tokens": self.config.ingestion.pdf_min_chunk_tokens,
+                "pdf_max_chunk_tokens": self.config.ingestion.pdf_max_chunk_tokens,
+                "pdf_split_overlap_tokens": self.config.ingestion.pdf_split_overlap_tokens,
+            },
+            "retrieval": {
+                "k": self.config.retrieval.k,
+                "rerank_top_k": self.config.retrieval.rerank_top_k,
+                "hybrid_weight": self.config.retrieval.hybrid_weight,
+                "min_score": self.config.retrieval.min_score,
+                "reranker_model": self.config.retrieval.reranker_model,
+                "reranker_endpoint": self.config.retrieval.reranker_endpoint,
+            },
+            "embeddings": {
+                "dense_model": self.config.embedding.dense_model,
+                "sparse_model": self.config.embedding.sparse_model,
+                "device": self.config.embedding.device,
+                "dense_device": self.config.embedding.dense_device,
+                "sparse_device": self.config.embedding.sparse_device,
+                "batch_size": self.config.embedding.batch_size,
+                "quantize_8bit": self.config.embedding.quantize_8bit,
+            },
+            "generation": {
+                "model_name": self.config.generation.model_name,
+                "llm_endpoint": self.config.generation.llm_endpoint,
+                "max_tokens": self.config.generation.max_tokens,
+                "temperature": self.config.generation.temperature,
+                "reasoning_effort": self.config.generation.reasoning_effort,
+            },
+            "evaluation": {
+                "judge_mode": self.config.evaluation.judge_mode,
+                "metrics": list(self.config.evaluation.metrics),
+                "eval_llm": self.config.evaluation.eval_llm,
+                "eval_llm_endpoint": self.config.evaluation.eval_llm_endpoint,
+                "eval_llm_api_key_env": self.config.evaluation.eval_llm_api_key_env,
+                "eval_llm_max_tokens": self.config.evaluation.eval_llm_max_tokens,
+                "eval_reasoning_effort": self.config.evaluation.eval_reasoning_effort,
+                "eval_include_thoughts": self.config.evaluation.eval_include_thoughts,
+                "eval_embeddings": self.config.evaluation.eval_embeddings,
+                "eval_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
+                "dataset_path": self.config.evaluation.dataset_path,
+                "report_dir": self.config.evaluation.report_dir,
+                "prediction_dir": self.config.evaluation.prediction_dir,
+                "answer_relevancy_strictness": self.config.evaluation.answer_relevancy_strictness,
+            },
+        }
+
     def _build_eval_llm(self):
         mode = (self.config.evaluation.judge_mode or "local").strip().lower()
         if mode not in {"api", "local", "reuse_generation"}:
@@ -1246,6 +1310,7 @@ class RAGPipeline:
 
         report = {
             "generated_at": datetime.now().isoformat(),
+            "runtime_settings": self._runtime_settings_snapshot(),
             "summary": self._build_eval_summary(
                 eval_results=eval_results,
                 timings_summary=timings_summary,
@@ -1348,6 +1413,7 @@ class RAGPipeline:
         report = {
             "generated_at": datetime.now().isoformat(),
             "mode": "prediction_generation",
+            "runtime_settings": self._runtime_settings_snapshot(),
             "summary": {
                 "question_count": len(questions),
                 "timings": {
@@ -1431,6 +1497,7 @@ class RAGPipeline:
             "generated_at": datetime.now().isoformat(),
             "mode": "prediction_scoring",
             "judge_mode": self.config.evaluation.judge_mode,
+            "runtime_settings": self._runtime_settings_snapshot(),
             "summary": self._build_eval_summary(
                 eval_results=eval_results,
                 timings_summary=timings_summary,

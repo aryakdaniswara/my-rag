@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-evaluation/configs/eval_base_api_judge.yaml}"
+CONFIG_PATH="${1:-config_server.yaml}"
 API_BASE_URL="${2:-http://127.0.0.1:8000}"
 
 LOG_DIR="/app/storage/eval_logs"
