@@ -97,6 +97,8 @@ services:
       - RAG_CONFIG_PATH=/app/config_rag.yaml
       # Ollama and OpenAI-compatible endpoints require this var even with a dummy value
       - OPENAI_API_KEY=dummy
+      # Remote or local Ollama endpoint used by generation.llm_endpoint in config_server.yaml
+      - OLLAMA_LLM_ENDPOINT=${OLLAMA_LLM_ENDPOINT:-http://127.0.0.1:11434/v1}
       # Evaluation judge API key loaded from local .env
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       # Memory management for PyTorch to avoid fragmentation

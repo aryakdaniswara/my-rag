@@ -3,10 +3,7 @@ extends: "../../config_server.yaml"
 
 evaluation:
   model_matrix:
-    - label: "qwen3.5:2b"
-      model_name: "qwen3.5:2b"  
     - label: "qwen3.5:4b"
       model_name: "qwen3.5:4b"
     - label: "qwen3.5:9b"
       model_name: "qwen3.5:9b"
-

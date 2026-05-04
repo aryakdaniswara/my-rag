@@ -3,7 +3,7 @@ set -eu
 
 CONFIG_PATH="${1:-config_server.yaml}"
 API_BASE_URL="${2:-http://127.0.0.1:8000}"
-EVAL_MODELS="${EVAL_MODELS:-qwen3.5:2b=qwen35_2b qwen3.5:4b=qwen35_4b qwen3.5:9b=qwen35_9b}"
+EVAL_MODELS="${EVAL_MODELS:-qwen3.5:4b=qwen35_4b qwen3.5:9b=qwen35_9b}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 
 LOG_DIR="/app/storage/eval_logs"
