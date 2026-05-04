@@ -33,10 +33,8 @@ storage:
 retrieval:
   k: 8                         # Candidate pool fetched from Milvus before reranking
   rerank_top_k: 5               # Docs passed to the LLM after reranking (prevents token overflow)
-  hybrid_weight: 0.5
   reranker_model: null  # Set to null to disable
   reranker_endpoint: null
-  min_score: 0.0
 
 # LLM generation
 generation:
@@ -62,4 +60,4 @@ evaluation:
   dataset_path: "storage/eval_datasets/ui_mixed_seed.json"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
-  answer_relevancy_strictness: 1
+  answer_relevancy_strictness: 1  # Passed to RAGAS ResponseRelevancy(strictness=...); higher is stricter.

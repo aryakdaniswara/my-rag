@@ -97,7 +97,6 @@ class RAGPipeline:
             reranker_model=config.retrieval.reranker_model,
             reranker_endpoint=config.retrieval.reranker_endpoint,
             k=config.retrieval.k,
-            hybrid_weight=config.retrieval.hybrid_weight,
         )
         if preload_retrieval_models:
             self.retriever.load_models()
@@ -153,7 +152,6 @@ class RAGPipeline:
                 "collection_base_name": self.config.storage.collection_base_name,
                 "milvus_uri": self.config.storage.milvus_uri,
                 "db_name": self.config.storage.db_name,
-                "metric_type": self.config.storage.metric_type,
             },
             "ingestion": {
                 "state_path": self.config.ingestion.state_path,
@@ -170,8 +168,6 @@ class RAGPipeline:
             "retrieval": {
                 "k": self.config.retrieval.k,
                 "rerank_top_k": self.config.retrieval.rerank_top_k,
-                "hybrid_weight": self.config.retrieval.hybrid_weight,
-                "min_score": self.config.retrieval.min_score,
                 "reranker_model": self.config.retrieval.reranker_model,
                 "reranker_endpoint": self.config.retrieval.reranker_endpoint,
             },
@@ -1221,7 +1217,6 @@ class RAGPipeline:
     def evaluate(
         self,
         questions: List[str],
-        synthetic_qa: bool = False,
         ground_truths: Optional[List[str]] = None,
         retrieval_logs: Optional[List[Dict]] = None,
         rerank_logs: Optional[List[Dict]] = None,

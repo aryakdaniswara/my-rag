@@ -241,13 +241,10 @@ def _runtime_settings_snapshot(config: RAGConfig, config_path: str | None = None
             "collection_base_name": config.storage.collection_base_name,
             "milvus_uri": config.storage.milvus_uri,
             "db_name": config.storage.db_name,
-            "metric_type": config.storage.metric_type,
         },
         "retrieval": {
             "k": config.retrieval.k,
             "rerank_top_k": config.retrieval.rerank_top_k,
-            "hybrid_weight": config.retrieval.hybrid_weight,
-            "min_score": config.retrieval.min_score,
             "reranker_model": config.retrieval.reranker_model,
             "reranker_endpoint": config.retrieval.reranker_endpoint,
         },

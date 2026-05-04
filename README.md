@@ -15,7 +15,7 @@ This repo is organized to support two common modes:
 - **Debuggability**: 
   - `find-keyword`: Locate specific keywords across all stored chunks.
   - `trace`: Verify if retrieved chunks contain specific keywords.
-- **Evaluation**: Built-in RAGAS evaluation and synthetic QA generation.
+- **Evaluation**: Built-in RAGAS evaluation.
 
 ## Installation
 

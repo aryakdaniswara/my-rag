@@ -27,15 +27,12 @@ storage:
   collection_base_name: "documents"
   collection_name: "documents_rebuild_20260422_132325"
   db_name: "default"
-  metric_type: "COSINE"
 
 retrieval:
   k: 15                         # Candidate pool fetched from Milvus before reranking
   rerank_top_k: 5               # Docs passed to the LLM after reranking
-  hybrid_weight: 0.5
   reranker_model: null
   reranker_endpoint: "http://127.0.0.1:8012/v1/rerank"
-  min_score: 0.0
 
 generation:
   llm_endpoint: "http://127.0.0.1:11434/v1"
@@ -57,4 +54,4 @@ evaluation:
   dataset_path: "storage/eval_datasets/ui_reviewed_synth_v2.json"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
-  answer_relevancy_strictness: 1
+  answer_relevancy_strictness: 1  # Passed to RAGAS ResponseRelevancy(strictness=...); higher is stricter.

@@ -31,7 +31,6 @@ class Retriever:
         reranker_model: Optional[str] = "jinaai/jina-reranker-v3-GGUF:Q5_K_M",
         reranker_endpoint: Optional[str] = "http://127.0.0.1:8012/v1/rerank",
         k: int = 50,
-        hybrid_weight: float = 0.5,
     ):
         self.dense_model = dense_model
         self.sparse_model = sparse_model
@@ -39,7 +38,6 @@ class Retriever:
         self.reranker_model = reranker_model
         self.reranker_endpoint = reranker_endpoint
         self.k = k
-        self.hybrid_weight = hybrid_weight
         self._reranker = None
         self.device = "cuda" if _has_cuda() else "cpu"
 

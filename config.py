@@ -30,7 +30,6 @@ class IngestionConfig:
     save_snapshots: bool = False
     incremental: bool = True
     state_path: str = "storage/ingestion_state.json"
-    upload_dir: str = "uploads"
 
 
 @dataclass
@@ -50,7 +49,6 @@ class StorageConfig:
     collection_base_name: str = "documents"
     collection_name: str = "documents"
     db_name: str = "default"
-    metric_type: str = "COSINE"
 
 
 @dataclass
@@ -61,10 +59,8 @@ class RetrievalConfig:
     rerank_top_k: int = 5
     """Number of documents passed to the LLM after reranking."""
 
-    hybrid_weight: float = 0.5
     reranker_model: Optional[str] = "jinaai/jina-reranker-v3-GGUF:Q5_K_M"
     reranker_endpoint: Optional[str] = "http://127.0.0.1:8012/v1/rerank"
-    min_score: float = 0.0
 
 
 @dataclass
@@ -108,7 +104,7 @@ class EvaluationConfig:
     dataset_path: Optional[str] = "storage/eval_datasets/ui_mixed_seed.json"
     report_dir: str = "storage/eval_results"
     prediction_dir: str = "storage/eval_predictions"
-    answer_relevancy_strictness: int = 1
+    answer_relevancy_strictness: int = 1  # Passed to RAGAS ResponseRelevancy(strictness=...).
     model_matrix: List["EvaluationConfig.ModelSpec"] = field(default_factory=list)
 
 
