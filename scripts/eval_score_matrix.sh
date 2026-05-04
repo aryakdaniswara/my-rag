@@ -2,7 +2,7 @@
 set -eu
 
 CONFIG_PATH="${1:-config_server.yaml}"
-EVAL_LABELS="${EVAL_LABELS:-qwen35_4b qwen35_9b}"
+EVAL_LABELS="${EVAL_LABELS:-qwen36_27b gemma4_31b gemma4_26b deepseek_r1_32b mistral_small qwen35_9b qwen35_4b qwen35_2b}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 
 LOG_DIR="/app/storage/eval_logs"

@@ -3,7 +3,7 @@ set -eu
 
 CONFIG_PATH="${1:-config_server.yaml}"
 API_BASE_URL="${2:-http://127.0.0.1:8000}"
-EVAL_MODELS="${EVAL_MODELS:-qwen3.5:4b=qwen35_4b qwen3.5:9b=qwen35_9b}"
+EVAL_MODELS="${EVAL_MODELS:-qwen3.6:27b=qwen36_27b gemma4:31b=gemma4_31b gemma4:26b=gemma4_26b deepseek-r1:32b=deepseek_r1_32b mistral-small=mistral_small qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 
 LOG_DIR="/app/storage/eval_logs"

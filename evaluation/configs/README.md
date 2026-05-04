@@ -5,7 +5,7 @@ This folder is the source of truth for reusable evaluation configs.
 ## Files
 
 - `eval_matrix_qwen35.yaml`
-  - Runs one dataset across `qwen3.5:4b` and `qwen3.5:9b`.
+  - Runs one dataset across `qwen3.6:27b`, `gemma4:31b`, `gemma4:26b`, `deepseek-r1:32b`, `mistral-small`, `qwen3.5:9b`, `qwen3.5:4b`, and `qwen3.5:2b`.
   - Extends `config_server.yaml` directly so matrix runs track the live server config.
   - This is the current standard comparison path and keeps the live default `retrieval.rerank_top_k: 5`.
   - Each `evaluation.model_matrix` entry can also override `retrieval_k` and `rerank_top_k` when you want the matrix to compare retrieval settings as well as generation models.
@@ -34,7 +34,7 @@ Single model eval:
 python cli.py eval --config config_server.yaml
 ```
 
-Matrix eval for `qwen3.5:4b` and `qwen3.5:9b`:
+Matrix eval for the current eight-model comparison set:
 
 ```sh
 python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
@@ -59,7 +59,7 @@ evaluation:
       rerank_top_k: 10
 ```
 
-Generate saved predictions for `qwen3.5:4b` and `qwen3.5:9b` through the live API:
+Generate saved predictions for the current eight-model comparison set through the live API:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh
@@ -71,7 +71,7 @@ Generate the same matrix while sweeping reranked chunk counts:
 RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_generate_matrix.sh
 ```
 
-Score the latest saved predictions for `qwen3.5:4b` and `qwen3.5:9b` without regenerating:
+Score the latest saved predictions for the current eight-model comparison set without regenerating:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh
