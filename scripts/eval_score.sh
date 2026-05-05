@@ -4,11 +4,12 @@ set -eu
 MODE="${1:-}"
 VALUE="${2:-}"
 CONFIG_PATH="${3:-config_server.yaml}"
+OUTPUT_PATH="${4:-}"
 
 usage() {
   echo "Usage:"
-  echo "  sh /app/scripts/eval_score.sh --predictions <predictions_path> [config_path]"
-  echo "  sh /app/scripts/eval_score.sh --latest <label> [config_path]"
+  echo "  sh /app/scripts/eval_score.sh --predictions <predictions_path> [config_path] [output_path]"
+  echo "  sh /app/scripts/eval_score.sh --latest <label> [config_path] [output_path]"
   exit 1
 }
 
@@ -55,8 +56,15 @@ PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --config "$CONFIG_PATH" \
   --predictions "$PREDICTIONS_PATH"
 
-PYTHONUNBUFFERED=1 python cli.py eval-score \
-  --config "$CONFIG_PATH" \
-  --predictions "$PREDICTIONS_PATH"
+if [ -n "$OUTPUT_PATH" ]; then
+  PYTHONUNBUFFERED=1 python cli.py eval-score \
+    --config "$CONFIG_PATH" \
+    --predictions "$PREDICTIONS_PATH" \
+    --output "$OUTPUT_PATH"
+else
+  PYTHONUNBUFFERED=1 python cli.py eval-score \
+    --config "$CONFIG_PATH" \
+    --predictions "$PREDICTIONS_PATH"
+fi
 
 echo "[$(date -Iseconds)] Finished eval-score for predictions=$PREDICTIONS_PATH label=$LABEL"

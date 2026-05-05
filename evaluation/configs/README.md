@@ -59,7 +59,25 @@ evaluation:
       rerank_top_k: 10
 ```
 
-Generate saved predictions for the current eight-model comparison set through the live API:
+Run the API-only matrix end-to-end, generating predictions and scoring them in one neat run folder:
+
+```sh
+sh /app/scripts/eval_api_matrix.sh
+```
+
+Each run now lands in:
+
+- `storage/eval_predictions/<run_name>/eval_prediction_<label>.json`
+- `storage/eval_results/<run_name>/eval_score_<label>.json`
+- `storage/eval_logs/<run_name>.log`
+
+Use `RUN_NAME` when you want a stable folder name:
+
+```sh
+RUN_NAME=ui_v2_qwen_compare sh /app/scripts/eval_api_matrix.sh
+```
+
+Generate saved predictions only for the current eight-model comparison set through the live API:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh
@@ -107,7 +125,7 @@ export EVAL_LLM_ENDPOINT="http://YOUR_REMOTE_IP:11434/v1"
 The current default comparison dataset is:
 
 ```text
-storage/eval_datasets/ui_reviewed_synth_v2.json
+storage/eval_datasets/main/ui_main_v2.json
 ```
 
 Generate predictions through the live API, then score later:
@@ -122,9 +140,13 @@ python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_jud
 - Scored reports: `evaluation.report_dir` default `storage/eval_results`
 - Saved predictions: `evaluation.prediction_dir` default `storage/eval_predictions`
 
+For the new end-to-end matrix script, each batch is grouped under a dedicated run folder inside those directories.
+
 Scored reports include the generation model in the filename, for example:
 
 - `storage/eval_results/eval_report_qwen3.5_4b_20260503_...json`
 - `storage/eval_results/eval_score_qwen3.5_4b_20260503_...json`
+
+When scoring from saved predictions, the report filename now prefers the saved prediction label when available, so a run like `qwen35_4b_rerank8` stays readable all the way through scoring.
 
 Every prediction/report artifact now includes a `runtime_settings` block so you can inspect the collection, retrieval `k`, `rerank_top_k`, reranker endpoint, embedding setup, generation settings, judge settings, dataset path, and config path used for that run.

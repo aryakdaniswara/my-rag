@@ -1483,7 +1483,9 @@ class RAGPipeline:
         timings_summary = self._summarize_timings(timings)
         total_runtime_ms = (time.time() - scoring_started) * 1000
         generation_model = None
+        generation_label = None
         if dataset_metadata:
+            generation_label = dataset_metadata.get("generation_label")
             generation_model = dataset_metadata.get("generation_model")
         if not generation_model:
             generation_model = self.config.generation.model_name
@@ -1500,6 +1502,7 @@ class RAGPipeline:
                 total_runtime_ms=total_runtime_ms,
             ),
             "models": {
+                "generation_label": generation_label,
                 "generation_model": generation_model,
                 "judge_model": self.config.evaluation.eval_llm,
                 "judge_endpoint": self.config.evaluation.eval_llm_endpoint,
@@ -1531,7 +1534,7 @@ class RAGPipeline:
         report["report_path"] = self._write_eval_report(
             report,
             artifact_kind="score",
-            label=generation_model,
+            label=generation_label or generation_model,
         )
         return report
 

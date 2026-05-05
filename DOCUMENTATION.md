@@ -120,7 +120,7 @@ For a responsive user experience, the system supports real-time token streaming:
 - **Canonical Guide**: Evaluation workflow, metric semantics, config examples, artifact layout, and reasoning toggles now live in `EVALUATION_GUIDE.md`.
 - **Live Prompt Source**: The actual evaluation prompt logic is not stored in this repo. It comes from the installed `ragas` library, and `EVALUATION_GUIDE.md` points to the live package files used at runtime.
 - **Artifact Layout**: Scored results default to `storage/eval_results`, while raw saved predictions default to `storage/eval_predictions`.
-- **Current Iteration Dataset**: The default benchmark remains `storage/eval_datasets/ui_mixed_seed.json`. A cleaner reviewed main benchmark now also exists at `storage/eval_datasets/ui_reviewed_synth_v2.json`, and refusal/out-of-scope checks are separated into `storage/eval_datasets/ui_refusal_diagnostic_v1.json`.
+- **Current Iteration Dataset**: The default benchmark is `storage/eval_datasets/main/ui_main_v2.json`. The lighter legacy seed set is kept at `storage/eval_datasets/seeds/ui_seed_v1.json`, and refusal/out-of-scope checks stay separate at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`.
 
 ---
 
@@ -360,6 +360,7 @@ Common commands:
 python cli.py eval --config config_rag.yaml
 python cli.py eval-generate --config config_rag.yaml --model qwen3.5:4b --label qwen35_4b
 python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_<timestamp>.json
+sh /app/scripts/eval_api_matrix.sh
 ```
 
 The guide documents:

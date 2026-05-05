@@ -189,6 +189,7 @@ def _load_prediction_samples(path: Path) -> tuple[list[dict], dict]:
     payload_models = payload.get("models", {})
     if isinstance(payload_models, dict):
         for key in (
+            "generation_label",
             "generation_model",
             "generation_endpoint",
             "generation_reasoning_effort",
@@ -323,6 +324,7 @@ def _generate_eval_predictions_via_api(
     dataset_metadata: dict | None = None,
     generation_override: dict | None = None,
     retrieval_override: dict | None = None,
+    artifact_label: str | None = None,
 ) -> dict:
     api_url = f"{api_base_url.rstrip('/')}/query"
     samples = []
@@ -415,6 +417,7 @@ def _generate_eval_predictions_via_api(
         },
         "api_base_url": api_base_url,
         "models": {
+            "generation_label": artifact_label,
             "generation_model": generation_override.get("model_name", config.generation.model_name)
             if generation_override
             else config.generation.model_name,
@@ -1223,6 +1226,7 @@ def main():
             dataset_metadata=dataset_metadata,
             generation_override=generation_override,
             retrieval_override=retrieval_override,
+            artifact_label=output_label,
         )
         output = args.output or _artifact_path_for_label(
             config.evaluation.prediction_dir,

@@ -226,8 +226,14 @@ python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
 Or use the helper script:
 
 ```sh
-sh /app/scripts/eval_matrix.sh
+sh /app/scripts/eval_api_matrix.sh
 ```
+
+That API-only helper groups one batch neatly under:
+
+- `storage/eval_predictions/<run_name>/eval_prediction_<label>.json`
+- `storage/eval_results/<run_name>/eval_score_<label>.json`
+- `storage/eval_logs/<run_name>.log`
 
 If you want generate-only artifacts for all three models first, then score them later, use:
 
@@ -263,12 +269,12 @@ Recommended files:
 
 The active default dataset in this repo is:
 
-- `storage/eval_datasets/ui_mixed_seed.json`
+- `storage/eval_datasets/seeds/ui_seed_v1.json`
 
 Additional reviewed datasets now exist alongside it:
 
-- `storage/eval_datasets/ui_reviewed_synth_v2.json`
-- `storage/eval_datasets/ui_refusal_diagnostic_v1.json`
+- `storage/eval_datasets/main/ui_main_v2.json`
+- `storage/eval_datasets/diagnostics/ui_refusal_v1.json`
 
 Important properties of the current file:
 
@@ -287,11 +293,11 @@ This does not make it a strong final scorecard for general retrieval quality.
 
 For this repo, the safest reading is:
 
-- treat `ui_mixed_seed.json` as the current seed benchmark
+- treat `seeds/ui_seed_v1.json` as the lighter seed benchmark
 - keep using it as a stable baseline
 - avoid presenting its scores as proof that retrieval is broadly solved
-- treat `ui_reviewed_synth_v2.json` as the cleaner reviewed benchmark for future main comparisons
-- treat `ui_refusal_diagnostic_v1.json` as a separate diagnostic split for refusal and out-of-scope behavior
+- treat `main/ui_main_v2.json` as the cleaner reviewed benchmark for main comparisons
+- treat `diagnostics/ui_refusal_v1.json` as a separate diagnostic split for refusal and out-of-scope behavior
 
 ## Reasoning Control
 
@@ -495,9 +501,9 @@ For current comparison work in this repo:
 
 Recommended benchmark positioning:
 
-- keep `ui_mixed_seed.json` as the default seed benchmark for now
-- keep `ui_reviewed_synth_v2.json` separate until you are ready to promote it
-- keep `ui_refusal_diagnostic_v1.json` out of the headline score path
+- keep `seeds/ui_seed_v1.json` as a lighter smoke-test benchmark
+- keep `main/ui_main_v2.json` as the default main benchmark
+- keep `diagnostics/ui_refusal_v1.json` out of the headline score path
 - use it for regression checks and stable model-to-model comparisons
 - do not use it alone as the final scorecard for overall retrieval quality claims
 

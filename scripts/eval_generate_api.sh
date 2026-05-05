@@ -5,9 +5,11 @@ MODEL="${1:-}"
 LABEL="${2:-}"
 CONFIG_PATH="${3:-config_server.yaml}"
 API_BASE_URL="${4:-http://127.0.0.1:8000}"
+OUTPUT_PATH="${5:-}"
 
 if [ -z "$MODEL" ]; then
   echo "Usage: sh /app/scripts/eval_generate_api.sh <model> [label] [config_path] [api_base_url]"
+  echo "       sh /app/scripts/eval_generate_api.sh <model> [label] [config_path] [api_base_url] [output_path]"
   exit 1
 fi
 
@@ -30,10 +32,19 @@ PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --config "$CONFIG_PATH" \
   --api-base-url "$API_BASE_URL"
 
-PYTHONUNBUFFERED=1 python cli.py eval-generate \
-  --config "$CONFIG_PATH" \
-  --api-base-url "$API_BASE_URL" \
-  --model "$MODEL" \
-  --label "$LABEL"
+if [ -n "$OUTPUT_PATH" ]; then
+  PYTHONUNBUFFERED=1 python cli.py eval-generate \
+    --config "$CONFIG_PATH" \
+    --api-base-url "$API_BASE_URL" \
+    --model "$MODEL" \
+    --label "$LABEL" \
+    --output "$OUTPUT_PATH"
+else
+  PYTHONUNBUFFERED=1 python cli.py eval-generate \
+    --config "$CONFIG_PATH" \
+    --api-base-url "$API_BASE_URL" \
+    --model "$MODEL" \
+    --label "$LABEL"
+fi
 
 echo "[$(date -Iseconds)] Finished eval-generate for model=$MODEL label=$LABEL"
