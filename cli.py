@@ -52,28 +52,228 @@ def _load_json(path: Path) -> dict:
         return json.load(f)
 
 
-def _timestamped_path(directory: str | Path, prefix: str) -> Path:
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return Path(directory) / f"{prefix}_{timestamp}.json"
-
-
-def _artifact_path_for_label(
-    directory: str | Path,
-    prefix: str,
-    label: str | None = None,
-) -> Path:
-    base_prefix = prefix
-    slug = _slugify_label(label)
-    if slug:
-        base_prefix = f"{base_prefix}_{slug}"
-    return _timestamped_path(directory, base_prefix)
-
-
 def _slugify_label(value: str | None) -> str | None:
     if not value:
         return None
     slug = re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())
     return slug.strip("._-") or None
+
+
+def _now_timestamp() -> str:
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def _safe_load_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        data = _load_json(path)
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _dataset_label(
+    dataset_metadata: dict | None,
+    dataset_path: str | None = None,
+) -> str:
+    candidate = None
+    if dataset_metadata:
+        candidate = dataset_metadata.get("dataset_label")
+        if not candidate:
+            dataset_path = dataset_metadata.get("dataset_path") or dataset_path
+    if not candidate and dataset_path:
+        candidate = Path(dataset_path).stem
+    return _slugify_label(candidate) or "dataset"
+
+
+def _judge_label_from_config(config: RAGConfig) -> str:
+    mode = (config.evaluation.judge_mode or "local").strip().lower()
+    model = _slugify_label(config.evaluation.eval_llm) or "judge"
+    return f"{mode}_{model}"
+
+
+def _build_run_name(
+    mode: str,
+    dataset_label: str,
+    generation_label: str | None = None,
+    judge_label: str | None = None,
+    run_name: str | None = None,
+) -> str:
+    if run_name:
+        return _slugify_label(run_name) or _now_timestamp()
+    parts = [_now_timestamp(), _slugify_label(mode) or "eval", dataset_label]
+    if generation_label:
+        parts.append(f"gen_{_slugify_label(generation_label) or 'model'}")
+    if judge_label:
+        parts.append(f"judge_{_slugify_label(judge_label) or 'judge'}")
+    return "__".join(parts)
+
+
+def _prepare_run_layout(
+    config: RAGConfig,
+    mode: str,
+    dataset_metadata: dict | None = None,
+    generation_label: str | None = None,
+    judge_label: str | None = None,
+    run_dir: str | None = None,
+    run_name: str | None = None,
+) -> dict:
+    dataset_label = _dataset_label(dataset_metadata, config.evaluation.dataset_path)
+    root = (
+        Path(run_dir)
+        if run_dir
+        else Path(config.evaluation.run_dir)
+        / _build_run_name(
+            mode=mode,
+            dataset_label=dataset_label,
+            generation_label=generation_label,
+            judge_label=judge_label,
+            run_name=run_name,
+        )
+    )
+    layout = {
+        "root": root,
+        "predictions_dir": root / "predictions",
+        "scores_dir": root / "scores",
+        "logs_dir": root / "logs",
+        "manifest_path": root / "run_manifest.json",
+        "dataset_label": dataset_label,
+    }
+    for key in ("root", "predictions_dir", "scores_dir", "logs_dir"):
+        layout[key].mkdir(parents=True, exist_ok=True)
+    return layout
+
+
+def _artifact_file_name(
+    artifact_kind: str,
+    dataset_label: str,
+    generation_label: str | None = None,
+    generation_model: str | None = None,
+    judge_label: str | None = None,
+) -> str:
+    parts = [_now_timestamp(), _slugify_label(artifact_kind) or "artifact", dataset_label]
+    if generation_label:
+        parts.append(f"gen_{_slugify_label(generation_label) or 'model'}")
+    elif generation_model:
+        parts.append(f"gen_{_slugify_label(generation_model) or 'model'}")
+    if generation_model:
+        parts.append(f"model_{_slugify_label(generation_model) or 'model'}")
+    if judge_label:
+        parts.append(f"judge_{_slugify_label(judge_label) or 'judge'}")
+    return "__".join(parts) + ".json"
+
+
+def _init_or_update_run_manifest(
+    layout: dict,
+    mode: str,
+    config_path: str | None,
+    dataset_info: dict | None = None,
+    generation_info: dict | None = None,
+    judge_info: dict | None = None,
+    artifact_entry: dict | None = None,
+    status: str = "running",
+) -> dict:
+    manifest_path = layout["manifest_path"]
+    manifest = _safe_load_json(manifest_path)
+    started_at = manifest.get("started_at") or datetime.now().isoformat()
+    manifest.update(
+        {
+            "run_id": layout["root"].name,
+            "run_name": layout["root"].name,
+            "run_dir": str(layout["root"]),
+            "status": status,
+            "updated_at": datetime.now().isoformat(),
+            "config_path": config_path,
+            "started_at": started_at,
+        }
+    )
+    steps = manifest.get("steps_run")
+    if not isinstance(steps, list):
+        steps = []
+    if mode not in steps:
+        steps.append(mode)
+    manifest["steps_run"] = steps
+    manifest["mode"] = steps[0] if len(steps) == 1 else "multi_step"
+    if status == "completed":
+        manifest["completed_at"] = datetime.now().isoformat()
+    if dataset_info:
+        manifest["dataset"] = {**manifest.get("dataset", {}), **dataset_info}
+    if generation_info:
+        manifest["generation"] = {**manifest.get("generation", {}), **generation_info}
+    if judge_info:
+        manifest["judge"] = {**manifest.get("judge", {}), **judge_info}
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, dict):
+        artifacts = {}
+    for key in ("predictions", "scores", "summaries", "logs"):
+        items = artifacts.get(key)
+        artifacts[key] = items if isinstance(items, list) else []
+    if artifact_entry:
+        artifact_type = artifact_entry.pop("type")
+        existing_paths = {entry.get("path") for entry in artifacts[artifact_type]}
+        if artifact_entry.get("path") not in existing_paths:
+            artifacts[artifact_type].append(artifact_entry)
+    manifest["artifacts"] = artifacts
+    _write_json(manifest_path, manifest)
+    return manifest
+
+
+def _build_manifest_artifact_entry(
+    artifact_type: str,
+    path: Path,
+    label: str | None = None,
+    metadata: dict | None = None,
+) -> dict:
+    entry = {
+        "type": artifact_type,
+        "path": str(path),
+        "created_at": datetime.now().isoformat(),
+    }
+    if label:
+        entry["label"] = label
+    if metadata:
+        entry.update(metadata)
+    return entry
+
+
+def _resolve_latest_prediction_from_manifests(
+    run_root: str | Path,
+    label: str | None = None,
+) -> Path | None:
+    root = Path(run_root)
+    if not root.exists():
+        return None
+
+    candidates: list[tuple[float, Path]] = []
+    label_slug = _slugify_label(label) if label else None
+    for manifest_path in root.rglob("run_manifest.json"):
+        manifest = _safe_load_json(manifest_path)
+        artifacts = manifest.get("artifacts", {})
+        prediction_entries = artifacts.get("predictions", [])
+        if not isinstance(prediction_entries, list):
+            continue
+        for entry in prediction_entries:
+            if not isinstance(entry, dict):
+                continue
+            entry_label = _slugify_label(entry.get("label"))
+            generation_label = _slugify_label(entry.get("generation_label"))
+            generation_model = _slugify_label(entry.get("generation_model"))
+            if label_slug and label_slug not in {entry_label, generation_label, generation_model}:
+                continue
+            path = entry.get("path")
+            if not path:
+                continue
+            created_at = entry.get("created_at") or manifest.get("updated_at") or ""
+            try:
+                sort_key = datetime.fromisoformat(created_at).timestamp()
+            except Exception:
+                sort_key = 0.0
+            candidates.append((sort_key, Path(path)))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    return candidates[0][1]
 
 
 def _load_eval_dataset(path: Path) -> tuple[list[str], list[str] | None, dict]:
@@ -281,6 +481,7 @@ def _runtime_settings_snapshot(config: RAGConfig, config_path: str | None = None
             "eval_embeddings": config.evaluation.eval_embeddings,
             "eval_embeddings_endpoint": config.evaluation.eval_embeddings_endpoint,
             "dataset_path": config.evaluation.dataset_path,
+            "run_dir": config.evaluation.run_dir,
             "report_dir": config.evaluation.report_dir,
             "prediction_dir": config.evaluation.prediction_dir,
             "answer_relevancy_strictness": config.evaluation.answer_relevancy_strictness,
@@ -580,15 +781,27 @@ def _run_eval_matrix(
     ground_truths: list[str] | None,
     dataset_metadata: dict | None,
     output_path: str | None,
+    run_layout: dict | None = None,
 ) -> dict:
     model_specs = rag.config.evaluation.model_matrix
     run_started = time.time()
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    summary_path = (
-        Path(output_path)
-        if output_path
-        else Path(rag.config.evaluation.report_dir) / f"eval_matrix_summary_{timestamp}.json"
-    )
+    dataset_label = _dataset_label(dataset_metadata, rag.config.evaluation.dataset_path)
+    judge_label = _judge_label_from_config(rag.config)
+    summary_path = None
+    if output_path:
+        summary_path = Path(output_path)
+    elif run_layout:
+        summary_path = run_layout["scores_dir"] / _artifact_file_name(
+            artifact_kind="matrix_summary",
+            dataset_label=dataset_label,
+            judge_label=judge_label,
+        )
+    else:
+        summary_path = Path(rag.config.evaluation.report_dir) / _artifact_file_name(
+            artifact_kind="matrix_summary",
+            dataset_label=dataset_label,
+            judge_label=judge_label,
+        )
 
     aggregate = {
         "generated_at": datetime.now().isoformat(),
@@ -614,9 +827,37 @@ def _run_eval_matrix(
             "timings": {},
         },
     }
+    if run_layout:
+        aggregate["run"] = {
+            "run_id": run_layout["root"].name,
+            "run_dir": str(run_layout["root"]),
+            "manifest_path": str(run_layout["manifest_path"]),
+        }
     if dataset_metadata:
         aggregate["dataset"].update(dataset_metadata)
     _write_json(summary_path, aggregate)
+    if run_layout:
+        _init_or_update_run_manifest(
+            layout=run_layout,
+            mode="eval",
+            config_path=getattr(rag.config, "source_config_path", None),
+            dataset_info=aggregate["dataset"],
+            generation_info={
+                "matrix_model_count": len(model_specs),
+            },
+            judge_info={
+                "judge_label": judge_label,
+                "judge_mode": rag.config.evaluation.judge_mode,
+                "judge_model": rag.config.evaluation.eval_llm,
+            },
+            artifact_entry=_build_manifest_artifact_entry(
+                artifact_type="summaries",
+                path=summary_path,
+                label="matrix_summary",
+                metadata={"artifact_kind": "matrix_summary"},
+            ),
+            status="running",
+        )
 
     for index, spec in enumerate(model_specs, start=1):
         run_config = deepcopy(rag.config)
@@ -635,6 +876,15 @@ def _run_eval_matrix(
             run_config.retrieval.rerank_top_k = spec.rerank_top_k
 
         label = spec.label or spec.model_name
+        report_output_path = None
+        if run_layout:
+            report_output_path = run_layout["scores_dir"] / _artifact_file_name(
+                artifact_kind="report",
+                dataset_label=dataset_label,
+                generation_label=label,
+                generation_model=run_config.generation.model_name,
+                judge_label=judge_label,
+            )
         print(f"[{index}/{len(model_specs)}] Evaluating {label}")
         run_rag = None
         try:
@@ -643,6 +893,7 @@ def _run_eval_matrix(
                 questions=questions,
                 ground_truths=ground_truths,
                 dataset_metadata=dataset_metadata,
+                output_path=str(report_output_path) if report_output_path else None,
             )
         except Exception as exc:
             report = {
@@ -666,8 +917,10 @@ def _run_eval_matrix(
                     "requested_metrics": run_config.evaluation.metrics,
                     "used_metrics": [],
                 },
-                "report_path": None,
+                "report_path": str(report_output_path) if report_output_path else None,
             }
+            if report_output_path:
+                _write_json(report_output_path, report)
         finally:
             if run_rag is not None:
                 run_rag.close()
@@ -683,6 +936,31 @@ def _run_eval_matrix(
         aggregate["leaderboards"] = _build_leaderboards(aggregate["models"])
         aggregate["updated_at"] = datetime.now().isoformat()
         _write_json(summary_path, aggregate)
+        if run_layout and matrix_entry.get("report_path"):
+            _init_or_update_run_manifest(
+                layout=run_layout,
+                mode="eval",
+                config_path=getattr(rag.config, "source_config_path", None),
+                dataset_info=aggregate["dataset"],
+                generation_info={"matrix_model_count": len(model_specs)},
+                judge_info={
+                    "judge_label": judge_label,
+                    "judge_mode": rag.config.evaluation.judge_mode,
+                    "judge_model": rag.config.evaluation.eval_llm,
+                },
+                artifact_entry=_build_manifest_artifact_entry(
+                    artifact_type="scores",
+                    path=Path(matrix_entry["report_path"]),
+                    label=label,
+                    metadata={
+                        "artifact_kind": "report",
+                        "generation_label": label,
+                        "generation_model": matrix_entry.get("generation_model"),
+                        "judge_model": matrix_entry.get("judge_model"),
+                    },
+                ),
+                status=aggregate["status"],
+            )
         score_display = (
             f"{matrix_entry['primary_score']:.4f}"
             if isinstance(matrix_entry.get("primary_score"), (int, float))
@@ -708,6 +986,26 @@ def _run_eval_matrix(
         print(
             f"Top overall: {winner['label']} "
             f"({winner['score']:.4f})"
+        )
+    if run_layout:
+        _init_or_update_run_manifest(
+            layout=run_layout,
+            mode="eval",
+            config_path=getattr(rag.config, "source_config_path", None),
+            dataset_info=aggregate["dataset"],
+            generation_info={"matrix_model_count": len(model_specs)},
+            judge_info={
+                "judge_label": judge_label,
+                "judge_mode": rag.config.evaluation.judge_mode,
+                "judge_model": rag.config.evaluation.eval_llm,
+            },
+            artifact_entry=_build_manifest_artifact_entry(
+                artifact_type="summaries",
+                path=summary_path,
+                label="matrix_summary",
+                metadata={"artifact_kind": "matrix_summary"},
+            ),
+            status="completed",
         )
     return aggregate
 
@@ -901,6 +1199,8 @@ def main():
         help="Optional dataset JSON file. Defaults to evaluation.dataset_path when --questions is omitted.",
     )
     eval_parser.add_argument("--output", help="Output file for results")
+    eval_parser.add_argument("--run-dir", help="Existing or new eval run directory")
+    eval_parser.add_argument("--run-name", help="Optional eval run folder name when --run-dir is omitted")
 
     eval_generate_parser = subparsers.add_parser(
         "eval-generate",
@@ -914,7 +1214,7 @@ def main():
     )
     eval_generate_parser.add_argument(
         "--output",
-        help="Output file for saved predictions. Defaults to evaluation.prediction_dir/eval_predictions_<model>_<timestamp>.json",
+        help="Output file for saved predictions. Defaults to <run_dir>/predictions/<rich-name>.json",
     )
     eval_generate_parser.add_argument("--model", help="Override generation model for this run")
     eval_generate_parser.add_argument("--endpoint", help="Override generation endpoint for this run")
@@ -940,16 +1240,22 @@ def main():
         type=int,
         help="Override retrieval.rerank_top_k for this generation run",
     )
+    eval_generate_parser.add_argument("--run-dir", help="Existing or new eval run directory")
+    eval_generate_parser.add_argument("--run-name", help="Optional eval run folder name when --run-dir is omitted")
 
     eval_score_parser = subparsers.add_parser(
         "eval-score",
         help="Score a saved prediction artifact with RAGAS without rerunning retrieval or generation",
     )
     eval_score_parser.add_argument("--config", required=True, help="Path to config YAML")
-    eval_score_parser.add_argument(
+    score_input_group = eval_score_parser.add_mutually_exclusive_group(required=True)
+    score_input_group.add_argument(
         "--predictions",
-        required=True,
         help="Path to a saved prediction artifact JSON file",
+    )
+    score_input_group.add_argument(
+        "--latest-label",
+        help="Resolve the latest saved prediction artifact for this label from run manifests",
     )
     eval_score_parser.add_argument("--output", help="Output file for scored results")
     eval_score_parser.add_argument("--judge-model", help="Override evaluation judge model")
@@ -980,6 +1286,15 @@ def main():
         action="store_true",
         help="Request judge thoughts when the backend supports them",
     )
+    eval_score_parser.add_argument("--run-dir", help="Existing or new eval run directory")
+    eval_score_parser.add_argument("--run-name", help="Optional eval run folder name when --run-dir is omitted")
+
+    eval_latest_parser = subparsers.add_parser(
+        "eval-find-latest",
+        help="Resolve the latest saved prediction artifact from run manifests",
+    )
+    eval_latest_parser.add_argument("--config", required=True, help="Path to config YAML")
+    eval_latest_parser.add_argument("--label", help="Optional generation label or model filter")
 
     ingest_parser = subparsers.add_parser("ingest", help="Ingest documents")
     ingest_parser.add_argument("--config", required=True, help="Path to config YAML")
@@ -1193,6 +1508,19 @@ def main():
 
     config = RAGConfig.from_yaml(args.config)
     setattr(config, "source_config_path", args.config)
+    if args.command == "eval-find-latest":
+        latest_prediction = _resolve_latest_prediction_from_manifests(
+            run_root=config.evaluation.run_dir,
+            label=args.label,
+        )
+        if latest_prediction is None:
+            parser.error(
+                f"no saved prediction artifact found in {config.evaluation.run_dir}"
+                + (f" for label: {args.label}" if args.label else "")
+            )
+        print(str(latest_prediction))
+        return
+
     base_generation_model = config.generation.model_name
     base_generation_endpoint = config.generation.llm_endpoint
     output_label = None
@@ -1206,6 +1534,14 @@ def main():
             args,
             parser,
             config.evaluation.dataset_path,
+        )
+        run_layout = _prepare_run_layout(
+            config=config,
+            mode="eval-generate",
+            dataset_metadata=dataset_metadata,
+            generation_label=output_label or config.generation.model_name,
+            run_dir=args.run_dir,
+            run_name=args.run_name,
         )
         generation_override = {
             "model_name": config.generation.model_name,
@@ -1228,15 +1564,41 @@ def main():
             retrieval_override=retrieval_override,
             artifact_label=output_label,
         )
-        output = args.output or _artifact_path_for_label(
-            config.evaluation.prediction_dir,
-            "eval_predictions",
-            output_label,
+        output_path = Path(args.output) if args.output else run_layout["predictions_dir"] / _artifact_file_name(
+            artifact_kind="predictions",
+            dataset_label=run_layout["dataset_label"],
+            generation_label=output_label,
+            generation_model=config.generation.model_name,
         )
-        output_path = Path(output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(results, f, indent=2, default=str)
+        results["run"] = {
+            "run_id": run_layout["root"].name,
+            "run_dir": str(run_layout["root"]),
+            "manifest_path": str(run_layout["manifest_path"]),
+        }
+        results["prediction_path"] = str(output_path)
+        _write_json(output_path, results)
+        _init_or_update_run_manifest(
+            layout=run_layout,
+            mode="eval-generate",
+            config_path=args.config,
+            dataset_info=results.get("dataset"),
+            generation_info={
+                "generation_label": output_label,
+                "generation_model": config.generation.model_name,
+                "generation_endpoint": config.generation.llm_endpoint,
+            },
+            artifact_entry=_build_manifest_artifact_entry(
+                artifact_type="predictions",
+                path=output_path,
+                label=output_label or config.generation.model_name,
+                metadata={
+                    "artifact_kind": "predictions",
+                    "generation_label": output_label,
+                    "generation_model": config.generation.model_name,
+                },
+            ),
+            status="completed",
+        )
         print(f"Prediction artifact saved to {output_path}")
         should_unload_custom_model = bool(
             args.model and (
@@ -1250,6 +1612,17 @@ def main():
                 model_name=config.generation.model_name,
             )
         return
+
+    if args.command == "eval-score" and args.latest_label:
+        latest_prediction = _resolve_latest_prediction_from_manifests(
+            run_root=config.evaluation.run_dir,
+            label=args.latest_label,
+        )
+        if latest_prediction is None:
+            parser.error(
+                f"no saved prediction artifact found in {config.evaluation.run_dir} for label: {args.latest_label}"
+            )
+        args.predictions = str(latest_prediction)
 
     preload_retrieval_models = args.command != "eval-score"
     rag = RAGPipeline.from_config(config) if preload_retrieval_models else RAGPipeline(
@@ -1302,6 +1675,19 @@ def main():
 
         elif args.command == "eval":
             questions, ground_truths, dataset_metadata = _resolve_eval_inputs(args, parser, rag)
+            run_layout = _prepare_run_layout(
+                config=rag.config,
+                mode="eval",
+                dataset_metadata=dataset_metadata,
+                generation_label=(
+                    f"{len(rag.config.evaluation.model_matrix)}_models"
+                    if rag.config.evaluation.model_matrix
+                    else rag.config.generation.model_name
+                ),
+                judge_label=_judge_label_from_config(rag.config),
+                run_dir=args.run_dir,
+                run_name=args.run_name,
+            )
 
             if rag.config.evaluation.model_matrix:
                 results = _run_eval_matrix(
@@ -1310,34 +1696,119 @@ def main():
                     ground_truths=ground_truths,
                     dataset_metadata=dataset_metadata,
                     output_path=args.output,
+                    run_layout=run_layout,
                 )
-                output = results.get("summary_path") or args.output or "eval_matrix_results.json"
+                output_path = Path(results.get("summary_path") or args.output or "")
             else:
+                report_output_path = Path(args.output) if args.output else run_layout["scores_dir"] / _artifact_file_name(
+                    artifact_kind="report",
+                    dataset_label=run_layout["dataset_label"],
+                    generation_model=rag.config.generation.model_name,
+                    judge_label=_judge_label_from_config(rag.config),
+                )
                 results = rag.evaluate(
                     questions=questions,
                     ground_truths=ground_truths,
                     dataset_metadata=dataset_metadata,
+                    output_path=str(report_output_path),
                 )
-                output = args.output or results.get("report_path") or "eval_results.json"
-            output_path = Path(output)
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(results, f, indent=2, default=str)
+                output_path = Path(results.get("report_path") or str(report_output_path))
+                results["run"] = {
+                    "run_id": run_layout["root"].name,
+                    "run_dir": str(run_layout["root"]),
+                    "manifest_path": str(run_layout["manifest_path"]),
+                }
+                _write_json(output_path, results)
+                _init_or_update_run_manifest(
+                    layout=run_layout,
+                    mode="eval",
+                    config_path=args.config,
+                    dataset_info=results.get("dataset"),
+                    generation_info={
+                        "generation_model": rag.config.generation.model_name,
+                        "generation_endpoint": rag.config.generation.llm_endpoint,
+                    },
+                    judge_info={
+                        "judge_label": _judge_label_from_config(rag.config),
+                        "judge_mode": rag.config.evaluation.judge_mode,
+                        "judge_model": rag.config.evaluation.eval_llm,
+                    },
+                    artifact_entry=_build_manifest_artifact_entry(
+                        artifact_type="scores",
+                        path=output_path,
+                        label=rag.config.generation.model_name,
+                        metadata={
+                            "artifact_kind": "report",
+                            "generation_model": rag.config.generation.model_name,
+                            "judge_model": rag.config.evaluation.eval_llm,
+                        },
+                    ),
+                    status="completed",
+                )
             print(f"Results saved to {output_path}")
 
         elif args.command == "eval-score":
             prediction_path = Path(args.predictions)
             samples, dataset_metadata = _load_prediction_samples(prediction_path)
+            generation_label = None
+            if dataset_metadata:
+                generation_label = dataset_metadata.get("generation_label") or dataset_metadata.get("generation_model")
+            run_layout = _prepare_run_layout(
+                config=rag.config,
+                mode="eval-score",
+                dataset_metadata=dataset_metadata,
+                generation_label=generation_label,
+                judge_label=_judge_label_from_config(rag.config),
+                run_dir=args.run_dir,
+                run_name=args.run_name,
+            )
+            output_path = Path(args.output) if args.output else run_layout["scores_dir"] / _artifact_file_name(
+                artifact_kind="score",
+                dataset_label=run_layout["dataset_label"],
+                generation_label=generation_label,
+                generation_model=dataset_metadata.get("generation_model") if dataset_metadata else None,
+                judge_label=_judge_label_from_config(rag.config),
+            )
             results = rag.score_eval_predictions(
                 samples=samples,
                 dataset_metadata=dataset_metadata,
                 prediction_path=str(prediction_path),
+                output_path=str(output_path),
             )
-            output = args.output or results.get("report_path") or "eval_results.json"
-            output_path = Path(output)
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(results, f, indent=2, default=str)
+            results["run"] = {
+                "run_id": run_layout["root"].name,
+                "run_dir": str(run_layout["root"]),
+                "manifest_path": str(run_layout["manifest_path"]),
+            }
+            _write_json(output_path, results)
+            _init_or_update_run_manifest(
+                layout=run_layout,
+                mode="eval-score",
+                config_path=args.config,
+                dataset_info=results.get("dataset"),
+                generation_info={
+                    "generation_label": generation_label,
+                    "generation_model": results.get("models", {}).get("generation_model"),
+                },
+                judge_info={
+                    "judge_label": _judge_label_from_config(rag.config),
+                    "judge_mode": rag.config.evaluation.judge_mode,
+                    "judge_model": rag.config.evaluation.eval_llm,
+                },
+                artifact_entry=_build_manifest_artifact_entry(
+                    artifact_type="scores",
+                    path=output_path,
+                    label=generation_label or results.get("models", {}).get("generation_model"),
+                    metadata={
+                        "artifact_kind": "score",
+                        "generation_label": generation_label,
+                        "generation_model": results.get("models", {}).get("generation_model"),
+                        "judge_model": results.get("models", {}).get("judge_model"),
+                        "source_prediction_path": str(prediction_path),
+                    },
+                ),
+                status="completed",
+            )
             print(f"Scored evaluation report saved to {output_path}")
 
         elif args.command == "ingest":

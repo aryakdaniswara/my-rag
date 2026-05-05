@@ -43,15 +43,8 @@ generation:
 
 evaluation:
   metrics: ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
-  judge_mode: "api"
-  eval_llm: "qwen3.6:27b"
-  eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"
-  eval_llm_api_key_env: "IGNORE"
-  eval_include_thoughts: false
-  eval_reasoning_effort: "none"
-  eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
-  eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/main/ui_main_v2.json"
+  run_dir: "storage/eval_runs"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
   answer_relevancy_strictness: 1  # Passed to RAGAS ResponseRelevancy(strictness=...); higher is stricter.

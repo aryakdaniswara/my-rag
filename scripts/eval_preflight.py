@@ -163,6 +163,7 @@ def main() -> None:
     parser.add_argument("--api-base-url")
     parser.add_argument("--predictions")
     parser.add_argument("--judge-endpoint")
+    parser.add_argument("--run-dir")
     args = parser.parse_args()
 
     config_path = _check_file(args.config, "config")
@@ -170,6 +171,8 @@ def main() -> None:
 
     evaluation = config.get("evaluation", {}) or {}
     dataset_path = evaluation.get("dataset_path")
+    run_dir = args.run_dir or evaluation.get("run_dir", "storage/eval_runs")
+    _ensure_dir(run_dir, "eval run root")
 
     if args.mode == "generate":
         if not args.api_base_url:
@@ -177,7 +180,6 @@ def main() -> None:
         if not dataset_path:
             _fail("evaluation.dataset_path is not configured")
         _check_file(dataset_path, "evaluation dataset")
-        _ensure_dir(evaluation.get("prediction_dir", "storage/eval_predictions"), "prediction output")
         _check_api_health(args.api_base_url)
         print("[OK] Generate preflight passed")
         return
@@ -186,7 +188,6 @@ def main() -> None:
         if not args.predictions:
             _fail("--predictions is required for score preflight")
         _check_file(args.predictions, "prediction artifact")
-        _ensure_dir(evaluation.get("report_dir", "storage/eval_results"), "scored report output")
         _check_judge_endpoint(config, explicit_judge_endpoint=args.judge_endpoint)
         print("[OK] Score preflight passed")
         return
@@ -195,7 +196,6 @@ def main() -> None:
         if not dataset_path:
             _fail("evaluation.dataset_path is not configured")
         _check_file(dataset_path, "evaluation dataset")
-        _ensure_dir(evaluation.get("report_dir", "storage/eval_results"), "scored report output")
         generation = config.get("generation", {}) or {}
         _check_openai_compatible_endpoint(
             endpoint=generation.get("llm_endpoint"),

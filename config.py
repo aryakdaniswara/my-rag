@@ -104,6 +104,7 @@ class EvaluationConfig:
     eval_embeddings: str = "microsoft/harrier-oss-v1-0.6b"
     eval_embeddings_endpoint: Optional[str] = None
     dataset_path: Optional[str] = "storage/eval_datasets/main/ui_main_v2.json"
+    run_dir: str = "storage/eval_runs"
     report_dir: str = "storage/eval_results"
     prediction_dir: str = "storage/eval_predictions"
     answer_relevancy_strictness: int = 1  # Passed to RAGAS ResponseRelevancy(strictness=...).

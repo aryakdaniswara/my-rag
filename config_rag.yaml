@@ -58,6 +58,7 @@ evaluation:
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
   dataset_path: "storage/eval_datasets/main/ui_main_v2.json"
+  run_dir: "storage/eval_runs"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"
   answer_relevancy_strictness: 1  # Passed to RAGAS ResponseRelevancy(strictness=...); higher is stricter.

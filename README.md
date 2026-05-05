@@ -112,14 +112,27 @@ Evaluation guidance now lives in [EVALUATION_GUIDE.md](./EVALUATION_GUIDE.md).
 
 Use that guide as the canonical source of truth for:
 
-- what the current repo can evaluate today
-- what each metric means technically
-- how to run single-model, saved-prediction, and matrix evals
-- how to configure local judging versus Gemini API judging, including reasoning toggles
-
-Scored reports now default to `storage/eval_results` and saved prediction artifacts now default to `storage/eval_predictions`.
+- the current eval truth path and judge config ownership
+- how the new run-folder and manifest layout works
+- the recommended full-run wrapper plus generate-only and score-only flows
+- how to configure local OpenAI-compatible judging versus Gemini API judging
 
 For day-to-day iteration, the default evaluation dataset is `storage/eval_datasets/main/ui_main_v2.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. The lighter seed benchmark now lives at `storage/eval_datasets/seeds/ui_seed_v1.json`, while refusal diagnostics are kept separately at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
+
+Recommended entrypoints:
+
+```bash
+sh /app/scripts/eval_run.sh evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_generate_api.sh qwen3.5:4b qwen35_4b
+sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_gemini_api.yaml
+```
+
+The structured eval workspace now lives under `storage/eval_runs/<run_name>/` with:
+
+- `run_manifest.json`
+- `predictions/`
+- `scores/`
+- `logs/`
 
 ## Architecture
 

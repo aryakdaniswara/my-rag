@@ -1,44 +1,38 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-config_server.yaml}"
+CONFIG_PATH="${1:-evaluation/configs/eval_judge_local_qwen36.yaml}"
 EVAL_LABELS="${EVAL_LABELS:-qwen36_27b gemma4_31b gemma4_26b deepseek_r1_32b mistral_small qwen35_9b qwen35_4b qwen35_2b}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
+RUN_NAME="${RUN_NAME:-eval_score_matrix_$(date +%Y%m%d_%H%M%S)}"
+RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
 
-LOG_DIR="/app/storage/eval_logs"
-LOG_PATH="$LOG_DIR/eval_score_matrix_$(date +%Y%m%d_%H%M%S).log"
-
-mkdir -p "$LOG_DIR"
+mkdir -p "$RUN_DIR/logs"
+LOG_PATH="$RUN_DIR/logs/eval-score-matrix.log"
 exec >>"$LOG_PATH" 2>&1
 
-echo "[$(date -Iseconds)] Starting eval-score matrix with config=$CONFIG_PATH"
+echo "[$(date -Iseconds)] Starting eval-score matrix config=$CONFIG_PATH"
+echo "Run dir: $RUN_DIR"
 
 resolve_latest_prediction() {
   LABEL="$1"
-  ls -1t "/app/storage/eval_predictions"/eval_predictions_"$LABEL"_*.json 2>/dev/null | head -n 1
+  python cli.py eval-find-latest --config "$CONFIG_PATH" --label "$LABEL"
 }
 
 preflight_label() {
   LABEL="$1"
   PREDICTIONS_PATH=$(resolve_latest_prediction "$LABEL")
-  if [ -z "${PREDICTIONS_PATH:-}" ]; then
+  if [ ! -f "$PREDICTIONS_PATH" ]; then
     echo "[FAIL] No prediction artifact found for label: $LABEL" >&2
     exit 1
   fi
 
-  echo "[$(date -Iseconds)] Preflight scoring inputs for label=$LABEL predictions=$PREDICTIONS_PATH"
+  echo "[$(date -Iseconds)] Preflight score label=$LABEL predictions=$PREDICTIONS_PATH"
   PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
     --mode score \
     --config "$CONFIG_PATH" \
-    --predictions "$PREDICTIONS_PATH"
-}
-
-run_label() {
-  LABEL="$1"
-
-  echo "[$(date -Iseconds)] Scoring latest predictions for label=$LABEL"
-  PYTHONUNBUFFERED=1 sh /app/scripts/eval_score.sh --latest "$LABEL" "$CONFIG_PATH"
-  echo "[$(date -Iseconds)] Finished scoring latest predictions for label=$LABEL"
+    --predictions "$PREDICTIONS_PATH" \
+    --run-dir "$RUN_DIR"
 }
 
 for BASE_LABEL in $EVAL_LABELS; do
@@ -46,12 +40,16 @@ for BASE_LABEL in $EVAL_LABELS; do
     for RERANK_TOP_K in $RERANK_TOP_K_VALUES; do
       LABEL="${BASE_LABEL}_rerank${RERANK_TOP_K}"
       preflight_label "$LABEL"
-      run_label "$LABEL"
+      echo "[$(date -Iseconds)] Scoring latest predictions label=$LABEL"
+      RUN_DIR="$RUN_DIR" PYTHONUNBUFFERED=1 sh /app/scripts/eval_score.sh --latest "$LABEL" "$CONFIG_PATH"
+      echo "[$(date -Iseconds)] Finished scoring latest predictions label=$LABEL"
     done
   else
     preflight_label "$BASE_LABEL"
-    run_label "$BASE_LABEL"
+    echo "[$(date -Iseconds)] Scoring latest predictions label=$BASE_LABEL"
+    RUN_DIR="$RUN_DIR" PYTHONUNBUFFERED=1 sh /app/scripts/eval_score.sh --latest "$BASE_LABEL" "$CONFIG_PATH"
+    echo "[$(date -Iseconds)] Finished scoring latest predictions label=$BASE_LABEL"
   fi
 done
 
-echo "[$(date -Iseconds)] Finished eval-score matrix with config=$CONFIG_PATH"
+echo "[$(date -Iseconds)] Finished eval-score matrix config=$CONFIG_PATH"

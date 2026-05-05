@@ -199,6 +199,7 @@ class RAGPipeline:
                 "eval_embeddings": self.config.evaluation.eval_embeddings,
                 "eval_embeddings_endpoint": self.config.evaluation.eval_embeddings_endpoint,
                 "dataset_path": self.config.evaluation.dataset_path,
+                "run_dir": self.config.evaluation.run_dir,
                 "report_dir": self.config.evaluation.report_dir,
                 "prediction_dir": self.config.evaluation.prediction_dir,
                 "answer_relevancy_strictness": self.config.evaluation.answer_relevancy_strictness,
@@ -229,6 +230,11 @@ class RAGPipeline:
         else:
             endpoint = self.config.evaluation.eval_llm_endpoint
             api_key = os.getenv(self.config.evaluation.eval_llm_api_key_env)
+            is_google_openai_endpoint = bool(
+                endpoint and "generativelanguage.googleapis.com" in endpoint
+            )
+            if not api_key and not is_google_openai_endpoint:
+                api_key = os.getenv("OPENAI_API_KEY", "dummy")
             if not api_key:
                 raise ValueError(
                     "Missing API key for evaluation judge. "
@@ -421,18 +427,23 @@ class RAGPipeline:
         report: Dict[str, Any],
         artifact_kind: str = "report",
         label: Optional[str] = None,
+        output_path: Optional[str] = None,
     ) -> str:
-        report_dir = Path(self.config.evaluation.report_dir)
-        report_dir.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        model_part = self._slugify_eval_part(
-            label or report.get("models", {}).get("generation_model"),
-            "unknown_model",
-        )
-        output_path = report_dir / f"eval_{artifact_kind}_{model_part}_{timestamp}.json"
-        with open(output_path, "w", encoding="utf-8") as f:
+        if output_path:
+            final_path = Path(output_path)
+        else:
+            report_dir = Path(self.config.evaluation.report_dir)
+            report_dir.mkdir(parents=True, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            model_part = self._slugify_eval_part(
+                label or report.get("models", {}).get("generation_model"),
+                "unknown_model",
+            )
+            final_path = report_dir / f"eval_{artifact_kind}_{model_part}_{timestamp}.json"
+        final_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(final_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False, default=str)
-        return str(output_path)
+        return str(final_path)
 
     @classmethod
     def from_config(cls, config: RAGConfig) -> "RAGPipeline":
@@ -1221,6 +1232,7 @@ class RAGPipeline:
         retrieval_logs: Optional[List[Dict]] = None,
         rerank_logs: Optional[List[Dict]] = None,
         dataset_metadata: Optional[Dict[str, Any]] = None,
+        output_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Evaluate the RAG pipeline using RAGAS metrics."""
         eval_started = time.time()
@@ -1351,6 +1363,7 @@ class RAGPipeline:
             report,
             artifact_kind="report",
             label=self.config.generation.model_name,
+            output_path=output_path,
         )
         return report
 
@@ -1451,6 +1464,7 @@ class RAGPipeline:
         samples: List[Dict[str, Any]],
         dataset_metadata: Optional[Dict[str, Any]] = None,
         prediction_path: Optional[str] = None,
+        output_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         scoring_started = time.time()
         if self.evaluator is None:
@@ -1535,6 +1549,7 @@ class RAGPipeline:
             report,
             artifact_kind="score",
             label=generation_label or generation_model,
+            output_path=output_path,
         )
         return report
 

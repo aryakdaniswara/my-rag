@@ -89,6 +89,8 @@ services:
       - ./storage/eval_results:/app/storage/eval_results
       # Evaluation: saved raw prediction artifacts for later scoring
       - ./storage/eval_predictions:/app/storage/eval_predictions
+      # Evaluation: structured per-run folders with manifests, logs, predictions, and scores
+      - ./storage/eval_runs:/app/storage/eval_runs
       # Rebuild bundles and detached rebuild logs
       - ./storage/rebuilds:/app/storage/rebuilds
       # Uploads: directory for user-uploaded documents
@@ -99,6 +101,8 @@ services:
       - OPENAI_API_KEY=dummy
       # Remote or local Ollama endpoint used by generation.llm_endpoint in config_server.yaml
       - OLLAMA_LLM_ENDPOINT=${OLLAMA_LLM_ENDPOINT:-http://127.0.0.1:11434/v1}
+      # Judge endpoint used by eval-owned configs for scoring
+      - EVAL_LLM_ENDPOINT=${EVAL_LLM_ENDPOINT:-http://127.0.0.1:11434/v1}
       # Evaluation judge API key loaded from local .env
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       # Memory management for PyTorch to avoid fragmentation

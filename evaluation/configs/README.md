@@ -1,152 +1,91 @@
 # Evaluation Configs
 
-This folder is the source of truth for reusable evaluation configs.
+This folder contains the checked-in eval configs that are meant to load successfully today.
 
-## Files
+## Current Files
+
+- `eval_judge_local_qwen36.yaml`
+  - Extends `config_server.yaml`
+  - Keeps retrieval and generation defaults from the live server config
+  - Owns the eval judge settings for a fixed local OpenAI-compatible judge: `qwen3.6:27b`
+  - Uses `EVAL_LLM_ENDPOINT` and `OPENAI_API_KEY`
+
+- `eval_judge_gemini_api.yaml`
+  - Extends `config_server.yaml`
+  - Keeps retrieval and generation defaults from the live server config
+  - Owns the eval judge settings for Gemini API judging
+  - Uses `GEMINI_API_KEY`
 
 - `eval_matrix_qwen35.yaml`
-  - Runs one dataset across `qwen3.6:27b`, `gemma4:31b`, `gemma4:26b`, `deepseek-r1:32b`, `mistral-small`, `qwen3.5:9b`, `qwen3.5:4b`, and `qwen3.5:2b`.
-  - Extends `config_server.yaml` directly so matrix runs track the live server config.
-  - This is the current standard comparison path and keeps the live default `retrieval.rerank_top_k: 5`.
-  - Each `evaluation.model_matrix` entry can also override `retrieval_k` and `rerank_top_k` when you want the matrix to compare retrieval settings as well as generation models.
+  - Extends `eval_judge_local_qwen36.yaml`
+  - Runs the standard eight-model generation comparison with one shared judge
+
 - `eval_matrix_qwen35_rerank_topk.yaml`
-  - Runs one dataset across `qwen3.5:4b` with `rerank_top_k` values `3`, `5`, `8`, and `10`.
-  - Useful when you want to isolate retrieval-context size without changing the generation model.
-- `eval_example_local_judge.yaml`
-  - Example for local-only evaluation where the judge reuses the same local backend.
-- `eval_example_gemini_api_judge.yaml`
-  - Example for Gemini API judging with reasoning disabled.
+  - Extends `eval_judge_local_qwen36.yaml`
+  - Sweeps `rerank_top_k` for one generation model
 
-## Reasoning Toggle
+## Recommended Flows
 
-- Generation reasoning:
-  - set `generation.reasoning_effort` to `none`, `low`, `medium`, or `high`
-- Judge reasoning:
-  - set `evaluation.eval_reasoning_effort`
-  - for Gemini OpenAI-compatible judging, `none` disables reasoning in the current repo path
-  - keep `evaluation.eval_include_thoughts: false` unless you explicitly want judge thoughts back
-
-## Common Runs
-
-Single model eval:
+Full run:
 
 ```sh
-python cli.py eval --config config_server.yaml
+sh /app/scripts/eval_run.sh evaluation/configs/eval_judge_local_qwen36.yaml
 ```
 
-Matrix eval for the current eight-model comparison set:
+Generate predictions only through the live API:
+
+```sh
+sh /app/scripts/eval_generate_api.sh qwen3.5:4b qwen35_4b
+```
+
+Score the latest saved predictions for a label:
+
+```sh
+sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+Full matrix run from the Python CLI:
 
 ```sh
 python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
 ```
 
-Matrix eval with rerank chunk-count variants:
-
-```yaml
-evaluation:
-  model_matrix:
-    - label: "qwen35_4b_rerank3"
-      model_name: "qwen3.5:4b"
-      rerank_top_k: 3
-    - label: "qwen35_4b_rerank5"
-      model_name: "qwen3.5:4b"
-      rerank_top_k: 5
-    - label: "qwen35_4b_rerank8"
-      model_name: "qwen3.5:4b"
-      rerank_top_k: 8
-    - label: "qwen35_4b_rerank10"
-      model_name: "qwen3.5:4b"
-      rerank_top_k: 10
-```
-
-Run the API-only matrix end-to-end, generating predictions and scoring them in one neat run folder:
-
-```sh
-sh /app/scripts/eval_api_matrix.sh
-```
-
-Each run now lands in:
-
-- `storage/eval_predictions/<run_name>/eval_prediction_<label>.json`
-- `storage/eval_results/<run_name>/eval_score_<label>.json`
-- `storage/eval_logs/<run_name>.log`
-
-Use `RUN_NAME` when you want a stable folder name:
-
-```sh
-RUN_NAME=ui_v2_qwen_compare sh /app/scripts/eval_api_matrix.sh
-```
-
-Generate saved predictions only for the current eight-model comparison set through the live API:
+Generate-only matrix:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
-Generate the same matrix while sweeping reranked chunk counts:
+Score-only matrix:
 
 ```sh
-RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_generate_matrix.sh
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
 ```
 
-Score the latest saved predictions for the current eight-model comparison set without regenerating:
+## Run Layout
 
-```sh
-sh /app/scripts/eval_score_matrix.sh
-```
-
-Score the latest rerank sweep artifacts:
-
-```sh
-RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_score_matrix.sh
-```
-
-All eval scripts now run a lightweight preflight first, including the matrix entrypoints:
-
-- generate checks config, dataset, prediction output dir, and RAG API `/health`
-- score checks config, prediction artifact, report output dir, and judge `/models`
-- full eval checks config, dataset, report output dir, generation `/models`, and judge `/models` when `judge_mode: api`
-
-## Judge Endpoint From Env
-
-`config_server.yaml` now supports environment expansion for the judge endpoint:
-
-```yaml
-evaluation:
-  eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"
-```
-
-Set the env var before running eval commands, for example:
-
-```sh
-export EVAL_LLM_ENDPOINT="http://YOUR_REMOTE_IP:11434/v1"
-```
-
-The current default comparison dataset is:
+Eval artifacts now group under one run folder:
 
 ```text
-storage/eval_datasets/main/ui_main_v2.json
+storage/eval_runs/<run_name>/
 ```
 
-Generate predictions through the live API, then score later:
+Each run folder contains:
 
-```sh
-python cli.py eval-generate --config config_server.yaml --model qwen3.5:4b --label qwen35_4b_rerank8 --rerank-top-k 8
-python cli.py eval-score --config evaluation/configs/eval_example_gemini_api_judge.yaml --predictions storage/eval_predictions/eval_predictions_qwen35_4b_rerank8_<timestamp>.json
+- `run_manifest.json`
+- `predictions/`
+- `scores/`
+- `logs/`
+
+Rich filenames help when files are copied elsewhere, but the manifest is the canonical lookup source for "latest" resolution.
+
+## Environment
+
+The actual env surface used by these configs is:
+
+```text
+OPENAI_API_KEY
+OLLAMA_LLM_ENDPOINT
+EVAL_LLM_ENDPOINT
+GEMINI_API_KEY
 ```
-
-## Output Folders
-
-- Scored reports: `evaluation.report_dir` default `storage/eval_results`
-- Saved predictions: `evaluation.prediction_dir` default `storage/eval_predictions`
-
-For the new end-to-end matrix script, each batch is grouped under a dedicated run folder inside those directories.
-
-Scored reports include the generation model in the filename, for example:
-
-- `storage/eval_results/eval_report_qwen3.5_4b_20260503_...json`
-- `storage/eval_results/eval_score_qwen3.5_4b_20260503_...json`
-
-When scoring from saved predictions, the report filename now prefers the saved prediction label when available, so a run like `qwen35_4b_rerank8` stays readable all the way through scoring.
-
-Every prediction/report artifact now includes a `runtime_settings` block so you can inspect the collection, retrieval `k`, `rerank_top_k`, reranker endpoint, embedding setup, generation settings, judge settings, dataset path, and config path used for that run.
