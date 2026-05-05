@@ -3,6 +3,12 @@ extends: "./eval_judge_local_qwen36.yaml"
 
 evaluation:
   model_matrix:
+    - label: "qwen35_9b"
+      model_name: "qwen3.5:9b"
+    - label: "qwen35_4b"
+      model_name: "qwen3.5:4b"
+    - label: "qwen35_2b"
+      model_name: "qwen3.5:2b"
     - label: "qwen36_27b"
       model_name: "qwen3.6:27b"
     - label: "gemma4_31b"
@@ -13,9 +19,3 @@ evaluation:
       model_name: "deepseek-r1:32b"
     - label: "mistral_small"
       model_name: "mistral-small"
-    - label: "qwen35_9b"
-      model_name: "qwen3.5:9b"
-    - label: "qwen35_4b"
-      model_name: "qwen3.5:4b"
-    - label: "qwen35_2b"
-      model_name: "qwen3.5:2b"

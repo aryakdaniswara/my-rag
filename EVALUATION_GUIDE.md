@@ -35,7 +35,7 @@ Judge ownership now lives in eval-side configs under `evaluation/configs/`.
 Use:
 
 - `evaluation/configs/eval_judge_local_qwen36.yaml` for a fixed local OpenAI-compatible judge
-- `evaluation/configs/eval_judge_gemini_api.yaml` for Gemini API judging
+- `evaluation/configs/eval_judge_gemini_api.yaml` for Gemini API judging with `gemini-3.1-flash-lite-preview`
 
 This keeps judge choice out of the main server config so scoring can switch judges cleanly.
 
@@ -152,6 +152,12 @@ Generate-only matrix:
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+Generate first and automatically score only if generation succeeds:
+
+```sh
+sh /app/scripts/eval_generate_and_score_matrix.sh
+```
+
 Score-only matrix against the latest saved predictions:
 
 ```sh
@@ -168,6 +174,37 @@ Rerank sweep scoring:
 
 ```sh
 RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+### Generate First, Then Score With Gemini Flash Lite
+
+For only `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` with `rerank_top_k` values `2`, `5`, `8`, and `10`, generate all predictions first:
+
+```sh
+EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_generate_matrix.sh config_server.yaml http://127.0.0.1:8000
+```
+
+Then score those saved predictions with Gemini:
+
+```sh
+EVAL_LABELS="qwen35_9b qwen35_4b qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_gemini_api.yaml
+```
+
+This reuses the saved predictions and avoids regenerating answers during judging.
+
+If you want the same sweep to score automatically right after generation, use the chained wrapper:
+
+```sh
+EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_generate_and_score_matrix.sh \
+  config_server.yaml \
+  evaluation/configs/eval_judge_gemini_api.yaml \
+  http://127.0.0.1:8000
 ```
 
 ## Environment

@@ -13,7 +13,7 @@ This folder contains the checked-in eval configs that are meant to load successf
 - `eval_judge_gemini_api.yaml`
   - Extends `config_server.yaml`
   - Keeps retrieval and generation defaults from the live server config
-  - Owns the eval judge settings for Gemini API judging
+  - Owns the eval judge settings for Gemini API judging with `gemini-3.1-flash-lite-preview`
   - Uses `GEMINI_API_KEY`
 
 - `eval_matrix_qwen35.yaml`
@@ -56,10 +56,39 @@ Generate-only matrix:
 sh /app/scripts/eval_generate_matrix.sh
 ```
 
+Generate first and automatically score only if generation succeeds:
+
+```sh
+sh /app/scripts/eval_generate_and_score_matrix.sh
+```
+
 Score-only matrix:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+Generate only the qwen3.5 `2b`, `4b`, and `9b` set at `rerank_top_k` values `2`, `5`, `8`, and `10`, then score with Gemini:
+
+```sh
+EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_generate_matrix.sh config_server.yaml http://127.0.0.1:8000
+
+EVAL_LABELS="qwen35_9b qwen35_4b qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_gemini_api.yaml
+```
+
+Or chain both phases so scoring starts automatically after a successful generate pass:
+
+```sh
+EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
+RERANK_TOP_K_VALUES="2 5 8 10" \
+sh /app/scripts/eval_generate_and_score_matrix.sh \
+  config_server.yaml \
+  evaluation/configs/eval_judge_gemini_api.yaml \
+  http://127.0.0.1:8000
 ```
 
 ## Run Layout

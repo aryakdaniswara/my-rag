@@ -2,7 +2,7 @@ extends: "../../config_server.yaml"
 
 evaluation:
   judge_mode: "api"
-  eval_llm: "gemini-2.5-flash"
+  eval_llm: "gemini-3.1-flash-lite-preview"
   eval_llm_endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/"
   eval_llm_api_key_env: "GEMINI_API_KEY"
   eval_reasoning_effort: "none"
