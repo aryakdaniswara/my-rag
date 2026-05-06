@@ -1,0 +1,11 @@
+extends: "../../config_server.yaml"
+
+evaluation:
+  judge_mode: "api"
+  eval_llm: "deepseek-r1:latest"
+  eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"
+  eval_llm_api_key_env: "OPENAI_API_KEY"
+  eval_reasoning_effort: "none"
+  eval_include_thoughts: false
+  eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
+  eval_embeddings_endpoint: null
