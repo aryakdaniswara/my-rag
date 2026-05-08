@@ -19,10 +19,10 @@ def _expand_env_vars(value: Any) -> Any:
 @dataclass
 class IngestionConfig:
     chunk_size: int = 512
-    chunk_overlap: int = 50
-    pdf_min_chunk_tokens: int = 300
-    pdf_max_chunk_tokens: int = 1000
-    pdf_split_overlap_tokens: int = 120
+    chunk_overlap: int = 64
+    pdf_min_chunk_tokens: int = 256
+    pdf_max_chunk_tokens: int = 512
+    pdf_split_overlap_tokens: int = 64
     pdf_parser: str = "docling"
     pdf_chunking_strategy: str = "hierarchical"
     html_parser: str = "trafilatura"
