@@ -1,0 +1,29 @@
+# Matrix evaluation config: eight generation models, fixed rerank_top_k=8.
+extends: "./eval_judge_local_qwen36.yaml"
+
+evaluation:
+  model_matrix:
+    - label: "qwen35_4b_rerank8"
+      model_name: "qwen3.5:4b"
+      rerank_top_k: 8
+    - label: "qwen35_9b_rerank8"
+      model_name: "qwen3.5:9b"
+      rerank_top_k: 8
+    - label: "qwen36_27b_rerank8"
+      model_name: "qwen3.6:27b"
+      rerank_top_k: 8
+    - label: "qwen36_35b_a3b_rerank8"
+      model_name: "qwen3.6:35b-a3b"
+      rerank_top_k: 8
+    - label: "gemma4_26b_rerank8"
+      model_name: "gemma4:26b"
+      rerank_top_k: 8
+    - label: "gemma4_31b_rerank8"
+      model_name: "gemma4:31b"
+      rerank_top_k: 8
+    - label: "gpt_oss_20b_rerank8"
+      model_name: "gpt-oss:20b"
+      rerank_top_k: 8
+    - label: "mistral_small_24b_rerank8"
+      model_name: "mistral-small:24b"
+      rerank_top_k: 8
