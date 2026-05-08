@@ -25,6 +25,11 @@ http://152.118.31.54:8000/docs
 | `GET` | `/collections` | List indexed Milvus collections |
 | `GET` | `/runtime/config` | Show the active collection and ingestion state path used by the running API |
 | `GET` | `/ingestion/status` | View ingested files and chunk counts |
+| `GET` | `/scraper/sites` | List configured scraper domains and crawl rules |
+| `POST` | `/scraper/jobs/configured-site` | Start a scrape job from a configured domain URL |
+| `POST` | `/scraper/jobs/urls` | Start a scrape job from explicit URLs |
+| `GET` | `/scraper/jobs/{job_id}` | Check scrape job status |
+| `POST` | `/scraper/jobs/{job_id}/cancel` | Cancel an active scrape job |
 | `POST` | `/query` | Run a standard RAG query |
 | `POST` | `/query/stream` | Run a streaming RAG query over SSE |
 | `POST` | `/ingest` | Start ingestion for a directory or file path |
@@ -43,6 +48,7 @@ http://152.118.31.54:8000/docs
 - The streaming endpoint returns Server-Sent Events.
 - Ingestion runs in the background, so the response comes back before processing finishes.
 - Normal ingestion writes one job-level chunk snapshot when `save_snapshots` is enabled.
+- Scraping writes source HTML/PDF files into `/app/data`; it does not automatically ingest or rebuild the index.
 - Reranking is optional in the server deployment. If `retrieval.reranker_model` is `null` in `config_server.yaml`, the API skips reranker use and you do not need to start the reranker container.
 - `confidence_score` is retrieval-strength only. It reflects how strong retrieval evidence is, not factual correctness probability.
 - The value is normalized to `0.0`-`1.0` from the top-5 RRF strengths using the current RRF setup (dense+sparse fusion, `k=60`).
@@ -200,6 +206,103 @@ data: {"type":"confidence","content":{"confidence_score":0.82,"query":"..."}}
 
 The confidence score is retrieval-strength from ranked retrieval evidence. It is deterministic and does not trigger a second LLM confidence check.
 It is computed as the average of normalized RRF scores from the top-5 ranked documents, where each item is normalized by the theoretical max fused score: `2/(60+1)`.
+
+## Scraper
+
+The scraper refreshes the raw corpus under `/app/data`. It is intentionally separate from ingestion: scrape first, inspect files/status, then run `/ingest` for incremental updates or the CLI `rebuild-index` flow for a fresh index.
+
+### `GET /scraper/sites`
+List the built-in configured sites and crawl rules.
+
+```bash
+curl -X GET http://152.118.31.54:8000/scraper/sites
+```
+
+Configured domains:
+
+```text
+simak.ui.ac.id
+www.ui.ac.id
+kemahasiswaan.ui.ac.id
+beasiswa.ui.ac.id
+penerimaan.ui.ac.id
+international.ui.ac.id
+admission.ui.ac.id
+enrollment.ui.ac.id
+```
+
+### `POST /scraper/jobs/configured-site`
+Start a scrape using the configured rules for the URL's domain.
+
+```bash
+curl -X POST http://152.118.31.54:8000/scraper/jobs/configured-site \
+  -H "Content-Type: application/json" \
+  -d '{"site_url":"https://simak.ui.ac.id/","dry_run":true}'
+```
+
+Set `dry_run` to `false` to write files:
+
+```bash
+curl -X POST http://152.118.31.54:8000/scraper/jobs/configured-site \
+  -H "Content-Type: application/json" \
+  -d '{"site_url":"https://simak.ui.ac.id/","dry_run":false,"skip_existing":false}'
+```
+
+Response:
+
+```json
+{
+  "job_id": "abc123",
+  "status": "running",
+  "pages_visited": 0,
+  "pdfs_downloaded": 0,
+  "errors": [],
+  "output_dir": "/app/data/simak"
+}
+```
+
+### `POST /scraper/jobs/urls`
+Start a scrape from explicit URLs. One job can target only one domain. Non-UI domains are blocked by default; use `allow_external: true` only for intentional external sources.
+
+```bash
+curl -X POST http://152.118.31.54:8000/scraper/jobs/urls \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": [
+      "https://simak.ui.ac.id/jadwal-seleksi/",
+      "https://simak.ui.ac.id/sk-biaya-pendidikan-ui/"
+    ],
+    "dry_run": true
+  }'
+```
+
+### `GET /scraper/jobs/{job_id}`
+Check scrape status, counts, current URL, errors, and output folder.
+
+```bash
+curl -X GET http://152.118.31.54:8000/scraper/jobs/abc123
+```
+
+### `POST /scraper/jobs/{job_id}/cancel`
+Cancel a running scrape.
+
+```bash
+curl -X POST http://152.118.31.54:8000/scraper/jobs/abc123/cancel
+```
+
+### Output Contract
+
+The scraper writes the same file shape ingestion expects:
+
+```text
+/app/data/<folder>/<url_path>/page.html
+/app/data/<folder>/<url_path>/page.meta.json
+/app/data/<folder>/<url_path>/<document>.pdf
+/app/data/<folder>/<url_path>/<document>.pdf.meta.json
+```
+
+`page.meta.json` contains `source_url`, `domain`, `folder`, `scraped_at`, `status_code`, and `content_type`.
+PDF sidecars contain `pdf_url`, `page_url`, `filename`, `domain`, `scraped_at`, `status_code`, and `content_type`.
 
 ## Ingestion
 

@@ -131,7 +131,7 @@ For a responsive user experience, the system supports real-time token streaming:
 ## 4. Pipeline Data Flow
 
 ### Ingestion Flow
-`Raw Files` -> `SHA-256 Fingerprint Scan` -> `Incremental/Duplicate Classification` -> `PDF: Docling + Hierarchical Hybrid Chunking / HTML: Trafilatura + Standard Text Chunking` -> `Dense & Sparse Embedding` -> `Milvus Storage` -> `Job Snapshot Manifest`
+`Configured Scraper / Uploaded Files / Existing Data` -> `Raw Files` -> `SHA-256 Fingerprint Scan` -> `Incremental/Duplicate Classification` -> `PDF: Docling + Hierarchical Hybrid Chunking / HTML: Trafilatura + Standard Text Chunking` -> `Dense & Sparse Embedding` -> `Milvus Storage` -> `Job Snapshot Manifest`
 
 ### Query Flow
 `User Query` -> `Dual Embedding` -> `Milvus Hybrid Search` -> `Metadata Filtering (Optional)` -> `RRF (k=60)` -> `Top-50 Candidates` -> `Jina Reranking` -> `Top-5 Context` -> `Grounded Generation` -> `Answer + Sources`
@@ -203,6 +203,45 @@ Streaming version of the RAG query. Returns tokens as they are generated.
   {"type": "sources", "content": [...]}
   {"type": "token", "content": "Hello"}
   ```
+
+### Scraper API
+The scraper API refreshes source files under `/app/data` and deliberately does not trigger ingestion automatically. Use it to refresh the raw corpus, then run `/ingest` for incremental updates or the CLI rebuild workflow when you need a fresh state file and shadow collection.
+
+**Configured domains**:
+- `simak.ui.ac.id`
+- `www.ui.ac.id`
+- `kemahasiswaan.ui.ac.id`
+- `beasiswa.ui.ac.id`
+- `penerimaan.ui.ac.id`
+- `international.ui.ac.id`
+- `admission.ui.ac.id`
+- `enrollment.ui.ac.id`
+
+**`GET /scraper/sites`** - list configured domains, seeds, allowed paths, disallowed paths, rate limit, depth, and parallelism.
+
+**`POST /scraper/jobs/configured-site`** - start a scrape by matching the request URL's domain against the built-in configured sites.
+
+```json
+{"site_url": "https://simak.ui.ac.id/", "dry_run": true}
+```
+
+**`POST /scraper/jobs/urls`** - start a scrape from explicit URLs on one domain. Non-UI domains are blocked unless `allow_external` is set to `true`.
+
+```json
+{
+  "urls": [
+    "https://simak.ui.ac.id/jadwal-seleksi/",
+    "https://simak.ui.ac.id/sk-biaya-pendidikan-ui/"
+  ],
+  "dry_run": true
+}
+```
+
+**`GET /scraper/jobs/{job_id}`** - view scrape status, counts, current URL, output path, and errors.
+
+**`POST /scraper/jobs/{job_id}/cancel`** - request cancellation.
+
+The scraper writes `page.html` plus `page.meta.json` for HTML pages, and stores PDFs beside the referring page with `<filename>.pdf.meta.json`. The sidecars preserve source URL, domain, scraped time, status code, content type, and PDF-specific fields such as `pdf_url`, `page_url`, and `filename`.
 
 ### `POST /ingest`
 Triggers a background ingestion process for a directory.
