@@ -9,7 +9,7 @@ This repo is organized to support two common modes:
 
 ## Features
 
-- **Advanced Ingestion**: PDF parsing via Docling with hierarchical-first hybrid chunking that normalizes PDF chunks into a `256-512` token-like range and uses `64` overlap only when splitting oversized chunks, plus HTML extraction via Trafilatura with `512` chunks and `64` overlap.
+- **Advanced Ingestion**: PDF parsing via Docling with hierarchical-first hybrid chunking that normalizes PDF chunks into a `256-1024` token-like range and uses `120` overlap only when splitting oversized chunks, plus HTML extraction via Trafilatura with `1024` chunks and `120` overlap to reduce cutoff risk observed at `512`.
 - **Hybrid Search**: Combines Dense (BGE) and Sparse (SPLADE) embeddings using Milvus.
 - **Reranking**: Integration with a dedicated GGUF reranker service to improve retrieval precision.
 - **Debuggability**: 
@@ -146,5 +146,5 @@ The structured eval workspace now lives under `storage/eval_runs/<run_name>/` wi
 
 ## Known Limitations
 
-- **Chunker Config**: HTML uses `chunk_size: 512` and `chunk_overlap: 64`. PDFs use Docling `HierarchicalChunker` plus hybrid normalization with `pdf_min_chunk_tokens: 256`, `pdf_max_chunk_tokens: 512`, and `pdf_split_overlap_tokens: 64`.
+- **Chunker Config**: HTML uses `chunk_size: 1024` and `chunk_overlap: 120`. PDFs use Docling `HierarchicalChunker` plus hybrid normalization with `pdf_min_chunk_tokens: 256`, `pdf_max_chunk_tokens: 1024`, and `pdf_split_overlap_tokens: 120`.
 - **VRAM Competition**: Running long-context reranking (8k tokens) on consumer GPUs alongside a large LLM may require careful GPU allocation.

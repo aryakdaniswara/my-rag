@@ -146,11 +146,11 @@ All configuration is driven by `config_rag.yaml` (local) or `config_server.yaml`
 
 | Section | Parameter | Default | Description |
 |---|---|---|---|
-| `ingestion` | `chunk_size` | `512` | Max token-like units per standard HTML text chunk |
-| `ingestion` | `chunk_overlap` | `64` | Overlap for standard HTML text chunks |
+| `ingestion` | `chunk_size` | `1024` | Max token-like units per standard HTML text chunk |
+| `ingestion` | `chunk_overlap` | `120` | Overlap for standard HTML text chunks |
 | `ingestion` | `pdf_min_chunk_tokens` | `256` | Minimum token-like size for merged PDF hierarchical chunks |
-| `ingestion` | `pdf_max_chunk_tokens` | `512` | Upper bound before a PDF hierarchical chunk is split |
-| `ingestion` | `pdf_split_overlap_tokens` | `64` | Overlap used only when splitting oversized PDF hierarchical chunks |
+| `ingestion` | `pdf_max_chunk_tokens` | `1024` | Upper bound before a PDF hierarchical chunk is split |
+| `ingestion` | `pdf_split_overlap_tokens` | `120` | Overlap used only when splitting oversized PDF hierarchical chunks |
 | `ingestion` | `pdf_parser` | `docling` | Parser for PDF files |
 | `ingestion` | `pdf_chunking_strategy` | `hierarchical` | Chunking strategy for PDF files; uses Docling `HierarchicalChunker` plus hybrid normalization |
 | `ingestion` | `html_parser` | `trafilatura` | Parser for HTML files |
@@ -243,6 +243,7 @@ The scraper API refreshes source files under `/app/data` and deliberately does n
 **`POST /scraper/jobs/{job_id}/cancel`** - request cancellation.
 
 The scraper writes `page.html` plus `page.meta.json` for HTML pages, and stores PDFs beside the referring page with `<filename>.pdf.meta.json`. The sidecars preserve source URL, domain, scraped time, status code, content type, and PDF-specific fields such as `pdf_url`, `page_url`, and `filename`.
+Configured `disallowed_paths` are also used as noise control, so selected low-signal pages/PDFs are intentionally skipped during scraping to keep retrieval quality focused.
 
 The current refreshed corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Scraping and ingestion remain separate: once the corpus looks sane, use the rebuild workflow below to create a fresh shadow collection.
 
@@ -336,7 +337,7 @@ flowchart TD
 - The split is a size guardrail, not a new semantic parser.
 - If a merged PDF chunk grows beyond `pdf_max_chunk_tokens`, it is split by token-like units with `pdf_split_overlap_tokens`.
 - The overlap softens the boundary so the next chunk still carries some trailing context from the previous one.
-- The current PDF normalization range is `256-512` token-like units, with `64` token-like units of overlap only when oversized PDF chunks must be split.
+- The current PDF normalization range is `256-1024` token-like units, with `120` token-like units of overlap only when oversized PDF chunks must be split.
 - This does mean a long table or long appendix can still be cut across a boundary, but it avoids a single giant retrieval unit that becomes hard to rank and expensive to embed/rerank.
 
 ### Why This Decision Tree Exists
@@ -509,7 +510,8 @@ As of April 2026, there are several areas where ingestion and model limits still
 - **Current Behavior**: HTML uses the standard overlapping chunker controlled by `chunk_size` and `chunk_overlap`.
 - **Current Behavior**: PDFs use Docling `HierarchicalChunker`, then merge undersized chunks up to `pdf_min_chunk_tokens`.
 - **Current Behavior**: Any merged PDF chunk above `pdf_max_chunk_tokens` is split with `pdf_split_overlap_tokens`.
-- **Current Defaults**: HTML uses `chunk_size: 512` and `chunk_overlap: 64`; PDF normalization uses `pdf_min_chunk_tokens: 256`, `pdf_max_chunk_tokens: 512`, and `pdf_split_overlap_tokens: 64`.
+- **Current Defaults**: HTML uses `chunk_size: 1024` and `chunk_overlap: 120`; PDF normalization uses `pdf_min_chunk_tokens: 256`, `pdf_max_chunk_tokens: 1024`, and `pdf_split_overlap_tokens: 120`.
+- **Why 1024**: We moved from 512 to 1024 because 512-sized chunks were cutting off important document context in practice.
 - **Impact**: PDF chunking keeps structural boundaries where possible, avoids tiny chunks, and uses overlap to soften large-chunk boundaries without adding document-specific heuristics.
 
 ### B. Embedding Model Context Limits

@@ -306,6 +306,7 @@ The scraper writes the same file shape ingestion expects:
 PDF sidecars contain `pdf_url`, `page_url`, `filename`, `domain`, `scraped_at`, `status_code`, and `content_type`.
 
 After the current configured scrape, the local corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Re-run scraping only when the source sites need refreshing; otherwise go straight to the rebuild workflow.
+The configured `disallowed_paths` rules are intentionally used to exclude noisy or low-signal pages/PDFs from scraping so the downstream index stays focused.
 
 ## Ingestion
 
@@ -407,7 +408,7 @@ curl -X POST http://152.118.31.54:8000/debug/chunks \
   -d '{"directory_path":"/app/data","save_to_file":false,"output_format":"json"}'
 ```
 
-Useful when you want to verify chunk boundaries before embedding. PDFs use hierarchical chunking followed by merge-small / split-large normalization, currently `256-512` token-like units with `64` overlap only when oversized chunks are split; HTML uses standard `512` chunks with `64` overlap.
+Useful when you want to verify chunk boundaries before embedding. PDFs use hierarchical chunking followed by merge-small / split-large normalization, currently `256-1024` token-like units with `120` overlap only when oversized chunks are split; HTML uses standard `1024` chunks with `120` overlap. We use `1024` because `512` chunks were cutting off useful context in practice.
 
 ### `POST /debug/retrieve`
 Inspect the raw retrieval output after hybrid search and RRF fusion, before reranking.
