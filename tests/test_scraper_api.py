@@ -13,6 +13,7 @@ from scraper_api.service import (
     ScraperJobManager,
     inject_source_url_meta,
     is_allowed_path,
+    matches_disallowed,
     sanitize_pdf_filename,
     url_to_abs_folder,
     url_to_folder_path,
@@ -165,6 +166,35 @@ class ScraperMappingTests(unittest.TestCase):
         )
         self.assertFalse(
             manager._should_visit("https://example.org/file.pdf", config)
+        )
+
+    def test_www_ui_noisy_pdf_rules_are_disallowed(self):
+        config = config_from_configured_site("https://www.ui.ac.id/")
+        disallowed = config["disallowed_paths"]
+
+        self.assertTrue(
+            matches_disallowed(
+                "https://www.ui.ac.id/wp-content/uploads/2022/04/Majalah-ALUMNI-UI-No-43-Th-2024_compressed.pdf",
+                disallowed,
+            )
+        )
+        self.assertTrue(
+            matches_disallowed(
+                "https://www.ui.ac.id/wp-content/uploads/dlm_uploads/2017/05/2017-Peraturan005-Pendidikan.pdf",
+                disallowed,
+            )
+        )
+        self.assertTrue(
+            matches_disallowed(
+                "https://cs.ui.ac.id/wp-content/uploads/2021/02/form-rekomendasi-Magister-di-Fasilkom.pdf",
+                disallowed,
+            )
+        )
+        self.assertFalse(
+            matches_disallowed(
+                "https://www.ui.ac.id/wp-content/uploads/2026/04/SK-JALUR-MANDIRI-SARJANA-DAN-VOKASI-2026.pdf",
+                disallowed,
+            )
         )
 
 
