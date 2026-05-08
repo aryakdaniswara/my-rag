@@ -407,7 +407,7 @@ curl -X POST http://152.118.31.54:8000/debug/chunks \
   -d '{"directory_path":"/app/data","save_to_file":false,"output_format":"json"}'
 ```
 
-Useful when you want to verify chunk boundaries before embedding. PDFs use hierarchical chunking followed by merge-small / split-large normalization; HTML uses standard overlapping text chunks.
+Useful when you want to verify chunk boundaries before embedding. PDFs use hierarchical chunking followed by merge-small / split-large normalization, currently `256-512` token-like units with `64` overlap only when oversized chunks are split; HTML uses standard `512` chunks with `64` overlap.
 
 ### `POST /debug/retrieve`
 Inspect the raw retrieval output after hybrid search and RRF fusion, before reranking.

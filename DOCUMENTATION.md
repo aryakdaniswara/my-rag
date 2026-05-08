@@ -147,10 +147,10 @@ All configuration is driven by `config_rag.yaml` (local) or `config_server.yaml`
 | Section | Parameter | Default | Description |
 |---|---|---|---|
 | `ingestion` | `chunk_size` | `512` | Max token-like units per standard HTML text chunk |
-| `ingestion` | `chunk_overlap` | `50` | Overlap for standard HTML text chunks |
-| `ingestion` | `pdf_min_chunk_tokens` | `300` | Minimum token-like size for merged PDF hierarchical chunks |
-| `ingestion` | `pdf_max_chunk_tokens` | `1000` | Upper bound before a PDF hierarchical chunk is split |
-| `ingestion` | `pdf_split_overlap_tokens` | `120` | Overlap used only when splitting oversized PDF hierarchical chunks |
+| `ingestion` | `chunk_overlap` | `64` | Overlap for standard HTML text chunks |
+| `ingestion` | `pdf_min_chunk_tokens` | `256` | Minimum token-like size for merged PDF hierarchical chunks |
+| `ingestion` | `pdf_max_chunk_tokens` | `512` | Upper bound before a PDF hierarchical chunk is split |
+| `ingestion` | `pdf_split_overlap_tokens` | `64` | Overlap used only when splitting oversized PDF hierarchical chunks |
 | `ingestion` | `pdf_parser` | `docling` | Parser for PDF files |
 | `ingestion` | `pdf_chunking_strategy` | `hierarchical` | Chunking strategy for PDF files; uses Docling `HierarchicalChunker` plus hybrid normalization |
 | `ingestion` | `html_parser` | `trafilatura` | Parser for HTML files |
@@ -336,6 +336,7 @@ flowchart TD
 - The split is a size guardrail, not a new semantic parser.
 - If a merged PDF chunk grows beyond `pdf_max_chunk_tokens`, it is split by token-like units with `pdf_split_overlap_tokens`.
 - The overlap softens the boundary so the next chunk still carries some trailing context from the previous one.
+- The current PDF normalization range is `256-512` token-like units, with `64` token-like units of overlap only when oversized PDF chunks must be split.
 - This does mean a long table or long appendix can still be cut across a boundary, but it avoids a single giant retrieval unit that becomes hard to rank and expensive to embed/rerank.
 
 ### Why This Decision Tree Exists
@@ -508,6 +509,7 @@ As of April 2026, there are several areas where ingestion and model limits still
 - **Current Behavior**: HTML uses the standard overlapping chunker controlled by `chunk_size` and `chunk_overlap`.
 - **Current Behavior**: PDFs use Docling `HierarchicalChunker`, then merge undersized chunks up to `pdf_min_chunk_tokens`.
 - **Current Behavior**: Any merged PDF chunk above `pdf_max_chunk_tokens` is split with `pdf_split_overlap_tokens`.
+- **Current Defaults**: HTML uses `chunk_size: 512` and `chunk_overlap: 64`; PDF normalization uses `pdf_min_chunk_tokens: 256`, `pdf_max_chunk_tokens: 512`, and `pdf_split_overlap_tokens: 64`.
 - **Impact**: PDF chunking keeps structural boundaries where possible, avoids tiny chunks, and uses overlap to soften large-chunk boundaries without adding document-specific heuristics.
 
 ### B. Embedding Model Context Limits
