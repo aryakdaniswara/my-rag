@@ -17,27 +17,76 @@ from scraper_api.service import (
     url_to_abs_folder,
     url_to_folder_path,
 )
-from scraper_api.presets import get_preset, list_presets
+from scraper_api.sites import (
+    config_from_configured_site,
+    config_from_urls,
+    folder_from_domain,
+    is_ui_domain,
+)
 
 
 class ScraperMappingTests(unittest.TestCase):
-    def test_ui_presets_are_available_and_overrideable(self):
-        presets = list_presets()
-        self.assertIn("simak", presets)
-        self.assertIn("ui_ac_id", presets)
-        self.assertEqual(presets["simak"]["domain"], "simak.ui.ac.id")
-
-        custom = get_preset(
-            "simak",
-            {
-                "domain": "example.org",
-                "folder": "external_example",
-                "seeds": ["https://example.org/"],
-            },
+    def test_url_job_config_derives_domain_folder_and_paths(self):
+        config = config_from_urls(
+            [
+                "https://simak.ui.ac.id/jadwal-seleksi/",
+                "https://simak.ui.ac.id/sk-biaya-pendidikan-ui/",
+            ],
+            dry_run=True,
         )
-        self.assertEqual(custom["domain"], "example.org")
-        self.assertEqual(custom["folder"], "external_example")
-        self.assertEqual(custom["seeds"], ["https://example.org/"])
+        self.assertEqual(config["domain"], "simak.ui.ac.id")
+        self.assertEqual(config["folder"], "simak")
+        self.assertEqual(
+            config["allowed_paths"],
+            ["/jadwal-seleksi/", "/sk-biaya-pendidikan-ui/"],
+        )
+        self.assertTrue(config["dry_run"])
+
+    def test_url_job_config_blocks_external_by_default(self):
+        with self.assertRaises(ValueError):
+            config_from_urls(["https://example.org/"])
+
+        config = config_from_urls(["https://example.org/"], allow_external=True)
+        self.assertEqual(config["domain"], "example.org")
+        self.assertEqual(config["folder"], "example_org")
+
+    def test_ui_domain_helpers(self):
+        self.assertTrue(is_ui_domain("simak.ui.ac.id"))
+        self.assertTrue(is_ui_domain("ui.ac.id"))
+        self.assertFalse(is_ui_domain("example.org"))
+        self.assertEqual(folder_from_domain("www.ui.ac.id"), "ui_ac_id")
+
+    def test_configured_site_uses_built_in_settings(self):
+        config = config_from_configured_site(
+            "https://simak.ui.ac.id/",
+            dry_run=True,
+        )
+        self.assertEqual(config["domain"], "simak.ui.ac.id")
+        self.assertEqual(config["folder"], "simak")
+        self.assertIn("/jadwal-seleksi/", config["allowed_paths"])
+        self.assertIn("/berita/", config["disallowed_paths"])
+        self.assertEqual(config["max_depth"], 4)
+        self.assertEqual(config["max_parallelism"], 2)
+        self.assertTrue(config["dry_run"])
+
+    def test_new_helpdesk_sites_are_configured(self):
+        international = config_from_configured_site("https://international.ui.ac.id/")
+        admission = config_from_configured_site("https://admission.ui.ac.id/")
+        enrollment = config_from_configured_site("https://enrollment.ui.ac.id/")
+
+        self.assertEqual(international["folder"], "international")
+        self.assertIn("/prospective-students/", international["allowed_paths"])
+        self.assertIn("/undergraduate-program/", international["allowed_paths"])
+        self.assertIn("/graduate-program/", international["allowed_paths"])
+        self.assertIn("/knb/", international["allowed_paths"])
+
+        self.assertEqual(admission["folder"], "admission")
+        self.assertEqual(admission["max_depth"], 2)
+        self.assertEqual(admission["max_parallelism"], 1)
+
+        self.assertEqual(enrollment["folder"], "enrollment")
+        self.assertEqual(enrollment["max_depth"], 1)
+        self.assertEqual(enrollment["max_parallelism"], 1)
 
     def test_url_to_folder_path_matches_old_scraper_shape(self):
         self.assertEqual(

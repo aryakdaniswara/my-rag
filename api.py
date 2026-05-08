@@ -16,7 +16,11 @@ from pipeline import RAGPipeline
 from config import RAGConfig
 from generation import LLM
 from scraper_api import ScrapeConfig, ScraperJobManager
-from scraper_api.presets import get_preset, list_presets, preset_names
+from scraper_api.sites import (
+    config_from_configured_site,
+    config_from_urls,
+    list_configured_sites,
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -133,18 +137,46 @@ class ScrapeJobRequest(BaseModel):
     }
 
 
-class ScrapePresetJobRequest(BaseModel):
-    overrides: Dict[str, Any] = Field(default_factory=dict)
+class ScrapeUrlsJobRequest(BaseModel):
+    urls: List[str]
+    allow_external: bool = False
+    folder: Optional[str] = None
+    output_dir: str = "/app/data"
+    max_depth: int = 2
+    max_parallelism: int = 2
+    rate_limit_ms: int = 1000
+    user_agent: str = "UI-RAG-Scraper/1.0"
+    skip_existing: bool = True
+    dry_run: bool = False
+    disallowed_paths: List[str] = Field(default_factory=list)
 
     model_config = {
         "json_schema_extra": {
             "example": {
-                "overrides": {
-                    "dry_run": True,
-                    "skip_existing": False,
-                    "max_depth": 1,
-                    "output_dir": "/app/data",
-                }
+                "urls": [
+                    "https://simak.ui.ac.id/jadwal-seleksi/",
+                    "https://simak.ui.ac.id/sk-biaya-pendidikan-ui/",
+                ],
+                "dry_run": True,
+                "allow_external": False,
+                "output_dir": "/app/data",
+            }
+        }
+    }
+
+
+class ScrapeConfiguredSiteJobRequest(BaseModel):
+    site_url: str
+    output_dir: str = "/app/data"
+    skip_existing: bool = True
+    dry_run: bool = False
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "site_url": "https://simak.ui.ac.id/",
+                "dry_run": True,
+                "output_dir": "/app/data",
             }
         }
     }
@@ -631,32 +663,58 @@ async def ingestion_status():
     return {"ingested_files": files, "count": len(files)}
 
 
-@app.get("/scraper/presets", summary="List built-in scraper presets")
-async def list_scraper_presets():
-    """Returns reusable scrape presets for the known UI corpus."""
-    return {"presets": list_presets()}
+@app.get("/scraper/sites", summary="Show configured scraper site settings")
+async def list_scraper_sites():
+    """Returns the built-in scraper site settings for inspection/reference."""
+    try:
+        return list_configured_sites()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
-@app.post("/scraper/jobs/preset/{preset_name}", summary="Start a scrape job from a preset")
-async def start_scraper_job_from_preset(
-    preset_name: str,
-    request: ScrapePresetJobRequest,
-):
+@app.post("/scraper/jobs/urls", summary="Start a scrape job from actual URLs")
+async def start_scraper_job_from_urls(request: ScrapeUrlsJobRequest):
     """
-    Starts a scrape job from a built-in preset. Request overrides can change any
-    preset field, including domain/seeds/folder for non-UI experiments.
+    Starts a scrape job from actual URLs. Non-UI domains are blocked unless
+    allow_external=true. One job targets one domain.
     """
     try:
-        preset = get_preset(preset_name, request.overrides)
-        return scraper_manager.start_job(_scrape_config_from_dict(preset))
-    except KeyError:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "message": f"Scrape preset not found: {preset_name}",
-                "available_presets": preset_names(),
-            },
+        config_data = config_from_urls(
+            request.urls,
+            allow_external=request.allow_external,
+            folder=request.folder,
+            output_dir=request.output_dir,
+            max_depth=request.max_depth,
+            max_parallelism=request.max_parallelism,
+            rate_limit_ms=request.rate_limit_ms,
+            user_agent=request.user_agent,
+            skip_existing=request.skip_existing,
+            dry_run=request.dry_run,
+            disallowed_paths=request.disallowed_paths,
         )
+        return scraper_manager.start_job(_scrape_config_from_dict(config_data))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/scraper/jobs/configured-site", summary="Start a configured scrape job by URL")
+async def start_scraper_job_from_configured_site(
+    request: ScrapeConfiguredSiteJobRequest,
+):
+    """
+    Starts a scrape job by matching site_url's domain against the built-in
+    configured site list, then reusing that site's exact settings.
+    """
+    try:
+        config_data = config_from_configured_site(
+            request.site_url,
+            output_dir=request.output_dir,
+            skip_existing=request.skip_existing,
+            dry_run=request.dry_run,
+        )
+        return scraper_manager.start_job(_scrape_config_from_dict(config_data))
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     except RuntimeError as exc:
