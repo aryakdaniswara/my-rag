@@ -120,7 +120,7 @@ For a responsive user experience, the system supports real-time token streaming:
 - **Canonical Guide**: Evaluation workflow, metric semantics, config examples, artifact layout, and reasoning toggles now live in `EVALUATION_GUIDE.md`.
 - **Live Prompt Source**: The actual evaluation prompt logic is not stored in this repo. It comes from the installed `ragas` library, and `EVALUATION_GUIDE.md` points to the live package files used at runtime.
 - **Artifact Layout**: Eval artifacts now group under `storage/eval_runs/<run_name>/` with `run_manifest.json`, `predictions/`, `scores/`, and `logs/`.
-- **Current Iteration Dataset**: The default benchmark is `storage/eval_datasets/main/ui_main_v2.json`. The lighter legacy seed set is kept at `storage/eval_datasets/seeds/ui_seed_v1.json`, and refusal/out-of-scope checks stay separate at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`.
+- **Current Iteration Dataset**: The default benchmark is `storage/eval_datasets/main/ui_main_v3.json`, a 50-row user-like benchmark manually reviewed against the local `/data` corpus. `storage/eval_datasets/main/ui_main_v2.json` remains available as a controlled chunk-grounded benchmark for technical comparison. The lighter legacy seed set is kept at `storage/eval_datasets/seeds/ui_seed_v1.json`, and refusal/out-of-scope checks stay separate at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`.
 
 ---
 

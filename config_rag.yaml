@@ -57,7 +57,7 @@ evaluation:
   eval_llm_api_key_env: "OPENAI_API_KEY"
   eval_embeddings: "microsoft/harrier-oss-v1-0.6b"
   eval_embeddings_endpoint: null
-  dataset_path: "storage/eval_datasets/main/ui_main_v2.json"
+  dataset_path: "storage/eval_datasets/main/ui_main_v3.json"
   run_dir: "storage/eval_runs"
   report_dir: "storage/eval_results"
   prediction_dir: "storage/eval_predictions"

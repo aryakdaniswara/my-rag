@@ -1,0 +1,1552 @@
+[
+    {
+        "question":  "Saya WNI, daftar UI lewat admission.ui.ac.id atau lewat SIMAK UI?",
+        "ground_truth":  "Jika Anda Warga Negara Indonesia, pendaftaran dilakukan melalui SIMAK UI di http://penerimaan.ui.ac.id/, bukan melalui admission.ui.ac.id.",
+        "answer":  "Jika Anda Warga Negara Indonesia, pendaftaran dilakukan melalui SIMAK UI di http://penerimaan.ui.ac.id/, bukan melalui admission.ui.ac.id.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/admission/register/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "admission_registration",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/admission/register/page.html"
+                                          ],
+                         "evidence_text":  "Admission UI khusus WNA; WNI diarahkan ke SIMAK UI.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau mau daftar jalur mandiri UI, websitenya lewat mana?",
+        "ground_truth":  "Pendaftaran jalur mandiri UI dilakukan melalui website enrollment.ui.ac.id.",
+        "answer":  "Pendaftaran jalur mandiri UI dilakukan melalui website enrollment.ui.ac.id.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "admission_registration",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "Pendaftaran jalur mandiri UI melalui enrollment.ui.ac.id.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SIMAK UI itu seleksi untuk jenjang apa saja?",
+        "ground_truth":  "SIMAK UI mencakup berbagai jenjang, mulai dari Vokasi, Sarjana, Sarjana Kelas Khusus Internasional, Sarjana RPL, Profesi, S2, Spesialis, hingga S3.",
+        "answer":  "SIMAK UI mencakup berbagai jenjang, mulai dari Vokasi, Sarjana, Sarjana Kelas Khusus Internasional, Sarjana RPL, Profesi, S2, Spesialis, hingga S3.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/tentang_simak/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "simak_general",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/tentang_simak/page.html"
+                                          ],
+                         "evidence_text":  "SIMAK UI mencakup Vokasi sampai S3.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Materi ujian SIMAK UI untuk Vokasi dan S1 apa saja?",
+        "ground_truth":  "Materi ujian SIMAK UI untuk Vokasi dan Sarjana mencakup Kemampuan Dasar, yaitu Matematika Dasar, Bahasa Indonesia, Bahasa Inggris, serta Pengukuran Kemampuan Akademik yang meliputi Verbal, Kuantitatif, dan Logika.",
+        "answer":  "Materi ujian SIMAK UI untuk Vokasi dan Sarjana mencakup Kemampuan Dasar, yaitu Matematika Dasar, Bahasa Indonesia, Bahasa Inggris, serta Pengukuran Kemampuan Akademik yang meliputi Verbal, Kuantitatif, dan Logika.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/tentang_simak/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "simak_general",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/tentang_simak/page.html"
+                                          ],
+                         "evidence_text":  "Materi Vokasi dan S1 mencakup Kemampuan Dasar dan Pengukuran Kemampuan Akademik.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau ikut SIMAK UI S1 reguler atau vokasi, biaya pendaftarannya berapa?",
+        "ground_truth":  "Biaya pendaftaran SIMAK UI untuk S1 dan Vokasi adalah Rp650.000.",
+        "answer":  "Biaya pendaftaran SIMAK UI untuk S1 dan Vokasi adalah Rp650.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "registration_fee",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "Biaya SIMAK UI S1 dan Vokasi Rp650.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Biaya daftar SIMAK UI S1 KKI berapa?",
+        "ground_truth":  "Biaya pendaftaran SIMAK UI S1 KKI adalah Rp1.800.000.",
+        "answer":  "Biaya pendaftaran SIMAK UI S1 KKI adalah Rp1.800.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "registration_fee",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "Biaya SIMAK UI S1 KKI Rp1.800.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SIMAK UI pascasarjana gelombang 2 pendaftarannya kapan?",
+        "ground_truth":  "Pendaftaran SIMAK UI Pascasarjana Gelombang 2 dibuka pada 4-30 Mei 2026.",
+        "answer":  "Pendaftaran SIMAK UI Pascasarjana Gelombang 2 dibuka pada 4-30 Mei 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "selection_schedule",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "SIMAK UI Pascasarjana Gelombang 2 pendaftaran 4-30 Mei 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SIMAK UI S1 Reguler dan Vokasi tahun 2026 ujiannya kapan?",
+        "ground_truth":  "Ujian SIMAK UI S1 Reguler dan Vokasi dijadwalkan pada 14 Juni 2026.",
+        "answer":  "Ujian SIMAK UI S1 Reguler dan Vokasi dijadwalkan pada 14 Juni 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "selection_schedule",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "SIMAK UI S1 Reguler dan Vokasi ujian 14 Juni 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Pengumuman SIMAK UI S1 Reguler dan Vokasi 2026 paling lambat kapan?",
+        "ground_truth":  "Pengumuman SIMAK UI S1 Reguler dan Vokasi 2026 paling lambat 1 Juli 2026.",
+        "answer":  "Pengumuman SIMAK UI S1 Reguler dan Vokasi 2026 paling lambat 1 Juli 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/simak_ui/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "selection_schedule",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/simak_ui/page.html"
+                                          ],
+                         "evidence_text":  "Pengumuman SIMAK UI S1 Reguler dan Vokasi paling lambat 1 Juli 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "S1 Reguler UI bisa daftar lewat jalur apa saja?",
+        "ground_truth":  "S1 Reguler UI dapat ditempuh melalui jalur nasional SNBP dan SNBT, serta jalur mandiri PPKB, SJP, dan SIMAK UI.",
+        "answer":  "S1 Reguler UI dapat ditempuh melalui jalur nasional SNBP dan SNBT, serta jalur mandiri PPKB, SJP, dan SIMAK UI.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/s1_reguler/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "undergraduate_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/s1_reguler/page.html"
+                                          ],
+                         "evidence_text":  "S1 Reguler melalui SNBP, SNBT, PPKB, SJP, dan SIMAK UI.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "S1 Reguler UI punya batas usia ijazah berapa tahun?",
+        "ground_truth":  "S1 Reguler UI dapat diikuti oleh lulusan SMA/SMK/MA sederajat dengan usia ijazah tidak lebih dari 3 tahun terakhir pada saat pendaftaran.",
+        "answer":  "S1 Reguler UI dapat diikuti oleh lulusan SMA/SMK/MA sederajat dengan usia ijazah tidak lebih dari 3 tahun terakhir pada saat pendaftaran.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/s1_reguler/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "undergraduate_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/s1_reguler/page.html"
+                                          ],
+                         "evidence_text":  "Usia ijazah S1 Reguler tidak lebih dari 3 tahun.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau masuk S1 Reguler UI lewat SNBP atau SNBT, ada IPI tidak?",
+        "ground_truth":  "Untuk S1 Reguler UI jalur nasional SNBP dan SNBT, biaya kuliah berupa UKT yang disesuaikan dengan kemampuan penanggung biaya pendidikan, tanpa IPI.",
+        "answer":  "Untuk S1 Reguler UI jalur nasional SNBP dan SNBT, biaya kuliah berupa UKT yang disesuaikan dengan kemampuan penanggung biaya pendidikan, tanpa IPI.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/s1_reguler/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "education_cost_scheme",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/s1_reguler/page.html"
+                                          ],
+                         "evidence_text":  "Jalur nasional S1 Reguler memakai UKT tanpa IPI.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau masuk S1 Reguler UI lewat jalur mandiri, biaya yang dibayar apa saja?",
+        "ground_truth":  "Untuk S1 Reguler UI jalur mandiri seperti PPKB, SJP, dan SIMAK, biaya terdiri dari IPI yang dibayar sekali di awal serta UKT per semester yang bersifat tetap.",
+        "answer":  "Untuk S1 Reguler UI jalur mandiri seperti PPKB, SJP, dan SIMAK, biaya terdiri dari IPI yang dibayar sekali di awal serta UKT per semester yang bersifat tetap.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/s1_reguler/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "education_cost_scheme",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/s1_reguler/page.html"
+                                          ],
+                         "evidence_text":  "Jalur mandiri terdiri dari IPI sekali di awal dan UKT per semester.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Program Vokasi UI jalur masuknya apa saja?",
+        "ground_truth":  "Program Vokasi UI dapat masuk melalui jalur nasional SNBP dan SNBT, serta jalur mandiri PPKB dan SIMAK UI.",
+        "answer":  "Program Vokasi UI dapat masuk melalui jalur nasional SNBP dan SNBT, serta jalur mandiri PPKB dan SIMAK UI.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/vokasi_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "vocation_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/vokasi_2/page.html"
+                                          ],
+                         "evidence_text":  "Vokasi melalui SNBP, SNBT, PPKB, dan SIMAK UI.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Vokasi UI itu fokusnya lebih ke apa?",
+        "ground_truth":  "Pendidikan Vokasi UI bertujuan menyiapkan tenaga profesional siap kerja dengan pembelajaran yang menekankan keterampilan.",
+        "answer":  "Pendidikan Vokasi UI bertujuan menyiapkan tenaga profesional siap kerja dengan pembelajaran yang menekankan keterampilan.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/vokasi_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "vocation_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/vokasi_2/page.html"
+                                          ],
+                         "evidence_text":  "Vokasi menyiapkan tenaga profesional siap kerja dan menekankan keterampilan.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Contoh program D4 di Vokasi UI apa saja?",
+        "ground_truth":  "Contoh program D4 di Vokasi UI adalah Manajemen Rekod dan Arsip, Manajemen Bisnis dan Pariwisata, Produksi Media, Bisnis Kreatif, Fisioterapi, dan Terapi Okupasi.",
+        "answer":  "Contoh program D4 di Vokasi UI adalah Manajemen Rekod dan Arsip, Manajemen Bisnis dan Pariwisata, Produksi Media, Bisnis Kreatif, Fisioterapi, dan Terapi Okupasi.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/vokasi_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "vocation_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/vokasi_2/page.html"
+                                          ],
+                         "evidence_text":  "D4 Vokasi mencakup Manajemen Rekod dan Arsip, Manajemen Bisnis dan Pariwisata, Produksi Media, Bisnis Kreatif, Fisioterapi, Terapi Okupasi.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SNBP itu seleksinya berdasarkan apa?",
+        "ground_truth":  "SNBP adalah jalur seleksi nasional masuk perguruan tinggi negeri untuk siswa SMA/sederajat yang menggunakan prestasi dan nilai rapor siswa.",
+        "answer":  "SNBP adalah jalur seleksi nasional masuk perguruan tinggi negeri untuk siswa SMA/sederajat yang menggunakan prestasi dan nilai rapor siswa.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbp/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbp/page.html"
+                                          ],
+                         "evidence_text":  "SNBP menggunakan prestasi dan nilai rapor siswa.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Pendaftaran SNBP 2026 kapan?",
+        "ground_truth":  "Pendaftaran SNBP 2026 berlangsung pada 3-18 Februari 2026.",
+        "answer":  "Pendaftaran SNBP 2026 berlangsung pada 3-18 Februari 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbp/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbp/page.html"
+                                          ],
+                         "evidence_text":  "Pendaftaran SNBP 3-18 Februari 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Hasil SNBP 2026 diumumkan kapan?",
+        "ground_truth":  "Hasil SNBP 2026 diumumkan pada 31 Maret 2026.",
+        "answer":  "Hasil SNBP 2026 diumumkan pada 31 Maret 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbp/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbp/page.html"
+                                          ],
+                         "evidence_text":  "Pengumuman SNBP 31 Maret 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SNBT itu seleksinya pakai apa?",
+        "ground_truth":  "SNBT adalah seleksi masuk perguruan tinggi negeri dengan tes berbasis komputer yang mencakup Tes Potensi Skolastik dan Tes Literasi.",
+        "answer":  "SNBT adalah seleksi masuk perguruan tinggi negeri dengan tes berbasis komputer yang mencakup Tes Potensi Skolastik dan Tes Literasi.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbt/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbt",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbt/page.html"
+                                          ],
+                         "evidence_text":  "SNBT menggunakan tes berbasis komputer, TPS dan Tes Literasi.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Pendaftaran UTBK-SNBT 2026 kapan dibuka?",
+        "ground_truth":  "Pendaftaran UTBK-SNBT 2026 berlangsung pada 25 Maret-7 April 2026.",
+        "answer":  "Pendaftaran UTBK-SNBT 2026 berlangsung pada 25 Maret-7 April 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbt/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbt",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbt/page.html"
+                                          ],
+                         "evidence_text":  "Pendaftaran UTBK-SNBT 25 Maret-7 April 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "UTBK 2026 dilaksanakan tanggal berapa?",
+        "ground_truth":  "Pelaksanaan UTBK 2026 dijadwalkan pada 21-30 April 2026.",
+        "answer":  "Pelaksanaan UTBK 2026 dijadwalkan pada 21-30 April 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbt/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbt",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbt/page.html"
+                                          ],
+                         "evidence_text":  "Pelaksanaan UTBK 21-30 April 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Hasil SNBT 2026 diumumkan kapan?",
+        "ground_truth":  "Hasil SNBT 2026 diumumkan pada 25 Mei 2026.",
+        "answer":  "Hasil SNBT 2026 diumumkan pada 25 Mei 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/snbt/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "snbt",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/snbt/page.html"
+                                          ],
+                         "evidence_text":  "Pengumuman Hasil SNBT 25 Mei 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "PPKB UI itu jalur seleksi seperti apa?",
+        "ground_truth":  "PPKB adalah jalur mandiri UI berdasarkan prestasi akademik siswa selama menempuh studi di sekolah asal.",
+        "answer":  "PPKB adalah jalur mandiri UI berdasarkan prestasi akademik siswa selama menempuh studi di sekolah asal.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/ppkb/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "ppkb",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/ppkb/page.html"
+                                          ],
+                         "evidence_text":  "PPKB berdasarkan prestasi akademik siswa di sekolah asal.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "PPKB UI terbagi jadi kategori apa saja?",
+        "ground_truth":  "PPKB UI terbagi menjadi PPKB Vokasi untuk D3 dan D4, serta PPKB S1 Reguler untuk jenjang Sarjana.",
+        "answer":  "PPKB UI terbagi menjadi PPKB Vokasi untuk D3 dan D4, serta PPKB S1 Reguler untuk jenjang Sarjana.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/ppkb/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "ppkb",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/ppkb/page.html"
+                                          ],
+                         "evidence_text":  "PPKB Vokasi untuk D3/D4 dan PPKB S1 Reguler untuk S1.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Biaya pendaftaran PPKB UI berapa?",
+        "ground_truth":  "Biaya pendaftaran PPKB UI adalah Rp900.000.",
+        "answer":  "Biaya pendaftaran PPKB UI adalah Rp900.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/ppkb/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "registration_fee",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/ppkb/page.html"
+                                          ],
+                         "evidence_text":  "Biaya pendaftaran PPKB Rp900.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Sekolah yang belum terdaftar PPKB harus menghubungi email apa?",
+        "ground_truth":  "Sekolah yang belum terdaftar tetapi ingin mengikuti PPKB dapat mengajukan ke email ppkb@ui.ac.id.",
+        "answer":  "Sekolah yang belum terdaftar tetapi ingin mengikuti PPKB dapat mengajukan ke email ppkb@ui.ac.id.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/ppkb/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "ppkb",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "admin_sekolah",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/ppkb/page.html"
+                                          ],
+                         "evidence_text":  "Pengajuan sekolah PPKB dikirim ke ppkb@ui.ac.id.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SJP UI bisa diikuti oleh siswa dengan prestasi seperti apa?",
+        "ground_truth":  "SJP UI dapat diikuti siswa yang memiliki prestasi atau pemenang lomba minimal juara tiga atau medali perunggu di bidang IPTEKS, olahraga, dan seni tingkat nasional maupun internasional saat SMA atau maksimal 3 tahun terakhir.",
+        "answer":  "SJP UI dapat diikuti siswa yang memiliki prestasi atau pemenang lomba minimal juara tiga atau medali perunggu di bidang IPTEKS, olahraga, dan seni tingkat nasional maupun internasional saat SMA atau maksimal 3 tahun terakhir.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/sjp_ta_2026_2027/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "sjp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/sjp_ta_2026_2027/page.html"
+                                          ],
+                         "evidence_text":  "SJP untuk prestasi minimal juara tiga atau medali perunggu tingkat nasional/internasional.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "SJP UI ditawarkan untuk program apa?",
+        "ground_truth":  "SJP UI ditawarkan untuk calon mahasiswa yang ingin menempuh pendidikan S1 Reguler.",
+        "answer":  "SJP UI ditawarkan untuk calon mahasiswa yang ingin menempuh pendidikan S1 Reguler.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/sjp_ta_2026_2027/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "sjp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/sjp_ta_2026_2027/page.html"
+                                          ],
+                         "evidence_text":  "SJP ditawarkan untuk S1 Reguler.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Pendaftaran SJP UI 2026 kapan?",
+        "ground_truth":  "Pendaftaran SJP UI 2026 berlangsung pada 4-30 Mei 2026.",
+        "answer":  "Pendaftaran SJP UI 2026 berlangsung pada 4-30 Mei 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/sjp_ta_2026_2027/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "sjp",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/sjp_ta_2026_2027/page.html"
+                                          ],
+                         "evidence_text":  "Pendaftaran SJP 4-30 Mei 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Biaya daftar SJP UI berapa?",
+        "ground_truth":  "Biaya pendaftaran SJP UI adalah Rp900.000.",
+        "answer":  "Biaya pendaftaran SJP UI adalah Rp900.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/sjp_ta_2026_2027/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "registration_fee",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/sjp_ta_2026_2027/page.html"
+                                          ],
+                         "evidence_text":  "Biaya pendaftaran SJP Rp900.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Talent Scouting UI itu untuk program apa?",
+        "ground_truth":  "Talent Scouting adalah jalur seleksi mandiri berdasarkan nilai rapor dan prestasi untuk program Sarjana Kelas Internasional.",
+        "answer":  "Talent Scouting adalah jalur seleksi mandiri berdasarkan nilai rapor dan prestasi untuk program Sarjana Kelas Internasional.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/talent_scouting/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "talent_scouting",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/talent_scouting/page.html"
+                                          ],
+                         "evidence_text":  "Talent Scouting untuk Sarjana Kelas Internasional.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Talent Scouting UI butuh TOEFL atau IELTS berapa?",
+        "ground_truth":  "Talent Scouting UI mensyaratkan sertifikat TOEFL atau IELTS yang masih berlaku, dengan standar minimum TOEFL ITP/PBT 500, iBT 61, CBT 173, atau IELTS minimal 5.5.",
+        "answer":  "Talent Scouting UI mensyaratkan sertifikat TOEFL atau IELTS yang masih berlaku, dengan standar minimum TOEFL ITP/PBT 500, iBT 61, CBT 173, atau IELTS minimal 5.5.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/talent_scouting/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "talent_scouting",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/talent_scouting/page.html"
+                                          ],
+                         "evidence_text":  "Minimum TOEFL ITP/PBT 500, iBT 61, CBT 173, IELTS 5.5.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Apa bedanya Single Degree dan Double Degree di Kelas Internasional UI?",
+        "ground_truth":  "Single Degree mewajibkan mobilitas internasional minimal satu semester dan menghasilkan ijazah tunggal dari UI, sedangkan Double Degree atau Joint Degree memberi kesempatan memperoleh dua ijazah dan dua gelar setelah menyelesaikan studi di UI dan universitas mitra.",
+        "answer":  "Single Degree mewajibkan mobilitas internasional minimal satu semester dan menghasilkan ijazah tunggal dari UI, sedangkan Double Degree atau Joint Degree memberi kesempatan memperoleh dua ijazah dan dua gelar setelah menyelesaikan studi di UI dan universitas mitra.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/talent_scouting/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "international_class",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "comparison",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/talent_scouting/page.html"
+                                          ],
+                         "evidence_text":  "Single Degree ijazah UI; Double Degree/Joint Degree dua ijazah dan dua gelar.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Pendaftaran Talent Scouting UI 2026 kapan?",
+        "ground_truth":  "Pendaftaran Talent Scouting UI 2026 berlangsung pada 9-27 Februari 2026.",
+        "answer":  "Pendaftaran Talent Scouting UI 2026 berlangsung pada 9-27 Februari 2026.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/talent_scouting/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "talent_scouting",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/talent_scouting/page.html"
+                                          ],
+                         "evidence_text":  "Pendaftaran Talent Scouting 9-27 Februari 2026.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Program Kelas Internasional UI bisa daftar lewat jalur apa?",
+        "ground_truth":  "Program Kelas Internasional UI dapat diikuti melalui Talent Scouting dan SIMAK Kelas Internasional.",
+        "answer":  "Program Kelas Internasional UI dapat diikuti melalui Talent Scouting dan SIMAK Kelas Internasional.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/program_kelas_internasional/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "international_class",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/program_kelas_internasional/page.html"
+                                          ],
+                         "evidence_text":  "Penerimaan Kelas Internasional melalui Talent Scouting dan SIMAK Kelas Internasional.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Program Kelas Internasional UI punya batas usia ijazah berapa tahun?",
+        "ground_truth":  "Program Kelas Internasional UI dapat diikuti lulusan SMA/sederajat dengan usia ijazah tidak lebih dari 5 tahun.",
+        "answer":  "Program Kelas Internasional UI dapat diikuti lulusan SMA/sederajat dengan usia ijazah tidak lebih dari 5 tahun.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/program_kelas_internasional/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "international_class",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/program_kelas_internasional/page.html"
+                                          ],
+                         "evidence_text":  "Usia ijazah Kelas Internasional tidak lebih dari 5 tahun.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Program Magister UI masuknya lewat jalur apa?",
+        "ground_truth":  "Jalur masuk Program Magister UI adalah melalui SIMAK UI untuk program pascasarjana.",
+        "answer":  "Jalur masuk Program Magister UI adalah melalui SIMAK UI untuk program pascasarjana.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/program_magister/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "graduate_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/program_magister/page.html"
+                                          ],
+                         "evidence_text":  "Magister masuk melalui SIMAK UI pascasarjana.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Program Doktor UI seleksinya lewat apa?",
+        "ground_truth":  "Seluruh proses seleksi Program Doktor UI dilakukan melalui jalur SIMAK UI Pascasarjana.",
+        "answer":  "Seluruh proses seleksi Program Doktor UI dilakukan melalui jalur SIMAK UI Pascasarjana.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/simak/s3_doktor/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "doctoral_program",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "calon_mahasiswa",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/simak/s3_doktor/page.html"
+                                          ],
+                         "evidence_text":  "Program Doktor seleksi melalui SIMAK UI Pascasarjana.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Beasiswa UI dilamar lewat sistem apa?",
+        "ground_truth":  "Beasiswa UI dilamar melalui Sistem Beasiswa dengan login menggunakan Single Sign On UI, memilih paket beasiswa, mengisi data, dan mengunggah dokumen yang diminta.",
+        "answer":  "Beasiswa UI dilamar melalui Sistem Beasiswa dengan login menggunakan Single Sign On UI, memilih paket beasiswa, mengisi data, dan mengunggah dokumen yang diminta.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/beasiswa/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "scholarship",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/beasiswa/page.html"
+                                          ],
+                         "evidence_text":  "Cara melamar beasiswa: login SSO UI, pilih paket, isi data, unggah dokumen.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau sudah punya akun UI, perlu buat login baru untuk sistem beasiswa?",
+        "ground_truth":  "Jika sudah memiliki akun UI, tidak diperlukan pendaftaran login baru pada sistem Single Sign On UI.",
+        "answer":  "Jika sudah memiliki akun UI, tidak diperlukan pendaftaran login baru pada sistem Single Sign On UI.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/beasiswa/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "scholarship",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/beasiswa/page.html"
+                                          ],
+                         "evidence_text":  "Akun UI tidak perlu login baru di SSO UI.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Email kontak beasiswa UI apa?",
+        "ground_truth":  "Email kontak beasiswa UI adalah beasiswa@ui.ac.id.",
+        "answer":  "Email kontak beasiswa UI adalah beasiswa@ui.ac.id.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/beasiswa/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "scholarship",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/beasiswa/page.html"
+                                          ],
+                         "evidence_text":  "Kontak beasiswa@ui.ac.id.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau mau meminjam fasilitas Pusgiwa UI, dokumen apa yang perlu disiapkan?",
+        "ground_truth":  "Untuk meminjam Pusgiwa UI, pemohon perlu menyiapkan surat permohonan resmi berkop lembaga, proposal kegiatan, dan surat persetujuan dari pembina atau manajer kemahasiswaan fakultas/prodi.",
+        "answer":  "Untuk meminjam Pusgiwa UI, pemohon perlu menyiapkan surat permohonan resmi berkop lembaga, proposal kegiatan, dan surat persetujuan dari pembina atau manajer kemahasiswaan fakultas/prodi.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/fasilitas_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "student_facility",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/fasilitas_2/page.html"
+                                          ],
+                         "evidence_text":  "Dokumen Pusgiwa: surat permohonan resmi, proposal, surat persetujuan.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Permohonan peminjaman Pusgiwa UI dikirim ke email mana?",
+        "ground_truth":  "Permohonan peminjaman Pusgiwa UI dikirim ke email ppsb.ui@gmail.com.",
+        "answer":  "Permohonan peminjaman Pusgiwa UI dikirim ke email ppsb.ui@gmail.com.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/fasilitas_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "student_facility",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/fasilitas_2/page.html"
+                                          ],
+                         "evidence_text":  "Dokumen dikirim ke ppsb.ui@gmail.com.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Auditorium Pusgiwa UI kapasitasnya berapa orang?",
+        "ground_truth":  "Auditorium Pusgiwa UI memiliki kapasitas 300 orang.",
+        "answer":  "Auditorium Pusgiwa UI memiliki kapasitas 300 orang.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/kemahasiswaan/fasilitas_2/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "student_facility",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "mahasiswa_aktif",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/kemahasiswaan/fasilitas_2/page.html"
+                                          ],
+                         "evidence_text":  "Auditorium kapasitas 300 orang.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Perpustakaan UI punya kira-kira berapa koleksi?",
+        "ground_truth":  "Perpustakaan UI memiliki sekitar 1,5 juta koleksi yang disimpan di Perpustakaan UI dan beberapa perpustakaan fakultas.",
+        "answer":  "Perpustakaan UI memiliki sekitar 1,5 juta koleksi yang disimpan di Perpustakaan UI dan beberapa perpustakaan fakultas.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/fasilitas/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "campus_facility",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "general_ui_policy_seeker",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/fasilitas/page.html"
+                                          ],
+                         "evidence_text":  "Perpustakaan UI memiliki sekitar 1,5 juta koleksi.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Felfest UI sekarang hanya untuk mahasiswa UI atau juga umum?",
+        "ground_truth":  "Felfest UI saat ini sudah dibuka untuk umum, meskipun sebelumnya khusus untuk kegiatan mahasiswa, dosen, dan member.",
+        "answer":  "Felfest UI saat ini sudah dibuka untuk umum, meskipun sebelumnya khusus untuk kegiatan mahasiswa, dosen, dan member.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/fasilitas/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "campus_facility",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "natural_user",
+                         "persona":  "general_ui_policy_seeker",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/fasilitas/page.html"
+                                          ],
+                         "evidence_text":  "Felfest saat ini sudah dibuka untuk umum.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau mau cek info resmi UKT UI, situsnya apa?",
+        "ground_truth":  "Info lebih lanjut tentang penetapan UKT Universitas Indonesia diarahkan ke situs resmi https://ukt.ui.ac.id/.",
+        "answer":  "Info lebih lanjut tentang penetapan UKT Universitas Indonesia diarahkan ke situs resmi https://ukt.ui.ac.id/.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "page",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/skbp2026/page.html",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "education_cost",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "procedural",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/skbp2026/page.html"
+                                          ],
+                         "evidence_text":  "Situs resmi penetapan UKT UI adalah ukt.ui.ac.id.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "Kalau masuk Ilmu Komputer UI jalur khusus kerja sama, UKT dan IPI-nya berapa?",
+        "ground_truth":  "Untuk Program Studi Ilmu Komputer jalur khusus kerja sama Tahun Akademik 2026/2027, UKT-nya adalah Rp29.300.000 dan IPI-nya Rp80.000.000.",
+        "answer":  "Untuk Program Studi Ilmu Komputer jalur khusus kerja sama Tahun Akademik 2026/2027, UKT-nya adalah Rp29.300.000 dan IPI-nya Rp80.000.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "pdf-proxy-1",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/skbp2026/pdf-proxy-1.pdf",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "education_cost",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/skbp2026/pdf-proxy-1.pdf"
+                                          ],
+                         "evidence_text":  "Ilmu Komputer kerja sama: UKT Rp29.300.000 dan IPI Rp80.000.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    },
+    {
+        "question":  "UKT kelompok 11 untuk Pendidikan Dokter UI berapa?",
+        "ground_truth":  "UKT kelompok 11 untuk Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+        "answer":  "UKT kelompok 11 untuk Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+        "sample_label":  "user_like_reviewed_v3",
+        "doc_id":  "pdf-proxy-4",
+        "chunk_id":  null,
+        "source_path":  "data/ui_ac_id/skbp2026/pdf-proxy-4.pdf",
+        "snapshot_path":  null,
+        "metadata":  {
+                         "benchmark_split":  "user_like_main",
+                         "benchmark_group":  "education_cost",
+                         "expected_behavior":  "answer",
+                         "refusal_subtype":  null,
+                         "scope_category":  "in_scope",
+                         "evidence_span":  "document_level",
+                         "question_style":  "specific_lookup",
+                         "persona":  "orang_tua",
+                         "generation_method":  "manual_user_like_from_data_review",
+                         "review_status":  "reviewed",
+                         "source_chunk_ids":  [
+
+                                              ],
+                         "source_paths":  [
+                                              "data/ui_ac_id/skbp2026/pdf-proxy-4.pdf"
+                                          ],
+                         "evidence_text":  "UKT 11 Pendidikan Dokter Rp20.000.000.",
+                         "source_dataset":  "data",
+                         "notes":  "rewritten after realism audit; answer verified against local /data source"
+                     }
+    }
+]

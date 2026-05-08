@@ -50,6 +50,50 @@ The repo still evaluates the same four RAGAS metrics:
 
 This cleanup did not change metric logic or score semantics.
 
+## Dataset Roles
+
+The default headline benchmark is now `storage/eval_datasets/main/ui_main_v3.json`.
+It contains 50 answerable, user-like questions manually reviewed against the
+local `/data` corpus. The set intentionally mixes admission, SIMAK schedules,
+program choices, tuition/registration fees, scholarships, and student/campus
+facilities instead of only asking technical document-grounded questions. Each
+row keeps a RAGAS reference answer plus source-path/evidence metadata, while
+adding `benchmark_split: user_like_main`, `persona`, and `question_style`
+fields.
+
+`storage/eval_datasets/main/ui_main_v2.json` is still kept as the controlled
+chunk-grounded benchmark for technical comparisons. Refusal and out-of-scope
+checks remain outside the headline score in
+`storage/eval_datasets/diagnostics/ui_refusal_v1.json`.
+
+This layout follows the thesis evaluation framing: user-like information needs
+for the main benchmark, chunk-grounded rows for technical diagnostics, and
+separate refusal diagnostics so absent-answer behavior does not distort the
+headline RAGAS mean.
+
+Literature anchors for this design:
+
+- Cranfield/TREC evaluation uses a fixed corpus, information needs/topics, and
+  relevance judgments for repeatable IR comparison:
+  https://www.nist.gov/publications/philosophy-information-retrieval-evaluation
+- TREC ad hoc retrieval commonly used 50 natural-language topic statements,
+  which supports `~50` as a practical first thesis benchmark size:
+  https://pages.nist.gov/trec-browser/trec7/overview/
+- Topic-set size affects retrieval experiment error, so results from this
+  benchmark should be framed as controlled POC comparison rather than exhaustive
+  user coverage:
+  https://www.nist.gov/publications/effect-topic-set-size-retrieval-experiment-error
+- RAGAS motivates multi-dimensional RAG evaluation across retrieval, grounding,
+  and generation quality:
+  https://huggingface.co/papers/2309.15217
+- ARES supports hybrid RAG evaluation designs that combine synthetic data with a
+  smaller reviewed/annotated set:
+  https://aclanthology.org/2024.naacl-long.20/
+- Recent RAG benchmark work such as mtRAG and UDA reinforces the value of
+  realistic or expert-reviewed QA pairs:
+  https://research.ibm.com/publications/mtrag-a-multi-turn-conversational-benchmark-for-evaluating-retrieval-augmented-generation-systems--1
+  and https://huggingface.co/papers/2406.15187
+
 ## Main Workflows
 
 ### Full Run

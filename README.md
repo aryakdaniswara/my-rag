@@ -117,7 +117,7 @@ Use that guide as the canonical source of truth for:
 - the recommended full-run wrapper plus generate-only and score-only flows
 - how to configure local OpenAI-compatible judging versus Gemini API judging
 
-For day-to-day iteration, the default evaluation dataset is `storage/eval_datasets/main/ui_main_v2.json`, and the CLI now loads `evaluation.dataset_path` automatically when `--questions` is not provided. The lighter seed benchmark now lives at `storage/eval_datasets/seeds/ui_seed_v1.json`, while refusal diagnostics are kept separately at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
+For day-to-day iteration, the default evaluation dataset is `storage/eval_datasets/main/ui_main_v3.json`, a 50-row user-like benchmark manually reviewed against the local `/data` corpus. The prior `storage/eval_datasets/main/ui_main_v2.json` remains as a controlled chunk-grounded benchmark for technical comparison. The lighter seed benchmark now lives at `storage/eval_datasets/seeds/ui_seed_v1.json`, while refusal diagnostics are kept separately at `storage/eval_datasets/diagnostics/ui_refusal_v1.json`. Narrower slices such as `storage/eval_datasets/ukt_fasilkom_seed.json` are kept for targeted checks.
 
 Recommended entrypoints:
 
