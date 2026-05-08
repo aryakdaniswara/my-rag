@@ -228,8 +228,9 @@ beasiswa.ui.ac.id
 penerimaan.ui.ac.id
 international.ui.ac.id
 admission.ui.ac.id
-enrollment.ui.ac.id
 ```
+
+`enrollment.ui.ac.id` is intentionally not part of the configured scrape set. The reachable page currently returns an authentication/loading shell instead of useful admission content, so stale `data/enrollment` output should be removed before ingestion.
 
 ### `POST /scraper/jobs/configured-site`
 Start a scrape using the configured rules for the URL's domain.
@@ -304,6 +305,8 @@ The scraper writes the same file shape ingestion expects:
 `page.meta.json` contains `source_url`, `domain`, `folder`, `scraped_at`, `status_code`, and `content_type`.
 PDF sidecars contain `pdf_url`, `page_url`, `filename`, `domain`, `scraped_at`, `status_code`, and `content_type`.
 
+After the current configured scrape, the local corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Re-run scraping only when the source sites need refreshing; otherwise go straight to the rebuild workflow.
+
 ## Ingestion
 
 ### `POST /ingest`
@@ -333,6 +336,8 @@ Ingestion is incremental and content-aware:
 - Duplicate files are recorded as aliases of the canonical document in `storage/ingestion_state.json`.
 
 Use `/ingest` for normal incremental updates. If parsing or chunking behavior changes and the same source files need to be rebuilt, do not wipe the live Milvus collection first. Use the CLI-only `rebuild-index` workflow to build a shadow collection with a fresh state file, validate it, then promote it intentionally.
+
+Before rebuilding after a scrape refresh, verify that unwanted stale folders are gone from `/app/data`. In particular, do not ingest `data/enrollment` unless the enrollment site later exposes crawlable public content.
 
 The tidy rebuild flow stores rebuild artifacts under `storage/rebuilds/YYYYMMDD_HHMMSS/` and the promoted `ingestion.state_path` should normally point at:
 

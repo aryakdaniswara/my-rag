@@ -72,7 +72,6 @@ class ScraperMappingTests(unittest.TestCase):
     def test_new_helpdesk_sites_are_configured(self):
         international = config_from_configured_site("https://international.ui.ac.id/")
         admission = config_from_configured_site("https://admission.ui.ac.id/")
-        enrollment = config_from_configured_site("https://enrollment.ui.ac.id/")
 
         self.assertEqual(international["folder"], "international")
         self.assertIn("/prospective-students/", international["allowed_paths"])
@@ -84,9 +83,8 @@ class ScraperMappingTests(unittest.TestCase):
         self.assertEqual(admission["max_depth"], 2)
         self.assertEqual(admission["max_parallelism"], 1)
 
-        self.assertEqual(enrollment["folder"], "enrollment")
-        self.assertEqual(enrollment["max_depth"], 1)
-        self.assertEqual(enrollment["max_parallelism"], 1)
+        with self.assertRaises(ValueError):
+            config_from_configured_site("https://enrollment.ui.ac.id/")
 
     def test_url_to_folder_path_matches_old_scraper_shape(self):
         self.assertEqual(
@@ -141,6 +139,34 @@ class ScraperMappingTests(unittest.TestCase):
         )
         self.assertEqual(links, ["https://simak.ui.ac.id/ok/"])
 
+    def test_extract_links_finds_flipbook_pdf_sources(self):
+        manager = ScraperJobManager()
+        links = manager._extract_links(
+            'window.option_df_1 = {"source":"https:\\/\\/international.ui.ac.id\\/wp-content\\/book.pdf"};',
+            "https://international.ui.ac.id/undergraduate-program/",
+        )
+        self.assertEqual(
+            links,
+            ["https://international.ui.ac.id/wp-content/book.pdf"],
+        )
+
+    def test_pdf_links_can_use_sibling_ui_domains(self):
+        manager = ScraperJobManager()
+        config = ScrapeConfig(
+            domain="www.ui.ac.id",
+            folder="ui_ac_id",
+            seeds=["https://www.ui.ac.id/"],
+        )
+        self.assertTrue(
+            manager._should_visit(
+                "https://cs.ui.ac.id/wp-content/uploads/form.pdf",
+                config,
+            )
+        )
+        self.assertFalse(
+            manager._should_visit("https://example.org/file.pdf", config)
+        )
+
 
 class ScraperSaveContractTests(unittest.TestCase):
     def test_save_page_and_pdf_metadata_contract(self):
@@ -150,6 +176,7 @@ class ScraperSaveContractTests(unittest.TestCase):
                 folder="ui_ac_id",
                 seeds=["https://www.ui.ac.id/skbp2026/"],
                 output_dir=tmp,
+                skip_existing=False,
             ).normalized()
             manager = ScraperJobManager()
             job = ScrapeJob(job_id="job", config=config)
@@ -194,6 +221,38 @@ class ScraperSaveContractTests(unittest.TestCase):
             self.assertEqual(pdf_meta["filename"], "SK_Tarif.pdf")
             self.assertEqual(pdf_meta["status_code"], 200)
             self.assertEqual(pdf_meta["content_type"], "application/pdf")
+
+    def test_save_pdf_overwrites_when_skip_existing_false(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = ScrapeConfig(
+                domain="www.ui.ac.id",
+                folder="ui_ac_id",
+                seeds=["https://www.ui.ac.id/"],
+                output_dir=tmp,
+                skip_existing=False,
+            ).normalized()
+            manager = ScraperJobManager()
+            job = ScrapeJob(job_id="job", config=config)
+            folder = url_to_abs_folder("https://www.ui.ac.id/", tmp, "ui_ac_id")
+            folder.mkdir(parents=True)
+            (folder / "a.pdf").write_bytes(b"old")
+            response = httpx.Response(
+                200,
+                headers={"content-type": "application/pdf"},
+                content=b"new",
+            )
+
+            asyncio.run(
+                manager._save_pdf(
+                    job,
+                    "https://www.ui.ac.id/a.pdf",
+                    "https://www.ui.ac.id/",
+                    response,
+                )
+            )
+
+            self.assertEqual((folder / "a.pdf").read_bytes(), b"new")
+            self.assertEqual(job.pdfs_downloaded, 1)
 
     def test_dry_run_writes_no_files(self):
         with tempfile.TemporaryDirectory() as tmp:

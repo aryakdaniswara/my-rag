@@ -14,11 +14,14 @@ from urllib.parse import urljoin, urlparse, unquote
 import httpx
 from bs4 import BeautifulSoup
 
+from scraper_api.sites import is_ui_domain
+
 
 logger = logging.getLogger(__name__)
 
 
 _NON_ALPHANUM_RE = re.compile(r"[^a-z0-9_]+")
+_PDF_URL_RE = re.compile(r"https?:\\?/\\?/[^\"'<>\s]+?\.pdf(?:\?[^\"'<>\s]*)?", re.IGNORECASE)
 
 
 def _utc_now_iso() -> str:
@@ -340,7 +343,10 @@ class ScraperJobManager:
 
                 content_type = response.headers.get("content-type", "")
                 final_url = str(response.url)
-                if not is_same_domain(final_url, config.domain):
+                if (
+                    not is_same_domain(final_url, config.domain)
+                    and not self._is_allowed_pdf_link(final_url, config)
+                ):
                     job.skipped += 1
                     continue
                 if response.status_code >= 400:
@@ -367,13 +373,20 @@ class ScraperJobManager:
                 queue.task_done()
 
     def _should_visit(self, raw_url: str, config: ScrapeConfig) -> bool:
-        if not is_same_domain(raw_url, config.domain):
-            return False
         if matches_disallowed(raw_url, config.disallowed_paths):
             return False
         if is_pdf_url(raw_url):
-            return True
+            return self._is_allowed_pdf_link(raw_url, config)
+        if not is_same_domain(raw_url, config.domain):
+            return False
         return is_allowed_path(raw_url, config.allowed_paths)
+
+    def _is_allowed_pdf_link(self, raw_url: str, config: ScrapeConfig) -> bool:
+        if not is_pdf_url(raw_url):
+            return False
+        parsed = urlparse(raw_url)
+        domain = (parsed.hostname or "").lower()
+        return domain == config.domain or is_ui_domain(domain)
 
     def _extract_links(self, html_text: str, base_url: str) -> List[str]:
         soup = BeautifulSoup(html_text, "html.parser")
@@ -385,6 +398,10 @@ class ScraperJobManager:
                 continue
             if absolute.startswith(("http://", "https://")):
                 links.append(absolute)
+        for match in _PDF_URL_RE.findall(html_text):
+            normalized = match.replace("\\/", "/")
+            if normalized.startswith(("http://", "https://")):
+                links.append(normalized)
         return links
 
     async def _save_page(
@@ -435,7 +452,7 @@ class ScraperJobManager:
         pdf_path = folder / filename
         meta_path = folder / f"{filename}.meta.json"
 
-        if pdf_path.exists():
+        if config.skip_existing and pdf_path.exists():
             job.skipped += 1
             return
 

@@ -215,7 +215,8 @@ The scraper API refreshes source files under `/app/data` and deliberately does n
 - `penerimaan.ui.ac.id`
 - `international.ui.ac.id`
 - `admission.ui.ac.id`
-- `enrollment.ui.ac.id`
+
+`enrollment.ui.ac.id` is excluded from the configured scrape set because the currently reachable page returns an authentication/loading shell instead of usable public content. Remove any stale `data/enrollment` folder before rebuilding the index.
 
 **`GET /scraper/sites`** - list configured domains, seeds, allowed paths, disallowed paths, rate limit, depth, and parallelism.
 
@@ -243,6 +244,8 @@ The scraper API refreshes source files under `/app/data` and deliberately does n
 
 The scraper writes `page.html` plus `page.meta.json` for HTML pages, and stores PDFs beside the referring page with `<filename>.pdf.meta.json`. The sidecars preserve source URL, domain, scraped time, status code, content type, and PDF-specific fields such as `pdf_url`, `page_url`, and `filename`.
 
+The current refreshed corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Scraping and ingestion remain separate: once the corpus looks sane, use the rebuild workflow below to create a fresh shadow collection.
+
 ### `POST /ingest`
 Triggers a background ingestion process for a directory.
 - **Request Body**:
@@ -268,6 +271,8 @@ python cli.py promote-index \
 ```
 
 The promotion command prints the exact production config values to apply; it does not mutate production config automatically. In the Docker server deployment, the detached rebuild path should use `docker exec -d my-rag-api ...` rather than `docker compose run -d ...` because this repo uses `network_mode: host` for `rag-api`.
+
+Before running the rebuild, confirm that stale scrape folders are not present in `/app/data`. For the current UI scrape set, `data/enrollment` should stay absent unless that site later exposes crawlable public pages.
 
 After the rebuilt collection is promoted and any old collection is cleaned up, you may also delete the old rebuild bundle folder itself. On Docker servers, files under bind-mounted `storage/` may be root-owned, so if host-side deletion fails with `permission denied`, remove the folder from inside the running API container:
 

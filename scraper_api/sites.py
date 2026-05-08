@@ -212,26 +212,6 @@ DEFAULT_SITE_CONFIG: Dict[str, Any] = {
             "max_depth": 2,
             "max_parallelism": 1,
         },
-        {
-            "domain": "enrollment.ui.ac.id",
-            "folder": "enrollment",
-            "seeds": [
-                "https://enrollment.ui.ac.id/",
-                "https://enrollment.ui.ac.id/en",
-            ],
-            "allowed_paths": [
-                "/",
-                "/en",
-            ],
-            "disallowed_paths": [
-                "/login",
-                "/auth",
-                "/profile",
-                "/payment",
-            ],
-            "max_depth": 1,
-            "max_parallelism": 1,
-        },
     ],
 }
 
