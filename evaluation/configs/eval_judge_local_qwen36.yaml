@@ -1,6 +1,7 @@
 extends: "../../config_server.yaml"
 
 evaluation:
+  dataset_path: "storage/eval_datasets/main/ui_main_v3.json"
   judge_mode: "api"
   eval_llm: "qwen3.6:27b"
   eval_llm_endpoint: "${EVAL_LLM_ENDPOINT}"

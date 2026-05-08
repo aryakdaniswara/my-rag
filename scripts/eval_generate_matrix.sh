@@ -1,12 +1,22 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-config_server.yaml}"
+CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
 API_BASE_URL="${2:-http://127.0.0.1:8000}"
-EVAL_MODELS="${EVAL_MODELS:-qwen3.6:27b=qwen36_27b gemma4:31b=gemma4_31b gemma4:26b=gemma4_26b deepseek-r1:32b=deepseek_r1_32b mistral-small=mistral_small qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 RUN_NAME="${RUN_NAME:-eval_generate_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
+
+if [ -n "${EVAL_MODELS:-}" ]; then
+  EVAL_MODEL_SPECS="$EVAL_MODELS"
+else
+  EVAL_MODEL_SPECS=$(
+    python /app/scripts/eval_preflight.py \
+      --mode generate \
+      --config "$CONFIG_PATH" \
+      --emit-model-specs
+  )
+fi
 
 mkdir -p "$RUN_DIR/logs"
 LOG_PATH="$RUN_DIR/logs/eval-generate-matrix.log"
@@ -19,6 +29,7 @@ PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --mode generate \
   --config "$CONFIG_PATH" \
   --api-base-url "$API_BASE_URL" \
+  --model-specs "$EVAL_MODEL_SPECS" \
   --run-dir "$RUN_DIR"
 
 run_model() {
@@ -47,14 +58,34 @@ run_model() {
   echo "[$(date -Iseconds)] Finished predictions model=$MODEL label=$LABEL"
 }
 
-for MODEL_SPEC in $EVAL_MODELS; do
-  MODEL="${MODEL_SPEC%%=*}"
-  BASE_LABEL="${MODEL_SPEC#*=}"
+for MODEL_SPEC in $EVAL_MODEL_SPECS; do
+  SPEC_RERANK_TOP_K=""
+  case "$MODEL_SPEC" in
+    *"|"*)
+      MODEL="${MODEL_SPEC%%|*}"
+      REST="${MODEL_SPEC#*|}"
+      BASE_LABEL="${REST%%|*}"
+      SPEC_RERANK_TOP_K="${REST#*|}"
+      if [ "$SPEC_RERANK_TOP_K" = "-" ]; then
+        SPEC_RERANK_TOP_K=""
+      fi
+      ;;
+    *=*)
+      MODEL="${MODEL_SPEC%%=*}"
+      BASE_LABEL="${MODEL_SPEC#*=}"
+      ;;
+    *)
+      MODEL="$MODEL_SPEC"
+      BASE_LABEL="$MODEL_SPEC"
+      ;;
+  esac
 
   if [ -n "$RERANK_TOP_K_VALUES" ]; then
     for RERANK_TOP_K in $RERANK_TOP_K_VALUES; do
       run_model "$MODEL" "${BASE_LABEL}_rerank${RERANK_TOP_K}" "$RERANK_TOP_K"
     done
+  elif [ -n "$SPEC_RERANK_TOP_K" ]; then
+    run_model "$MODEL" "$BASE_LABEL" "$SPEC_RERANK_TOP_K"
   else
     run_model "$MODEL" "$BASE_LABEL"
   fi

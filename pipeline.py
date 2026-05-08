@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 import logging
 import json
+import math
 import os
 import re
 import uuid
@@ -383,12 +384,51 @@ class RAGPipeline:
             numeric_values = []
             for value in candidates:
                 if isinstance(value, (int, float)) and not isinstance(value, bool):
-                    numeric_values.append(float(value))
+                    numeric_value = float(value)
+                    if math.isfinite(numeric_value):
+                        numeric_values.append(numeric_value)
 
             metric_means[metric_name] = (
                 sum(numeric_values) / len(numeric_values) if numeric_values else None
             )
         return metric_means
+
+    @staticmethod
+    def _metric_value_issues(eval_results: Dict[str, Any]) -> Dict[str, Any]:
+        metrics = eval_results.get("metrics")
+        if not isinstance(metrics, dict):
+            return {
+                "has_non_finite_scores": False,
+                "non_finite_score_count": 0,
+                "metrics": {},
+            }
+
+        issue_metrics: Dict[str, Any] = {}
+        total_non_finite = 0
+        for metric_name, raw_values in metrics.items():
+            if isinstance(raw_values, dict):
+                candidates = raw_values.values()
+            elif isinstance(raw_values, list):
+                candidates = raw_values
+            else:
+                candidates = [raw_values]
+
+            metric_non_finite = 0
+            for value in candidates:
+                if isinstance(value, (int, float)) and not isinstance(value, bool):
+                    numeric_value = float(value)
+                    if not math.isfinite(numeric_value):
+                        metric_non_finite += 1
+
+            if metric_non_finite:
+                issue_metrics[metric_name] = {"non_finite_score_count": metric_non_finite}
+                total_non_finite += metric_non_finite
+
+        return {
+            "has_non_finite_scores": total_non_finite > 0,
+            "non_finite_score_count": total_non_finite,
+            "metrics": issue_metrics,
+        }
 
     @staticmethod
     def _build_eval_summary(
@@ -401,17 +441,22 @@ class RAGPipeline:
         primary_metric_values = [
             value for value in metric_means.values() if isinstance(value, (int, float))
         ]
+        primary_metric_values = [
+            value for value in primary_metric_values if math.isfinite(float(value))
+        ]
         overall_mean = (
             sum(primary_metric_values) / len(primary_metric_values)
             if primary_metric_values
             else None
         )
+        metric_value_issues = RAGPipeline._metric_value_issues(eval_results)
 
         summary = {
             "question_count": question_count,
             "used_metrics": eval_results.get("used_metrics"),
             "metric_means": metric_means,
             "overall_mean_score": overall_mean,
+            "metric_value_issues": metric_value_issues,
             "timings": dict(timings_summary),
             "failure_count": len(eval_results.get("failure_analysis", []) or []),
             "metric_caveats": eval_results.get("metric_caveats", []),

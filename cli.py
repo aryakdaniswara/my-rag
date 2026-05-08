@@ -706,6 +706,43 @@ def _metric_means(results: dict) -> dict[str, float | None]:
     return summary
 
 
+def _metric_value_issues(results: dict) -> dict:
+    metrics = results.get("metrics")
+    if not isinstance(metrics, dict):
+        return {
+            "has_non_finite_scores": False,
+            "non_finite_score_count": 0,
+            "metrics": {},
+        }
+
+    issue_metrics = {}
+    total_non_finite = 0
+    for metric_name, raw_values in metrics.items():
+        if isinstance(raw_values, dict):
+            candidates = raw_values.values()
+        elif isinstance(raw_values, list):
+            candidates = raw_values
+        else:
+            candidates = [raw_values]
+
+        metric_non_finite = 0
+        for value in candidates:
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                numeric_value = float(value)
+                if not math.isfinite(numeric_value):
+                    metric_non_finite += 1
+
+        if metric_non_finite:
+            issue_metrics[metric_name] = {"non_finite_score_count": metric_non_finite}
+            total_non_finite += metric_non_finite
+
+    return {
+        "has_non_finite_scores": total_non_finite > 0,
+        "non_finite_score_count": total_non_finite,
+        "metrics": issue_metrics,
+    }
+
+
 def _primary_score(metric_means: dict[str, float | None]) -> float | None:
     numeric_values = [
         value for value in metric_means.values() if isinstance(value, (int, float))
@@ -755,6 +792,7 @@ def _build_leaderboards(model_entries: list[dict]) -> dict[str, list[dict]]:
 
 def _build_matrix_entry(report: dict, label: str) -> dict:
     results_block = report.get("results", {}) if isinstance(report.get("results"), dict) else {}
+    summary_block = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
     timings = report.get("timings", {}).get("summary", {})
     metric_means = _metric_means(results_block)
     return {
@@ -767,6 +805,8 @@ def _build_matrix_entry(report: dict, label: str) -> dict:
         "question_count": report.get("dataset", {}).get("question_count"),
         "metric_means": metric_means,
         "primary_score": _primary_score(metric_means),
+        "metric_value_issues": summary_block.get("metric_value_issues")
+        or _metric_value_issues(results_block),
         "error": results_block.get("error"),
         "requested_metrics": results_block.get("requested_metrics"),
         "used_metrics": results_block.get("used_metrics"),

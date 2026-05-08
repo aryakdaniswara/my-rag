@@ -1,11 +1,21 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-evaluation/configs/eval_judge_local_qwen36.yaml}"
-EVAL_LABELS="${EVAL_LABELS:-qwen36_27b gemma4_31b gemma4_26b deepseek_r1_32b mistral_small qwen35_9b qwen35_4b qwen35_2b}"
+CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 RUN_NAME="${RUN_NAME:-eval_score_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
+
+if [ -n "${EVAL_LABELS:-}" ]; then
+  EVAL_SCORE_LABELS="$EVAL_LABELS"
+else
+  EVAL_SCORE_LABELS=$(
+    python /app/scripts/eval_preflight.py \
+      --mode score \
+      --config "$CONFIG_PATH" \
+      --emit-labels
+  )
+fi
 
 mkdir -p "$RUN_DIR/logs"
 LOG_PATH="$RUN_DIR/logs/eval-score-matrix.log"
@@ -35,7 +45,7 @@ preflight_label() {
     --run-dir "$RUN_DIR"
 }
 
-for BASE_LABEL in $EVAL_LABELS; do
+for BASE_LABEL in $EVAL_SCORE_LABELS; do
   if [ -n "$RERANK_TOP_K_VALUES" ]; then
     for RERANK_TOP_K in $RERANK_TOP_K_VALUES; do
       LABEL="${BASE_LABEL}_rerank${RERANK_TOP_K}"

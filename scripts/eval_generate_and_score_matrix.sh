@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 
-GENERATE_CONFIG_PATH="${1:-config_server.yaml}"
-JUDGE_CONFIG_PATH="${2:-evaluation/configs/eval_judge_local_qwen36.yaml}"
+GENERATE_CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
+JUDGE_CONFIG_PATH="${2:-$GENERATE_CONFIG_PATH}"
 API_BASE_URL="${3:-http://127.0.0.1:8000}"
 RUN_NAME="${RUN_NAME:-eval_generate_and_score_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_ROOT="${RUN_ROOT:-/app/storage/eval_runs/$RUN_NAME}"
@@ -27,7 +27,7 @@ derive_eval_labels() {
 if [ -n "${EVAL_MODELS:-}" ]; then
   EVAL_LABELS="$(derive_eval_labels)"
 else
-  EVAL_LABELS="${EVAL_LABELS:-qwen36_27b gemma4_31b gemma4_26b deepseek_r1_32b mistral_small qwen35_9b qwen35_4b qwen35_2b}"
+  EVAL_LABELS="${EVAL_LABELS:-$(python /app/scripts/eval_preflight.py --mode generate --config "$GENERATE_CONFIG_PATH" --emit-labels)}"
 fi
 
 echo "[$(date -Iseconds)] Starting chained generate->score matrix run"

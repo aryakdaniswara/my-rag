@@ -20,6 +20,10 @@ This folder contains the checked-in eval configs that are meant to load successf
   - Extends `eval_judge_local_qwen36.yaml`
   - Runs the standard eight-model generation comparison with one shared judge
 
+- `eval_matrix_8models_rerank8.yaml`
+  - Extends `eval_judge_local_qwen36.yaml`
+  - Runs the current eight-model generation comparison with fixed `rerank_top_k: 8`
+
 - `eval_matrix_qwen35_rerank_topk.yaml`
   - Extends `eval_judge_local_qwen36.yaml`
   - Sweeps `rerank_top_k` for one generation model
@@ -47,26 +51,34 @@ sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_l
 Full matrix run from the Python CLI:
 
 ```sh
-python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
+python cli.py eval --config evaluation/configs/eval_matrix_8models_rerank8.yaml
 ```
 
 Generate-only matrix:
 
 ```sh
-sh /app/scripts/eval_generate_matrix.sh
+sh /app/scripts/eval_generate_matrix.sh evaluation/configs/eval_matrix_8models_rerank8.yaml
 ```
 
 Generate first and automatically score only if generation succeeds:
 
 ```sh
-sh /app/scripts/eval_generate_and_score_matrix.sh
+RUN_NAME=eval_v3_qwen36_judge_$(date +%Y%m%d_%H%M%S) \
+sh /app/scripts/eval_generate_and_score_matrix.sh \
+  evaluation/configs/eval_matrix_8models_rerank8.yaml \
+  evaluation/configs/eval_matrix_8models_rerank8.yaml \
+  http://127.0.0.1:8000
 ```
 
 Score-only matrix:
 
 ```sh
-sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_matrix_8models_rerank8.yaml
 ```
+
+Matrix helpers now prefer `evaluation.model_matrix` from the config for model names,
+labels, and per-model `rerank_top_k`. `EVAL_MODELS` and `EVAL_LABELS` still work
+as ad hoc overrides.
 
 Generate only the qwen3.5 `2b`, `4b`, and `9b` set at `rerank_top_k` values `2`, `5`, `8`, and `10`, then score with Gemini:
 
