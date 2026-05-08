@@ -75,8 +75,8 @@ services:
     volumes:
       # Live-code mount (Development best practice)
       - .:/app:rw
-      # Source documents (read-only)
-      - ./data:/app/data:ro
+      # Source documents and scraper output
+      - ./data:/app/data:rw
       # Use the server config (Milvus URI points to the milvus container)
       - ./config_server.yaml:/app/config_rag.yaml
       # Cache HuggingFace model weights across restarts (~5-10 GB total)

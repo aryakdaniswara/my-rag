@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, BackgroundTasks, UploadFile, File, Response
 from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 import os
@@ -15,6 +15,8 @@ import httpx
 from pipeline import RAGPipeline
 from config import RAGConfig
 from generation import LLM
+from scraper_api import ScrapeConfig, ScraperJobManager
+from scraper_api.presets import get_preset, list_presets, preset_names
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +25,7 @@ logger = logging.getLogger("rag-api")
 # ── Global pipeline instance ──────────────────────────────────────────────────
 rag_pipeline: Optional[RAGPipeline] = None
 llm_proxy_client: Optional[httpx.AsyncClient] = None
+scraper_manager = ScraperJobManager(logger_=logging.getLogger("rag-api.scraper"))
 
 
 @asynccontextmanager
@@ -66,6 +69,7 @@ async def lifespan(app: FastAPI):
     yield  # Application runs here
 
     logger.info("RAG API shutting down.")
+    await scraper_manager.shutdown()
     if llm_proxy_client is not None:
         await llm_proxy_client.aclose()
 
@@ -94,6 +98,56 @@ class IngestRequest(BaseModel):
     directory_path: str
 
     model_config = {"json_schema_extra": {"example": {"directory_path": "/app/data"}}}
+
+
+class ScrapeJobRequest(BaseModel):
+    domain: str
+    folder: str
+    seeds: List[str]
+    allowed_paths: List[str] = Field(default_factory=list)
+    disallowed_paths: List[str] = Field(default_factory=list)
+    max_depth: int = 3
+    max_parallelism: int = 2
+    rate_limit_ms: int = 1000
+    user_agent: str = "UI-RAG-Scraper/1.0"
+    skip_existing: bool = False
+    dry_run: bool = False
+    output_dir: str = "/app/data"
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "domain": "simak.ui.ac.id",
+                "folder": "simak",
+                "seeds": ["https://simak.ui.ac.id/"],
+                "allowed_paths": ["/"],
+                "disallowed_paths": ["/wp-admin"],
+                "max_depth": 2,
+                "max_parallelism": 2,
+                "rate_limit_ms": 1000,
+                "skip_existing": True,
+                "dry_run": False,
+                "output_dir": "/app/data",
+            }
+        }
+    }
+
+
+class ScrapePresetJobRequest(BaseModel):
+    overrides: Dict[str, Any] = Field(default_factory=dict)
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "overrides": {
+                    "dry_run": True,
+                    "skip_existing": False,
+                    "max_depth": 1,
+                    "output_dir": "/app/data",
+                }
+            }
+        }
+    }
 
 
 class RAGResponse(BaseModel):
@@ -367,6 +421,23 @@ def _llm_error_response(
     return JSONResponse(status_code=status_code, content=payload)
 
 
+def _scrape_config_from_dict(data: Dict[str, Any]) -> ScrapeConfig:
+    return ScrapeConfig(
+        domain=data["domain"],
+        folder=data["folder"],
+        seeds=data["seeds"],
+        allowed_paths=data.get("allowed_paths", []),
+        disallowed_paths=data.get("disallowed_paths", []),
+        max_depth=data.get("max_depth", 3),
+        max_parallelism=data.get("max_parallelism", 2),
+        rate_limit_ms=data.get("rate_limit_ms", 1000),
+        user_agent=data.get("user_agent", "UI-RAG-Scraper/1.0"),
+        skip_existing=data.get("skip_existing", False),
+        dry_run=data.get("dry_run", False),
+        output_dir=data.get("output_dir", "/app/data"),
+    )
+
+
 async def _proxy_llm_json(path: str, payload: Dict[str, Any]) -> Response:
     upstream_url = f"{_llm_base_url()}/{path.lstrip('/')}"
     try:
@@ -558,6 +629,70 @@ async def ingestion_status():
     
     files = rag_pipeline.ingestion_state.get_all_ingested()
     return {"ingested_files": files, "count": len(files)}
+
+
+@app.get("/scraper/presets", summary="List built-in scraper presets")
+async def list_scraper_presets():
+    """Returns reusable scrape presets for the known UI corpus."""
+    return {"presets": list_presets()}
+
+
+@app.post("/scraper/jobs/preset/{preset_name}", summary="Start a scrape job from a preset")
+async def start_scraper_job_from_preset(
+    preset_name: str,
+    request: ScrapePresetJobRequest,
+):
+    """
+    Starts a scrape job from a built-in preset. Request overrides can change any
+    preset field, including domain/seeds/folder for non-UI experiments.
+    """
+    try:
+        preset = get_preset(preset_name, request.overrides)
+        return scraper_manager.start_job(_scrape_config_from_dict(preset))
+    except KeyError:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "message": f"Scrape preset not found: {preset_name}",
+                "available_presets": preset_names(),
+            },
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/scraper/jobs", summary="Start a server-side scrape job")
+async def start_scraper_job(request: ScrapeJobRequest):
+    """
+    Starts a background scraper job that writes page.html/page.meta.json and
+    PDF sidecars under output_dir. This does not trigger ingestion.
+    """
+    try:
+        return scraper_manager.start_job(_scrape_config_from_dict(request.model_dump()))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.get("/scraper/jobs/{job_id}", summary="Get scrape job status")
+async def get_scraper_job(job_id: str):
+    """Returns status, counters, current URL, errors, and output path."""
+    status = scraper_manager.get_job(job_id)
+    if status is None:
+        raise HTTPException(status_code=404, detail=f"Scrape job not found: {job_id}")
+    return status
+
+
+@app.post("/scraper/jobs/{job_id}/cancel", summary="Cancel a scrape job")
+async def cancel_scraper_job(job_id: str):
+    """Requests cancellation for an active scrape job."""
+    status = scraper_manager.cancel_job(job_id)
+    if status is None:
+        raise HTTPException(status_code=404, detail=f"Scrape job not found: {job_id}")
+    return status
 
 
 @app.post("/query", response_model=RAGResponse, summary="Run a RAG query")

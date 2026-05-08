@@ -160,3 +160,4 @@ docs/
 config_rebuild_*.yaml
 storage/ingestion_state*.json
 storage/snapshots/
+extra/
