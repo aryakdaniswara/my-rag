@@ -379,7 +379,10 @@ class ScraperJobManager:
         soup = BeautifulSoup(html_text, "html.parser")
         links = []
         for tag in soup.find_all("a", href=True):
-            absolute = urljoin(base_url, tag.get("href", ""))
+            try:
+                absolute = urljoin(base_url, tag.get("href", ""))
+            except ValueError:
+                continue
             if absolute.startswith(("http://", "https://")):
                 links.append(absolute)
         return links

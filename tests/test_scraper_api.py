@@ -133,6 +133,14 @@ class ScraperMappingTests(unittest.TestCase):
         self.assertIn('meta name="source-url"', injected)
         self.assertIn('content="https://www.ui.ac.id/"', injected)
 
+    def test_extract_links_skips_malformed_hrefs(self):
+        manager = ScraperJobManager()
+        links = manager._extract_links(
+            '<a href="http://[bad">bad</a><a href="/ok/">ok</a>',
+            "https://simak.ui.ac.id/",
+        )
+        self.assertEqual(links, ["https://simak.ui.ac.id/ok/"])
+
 
 class ScraperSaveContractTests(unittest.TestCase):
     def test_save_page_and_pdf_metadata_contract(self):
