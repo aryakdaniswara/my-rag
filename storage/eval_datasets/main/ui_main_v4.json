@@ -1,0 +1,2248 @@
+[
+  {
+    "id": "q001",
+    "question": "Berapa UKT 11 Program Studi Pendidikan Dokter pada lampiran Program Sarjana Tahun Akademik 2026/2027?",
+    "reference": "UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "UKT 11",
+      "Pendidikan Dokter",
+      "Rp20.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Kedokteran Gigi",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 22 mencantumkan Pendidikan Dokter dengan UKT 11 sebesar 20.000.000.",
+    "notes": "Menguji lookup tarif UKT sarjana yang nilainya mirip dengan beberapa program lain.",
+    "ground_truth": "UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "answer": "UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 22,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        22
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q002",
+    "question": "Apakah Program Studi Sastra Arab memiliki UKT 10 pada lampiran Program Sarjana Tahun Akademik 2026/2027?",
+    "reference": "Tidak. Pada lampiran, UKT 10 Program Studi Sastra Arab ditandai \"-\".",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "table_lookup",
+    "must_include": [
+      "Sastra Arab",
+      "UKT 10",
+      "\"-\""
+    ],
+    "should_not_include": [
+      "Rp8.300.000",
+      "IPI",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 82 mencantumkan Sastra Arab dengan UKT 10 = -.",
+    "notes": "Menguji kemampuan membedakan nilai kosong/strip dari nominal rupiah.",
+    "ground_truth": "Tidak. Pada lampiran, UKT 10 Program Studi Sastra Arab ditandai \"-\".",
+    "answer": "Tidak. Pada lampiran, UKT 10 Program Studi Sastra Arab ditandai \"-\".",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 82,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        82
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q003",
+    "question": "Berapa UKT 9 untuk Program Studi Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi?",
+    "reference": "UKT 9 untuk Sarjana Terapan Fisioterapi adalah Rp15.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Sarjana Terapan Fisioterapi",
+      "UKT 9",
+      "Rp15.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Sarjana Terapan Terapi Okupasi",
+      "D3"
+    ],
+    "source_evidence": "Chunk 27 mencantumkan Sarjana Terapan Fisioterapi dengan UKT 9 sebesar 15.000.000.",
+    "notes": "Menguji lookup pada tabel Vokasi D4.",
+    "ground_truth": "UKT 9 untuk Sarjana Terapan Fisioterapi adalah Rp15.000.000.",
+    "answer": "UKT 9 untuk Sarjana Terapan Fisioterapi adalah Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 27,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        27
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q004",
+    "question": "Berapa UKT 9 Program Studi Administrasi Rumah Sakit pada Program Pendidikan Vokasi?",
+    "reference": "UKT 9 Program Studi Administrasi Rumah Sakit adalah Rp14.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Administrasi Rumah Sakit",
+      "UKT 9",
+      "Rp14.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Administrasi Perkantoran",
+      "Rp13.000.000"
+    ],
+    "source_evidence": "Chunk 28 mencantumkan Administrasi Rumah Sakit dengan UKT 9 sebesar 14.000.000.",
+    "notes": "Menguji lookup pada baris D3 yang berdekatan dengan banyak program bernilai mirip.",
+    "ground_truth": "UKT 9 Program Studi Administrasi Rumah Sakit adalah Rp14.000.000.",
+    "answer": "UKT 9 Program Studi Administrasi Rumah Sakit adalah Rp14.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": 28,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        28
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q005",
+    "question": "Berapa IPI 4 untuk Program Studi Pendidikan Dokter jalur seleksi mandiri?",
+    "reference": "IPI 4 untuk Program Studi Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Pendidikan Dokter",
+      "IPI 4",
+      "Rp120.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Kedokteran Gigi",
+      "Rp90.000.000"
+    ],
+    "source_evidence": "Chunk 86 mencantumkan Pendidikan Dokter dengan IPI 4 (UKT 9-11) sebesar 120.000.000.",
+    "notes": "Menguji retrieval IPI jalur mandiri, bukan UKT reguler.",
+    "ground_truth": "IPI 4 untuk Program Studi Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "answer": "IPI 4 untuk Program Studi Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 86,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        86
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q006",
+    "question": "Berapa IPI 2 untuk Program Studi Farmasi jalur seleksi mandiri?",
+    "reference": "IPI 2 untuk Program Studi Farmasi jalur seleksi mandiri adalah Rp28.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Farmasi",
+      "IPI 2",
+      "Rp28.500.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Rp57.000.000",
+      "Gizi"
+    ],
+    "source_evidence": "Chunk 87 mencantumkan Farmasi dengan IPI 2 (UKT 3-4) sebesar 28.500.000.",
+    "notes": "Menguji lookup kategori IPI menengah pada jalur mandiri.",
+    "ground_truth": "IPI 2 untuk Program Studi Farmasi jalur seleksi mandiri adalah Rp28.500.000.",
+    "answer": "IPI 2 untuk Program Studi Farmasi jalur seleksi mandiri adalah Rp28.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 87,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        87
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q007",
+    "question": "Berapa IPI 4 untuk Program Studi Ilmu Komputer jalur seleksi mandiri?",
+    "reference": "IPI 4 untuk Program Studi Ilmu Komputer jalur seleksi mandiri adalah Rp60.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Komputer",
+      "IPI 4",
+      "Rp60.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Sistem Informasi",
+      "Rp45.000.000"
+    ],
+    "source_evidence": "Chunk 88 mencantumkan Ilmu Komputer dengan IPI 4 (UKT 9-11) sebesar 60.000.000.",
+    "notes": "Menguji lookup IPI untuk program Fasilkom pada jalur mandiri.",
+    "ground_truth": "IPI 4 untuk Program Studi Ilmu Komputer jalur seleksi mandiri adalah Rp60.000.000.",
+    "answer": "IPI 4 untuk Program Studi Ilmu Komputer jalur seleksi mandiri adalah Rp60.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 88,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        88
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q008",
+    "question": "Berapa IPI 3 Program Studi Sastra Inggris jalur seleksi mandiri?",
+    "reference": "IPI 3 Program Studi Sastra Inggris jalur seleksi mandiri adalah Rp23.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Sastra Inggris",
+      "IPI 3",
+      "Rp23.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Sastra Jerman",
+      "Rp28.000.000"
+    ],
+    "source_evidence": "Chunk 90 mencantumkan Sastra Inggris dengan IPI 3 (UKT 5-8) sebesar 23.000.000.",
+    "notes": "Menguji retrieval di kelompok program humaniora yang berdekatan.",
+    "ground_truth": "IPI 3 Program Studi Sastra Inggris jalur seleksi mandiri adalah Rp23.000.000.",
+    "answer": "IPI 3 Program Studi Sastra Inggris jalur seleksi mandiri adalah Rp23.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 90,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        90
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q009",
+    "question": "Berapa IPI 2 Program Studi Ilmu Administrasi Niaga jalur seleksi mandiri?",
+    "reference": "IPI 2 Program Studi Ilmu Administrasi Niaga jalur seleksi mandiri adalah Rp12.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Administrasi Niaga",
+      "IPI 2",
+      "Rp12.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Ilmu Administrasi Negara",
+      "Rp24.000.000"
+    ],
+    "source_evidence": "Chunk 91 mencantumkan Ilmu Administrasi Niaga dengan IPI 2 sebesar 12.000.000.",
+    "notes": "Menguji program bernama mirip dalam rumpun administrasi.",
+    "ground_truth": "IPI 2 Program Studi Ilmu Administrasi Niaga jalur seleksi mandiri adalah Rp12.000.000.",
+    "answer": "IPI 2 Program Studi Ilmu Administrasi Niaga jalur seleksi mandiri adalah Rp12.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 91,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        91
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q010",
+    "question": "Berapa IPI 2 untuk Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi jalur seleksi mandiri?",
+    "reference": "IPI 2 untuk Sarjana Terapan Fisioterapi adalah Rp6.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Sarjana Terapan Fisioterapi",
+      "IPI 2",
+      "Rp6.500.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "D3",
+      "Rp13.000.000"
+    ],
+    "source_evidence": "Chunk 92 mencantumkan Sarjana Terapan Fisioterapi dengan IPI 2 (UKT 3-4) sebesar 6.500.000.",
+    "notes": "Menguji tarif IPI Vokasi D4 pada jalur mandiri.",
+    "ground_truth": "IPI 2 untuk Sarjana Terapan Fisioterapi adalah Rp6.500.000.",
+    "answer": "IPI 2 untuk Sarjana Terapan Fisioterapi adalah Rp6.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 92,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        92
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q011",
+    "question": "Berapa IPI 4 untuk D3 Administrasi Perkantoran pada jalur seleksi mandiri?",
+    "reference": "IPI 4 untuk D3 Administrasi Perkantoran adalah Rp11.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "D3",
+      "Administrasi Perkantoran",
+      "Rp11.500.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Administrasi Perpajakan",
+      "Rp9.000.000"
+    ],
+    "source_evidence": "Chunk 93 mencantumkan Administrasi Perkantoran dengan nilai kolom IPI 4 sebesar 11.500.000.",
+    "notes": "Menguji lookup Vokasi D3 pada chunk OCR yang memakai kolom bernomor.",
+    "ground_truth": "IPI 4 untuk D3 Administrasi Perkantoran adalah Rp11.500.000.",
+    "answer": "IPI 4 untuk D3 Administrasi Perkantoran adalah Rp11.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 93,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        93
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q012",
+    "question": "Berapa UKT Program Studi Pendidikan Dokter jalur Kelas Khusus Internasional Tahun Akademik 2026/2027?",
+    "reference": "UKT Program Studi Pendidikan Dokter jalur Kelas Khusus Internasional adalah Rp51.700.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Pendidikan Dokter",
+      "Kelas Khusus Internasional",
+      "Rp51.700.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Rp111.100.000",
+      "jalur seleksi mandiri"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan Pendidikan Dokter KKI dengan UKT 51.700.000.",
+    "notes": "Menguji pemisahan tarif KKI dari UKT sarjana reguler.",
+    "ground_truth": "UKT Program Studi Pendidikan Dokter jalur Kelas Khusus Internasional adalah Rp51.700.000.",
+    "answer": "UKT Program Studi Pendidikan Dokter jalur Kelas Khusus Internasional adalah Rp51.700.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 110,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        110
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q013",
+    "question": "Berapa IPI Program Studi Kedokteran Gigi jalur Kelas Khusus Internasional Tahun Akademik 2026/2027?",
+    "reference": "IPI Program Studi Kedokteran Gigi jalur Kelas Khusus Internasional adalah Rp225.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Kedokteran Gigi",
+      "Kelas Khusus Internasional",
+      "Rp225.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Pendidikan Dokter",
+      "Rp64.500.000"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan Kedokteran Gigi KKI dengan IPI 225.000.000.",
+    "notes": "Menguji lookup IPI KKI dengan nominal besar.",
+    "ground_truth": "IPI Program Studi Kedokteran Gigi jalur Kelas Khusus Internasional adalah Rp225.000.000.",
+    "answer": "IPI Program Studi Kedokteran Gigi jalur Kelas Khusus Internasional adalah Rp225.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 110,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        110
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q014",
+    "question": "Berapa IPI Program Studi Ilmu Hukum jalur Kelas Khusus Internasional Tahun Akademik 2026/2027?",
+    "reference": "IPI Program Studi Ilmu Hukum jalur Kelas Khusus Internasional adalah Rp98.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Hukum",
+      "Kelas Khusus Internasional",
+      "Rp98.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Akuntansi",
+      "Rp28.000.000"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Ilmu Hukum KKI dengan IPI 98.000.000.",
+    "notes": "Menguji lookup KKI di chunk lanjutan, bukan chunk pertama.",
+    "ground_truth": "IPI Program Studi Ilmu Hukum jalur Kelas Khusus Internasional adalah Rp98.000.000.",
+    "answer": "IPI Program Studi Ilmu Hukum jalur Kelas Khusus Internasional adalah Rp98.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 111,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        111
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q015",
+    "question": "Berapa UKT Program Studi Sastra Arab jalur Kelas Khusus Internasional Tahun Akademik 2026/2027?",
+    "reference": "UKT Program Studi Sastra Arab jalur Kelas Khusus Internasional adalah Rp16.600.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Sastra Arab",
+      "Kelas Khusus Internasional",
+      "Rp16.600.000"
+    ],
+    "should_not_include": [
+      "UKT 8",
+      "Rp8.300.000",
+      "IPI"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Sastra Arab KKI dengan UKT 16.600.000.",
+    "notes": "Menguji disambiguasi Sastra Arab KKI dari tabel UKT reguler.",
+    "ground_truth": "UKT Program Studi Sastra Arab jalur Kelas Khusus Internasional adalah Rp16.600.000.",
+    "answer": "UKT Program Studi Sastra Arab jalur Kelas Khusus Internasional adalah Rp16.600.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 111,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        111
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q016",
+    "question": "Berapa IPI Program Studi Ilmu Komputer jalur khusus kerja sama Tahun Akademik 2026/2027?",
+    "reference": "IPI Program Studi Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Komputer",
+      "jalur khusus kerja sama",
+      "Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "RPL",
+      "Rp50.000.000"
+    ],
+    "source_evidence": "Chunk 177 mencantumkan Ilmu Komputer jalur khusus kerja sama dengan IPI 80.000.000.",
+    "notes": "Menguji jalur kerja sama yang mudah tertukar dengan RPL atau KKI.",
+    "ground_truth": "IPI Program Studi Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "answer": "IPI Program Studi Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 177,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        177
+      ],
+      "benchmark_group": "kerja_sama_fee"
+    }
+  },
+  {
+    "id": "q017",
+    "question": "Berapa UKT Sarjana Terapan Bisnis Kreatif jalur khusus kerja sama Tahun Akademik 2026/2027?",
+    "reference": "UKT Sarjana Terapan Bisnis Kreatif jalur khusus kerja sama adalah Rp13.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "Sarjana Terapan Bisnis Kreatif",
+      "jalur khusus kerja sama",
+      "Rp13.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Sarjana Terapan Produksi Media",
+      "Rp15.000.000"
+    ],
+    "source_evidence": "Chunk 179 mencantumkan Sarjana Terapan Bisnis Kreatif dengan UKT 13.000.000 pada jalur khusus kerja sama.",
+    "notes": "Menguji lookup Vokasi D4 pada jalur kerja sama.",
+    "ground_truth": "UKT Sarjana Terapan Bisnis Kreatif jalur khusus kerja sama adalah Rp13.000.000.",
+    "answer": "UKT Sarjana Terapan Bisnis Kreatif jalur khusus kerja sama adalah Rp13.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 179,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        179
+      ],
+      "benchmark_group": "kerja_sama_fee"
+    }
+  },
+  {
+    "id": "q018",
+    "question": "Berapa IPI D3 Administrasi Rumah Sakit jalur khusus kerja sama Tahun Akademik 2026/2027?",
+    "reference": "IPI D3 Administrasi Rumah Sakit jalur khusus kerja sama adalah Rp15.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "fee",
+    "must_include": [
+      "D3 Administrasi Rumah Sakit",
+      "jalur khusus kerja sama",
+      "Rp15.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Administrasi Perkantoran",
+      "Rp13.000.000"
+    ],
+    "source_evidence": "Chunk 179 mencantumkan D3 Administrasi Rumah Sakit dengan IPI 15.000.000.",
+    "notes": "Menguji program D3 terakhir dalam tabel kerja sama.",
+    "ground_truth": "IPI D3 Administrasi Rumah Sakit jalur khusus kerja sama adalah Rp15.000.000.",
+    "answer": "IPI D3 Administrasi Rumah Sakit jalur khusus kerja sama adalah Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 179,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        179
+      ],
+      "benchmark_group": "kerja_sama_fee"
+    }
+  },
+  {
+    "id": "q019",
+    "question": "Untuk jalur RPL, UKT Farmasi tahun akademik 2026/2027 berapa?",
+    "reference": "UKT Farmasi jalur RPL Tahun Akademik 2026/2027 adalah Rp55.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Farmasi",
+      "RPL",
+      "Rp55.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "jalur kerja sama",
+      "Rp190.000.000"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan Farmasi jalur RPL dengan UKT 55.000.000.",
+    "notes": "Menguji pertanyaan paraphrase untuk tarif RPL.",
+    "ground_truth": "UKT Farmasi jalur RPL Tahun Akademik 2026/2027 adalah Rp55.000.000.",
+    "answer": "UKT Farmasi jalur RPL Tahun Akademik 2026/2027 adalah Rp55.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": 137,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        137
+      ],
+      "benchmark_group": "rpl_fee"
+    }
+  },
+  {
+    "id": "q020",
+    "question": "Di tabel RPL, IPI untuk Ilmu Hukum ditetapkan berapa?",
+    "reference": "IPI Ilmu Hukum pada jalur RPL adalah Rp22.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Hukum",
+      "RPL",
+      "Rp22.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "jalur kerja sama",
+      "Rp70.000.000"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan Ilmu Hukum jalur RPL dengan IPI 22.000.000.",
+    "notes": "Menguji disambiguasi RPL dari jalur kerja sama.",
+    "ground_truth": "IPI Ilmu Hukum pada jalur RPL adalah Rp22.000.000.",
+    "answer": "IPI Ilmu Hukum pada jalur RPL adalah Rp22.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": 137,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        137
+      ],
+      "benchmark_group": "rpl_fee"
+    }
+  },
+  {
+    "id": "q021",
+    "question": "Kalau Program Studi Ilmu Administrasi Fiskal lewat RPL, UKT-nya berapa?",
+    "reference": "UKT Ilmu Administrasi Fiskal jalur RPL adalah Rp13.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Administrasi Fiskal",
+      "RPL",
+      "Rp13.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Ilmu Administrasi Negara",
+      "Rp25.000.000"
+    ],
+    "source_evidence": "Chunk 138 mencantumkan Ilmu Administrasi Fiskal jalur RPL dengan UKT 13.000.000.",
+    "notes": "Menguji program administrasi dengan nama yang mirip.",
+    "ground_truth": "UKT Ilmu Administrasi Fiskal jalur RPL adalah Rp13.000.000.",
+    "answer": "UKT Ilmu Administrasi Fiskal jalur RPL adalah Rp13.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": 138,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        138
+      ],
+      "benchmark_group": "rpl_fee"
+    }
+  },
+  {
+    "id": "q022",
+    "question": "Untuk Profesi Kedokteran Gigi kategori WNI, uang kuliah TA 2025/2026 berapa?",
+    "reference": "Uang kuliah Profesi Kedokteran Gigi kategori WNI TA 2025/2026 adalah Rp17.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Profesi Kedokteran Gigi",
+      "WNI",
+      "Rp17.500.000"
+    ],
+    "should_not_include": [
+      "WNA",
+      "Khusus",
+      "Rp25.000.000"
+    ],
+    "source_evidence": "Chunk 209 mencantumkan Profesi Kedokteran Gigi kategori WNI dengan uang kuliah 17.500.000.",
+    "notes": "Menguji tarif pascasarjana/profesi berdasarkan kategori mahasiswa.",
+    "ground_truth": "Uang kuliah Profesi Kedokteran Gigi kategori WNI TA 2025/2026 adalah Rp17.500.000.",
+    "answer": "Uang kuliah Profesi Kedokteran Gigi kategori WNI TA 2025/2026 adalah Rp17.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 209,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        209
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q023",
+    "question": "Untuk Profesi Kedokteran Gigi kategori WNA, berapa uang kuliahnya pada TA 2025/2026?",
+    "reference": "Uang kuliah Profesi Kedokteran Gigi kategori WNA TA 2025/2026 adalah Rp61.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Profesi Kedokteran Gigi",
+      "WNA",
+      "Rp61.000.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Khusus",
+      "Rp17.500.000"
+    ],
+    "source_evidence": "Chunk 209 mencantumkan Profesi Kedokteran Gigi kategori WNA dengan uang kuliah 61.000.000.",
+    "notes": "Menguji kategori WNA pada baris yang berdekatan dengan WNI dan Khusus.",
+    "ground_truth": "Uang kuliah Profesi Kedokteran Gigi kategori WNA TA 2025/2026 adalah Rp61.000.000.",
+    "answer": "Uang kuliah Profesi Kedokteran Gigi kategori WNA TA 2025/2026 adalah Rp61.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 209,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        209
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q024",
+    "question": "Berapa uang kuliah Apoteker kategori Khusus S1 Non UI pada TA 2025/2026?",
+    "reference": "Uang kuliah Apoteker kategori Khusus (S1 Non UI) TA 2025/2026 adalah Rp40.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Apoteker",
+      "Khusus (S1 Non UI)",
+      "Rp40.000.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Rp25.000.000",
+      "WNA"
+    ],
+    "source_evidence": "Chunk 210 mencantumkan Apoteker kategori Khusus (S1 Non UI) dengan uang kuliah 40.000.000.",
+    "notes": "Menguji kategori khusus yang spesifik pada tabel profesi.",
+    "ground_truth": "Uang kuliah Apoteker kategori Khusus (S1 Non UI) TA 2025/2026 adalah Rp40.000.000.",
+    "answer": "Uang kuliah Apoteker kategori Khusus (S1 Non UI) TA 2025/2026 adalah Rp40.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 210,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        210
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q025",
+    "question": "Untuk Magister Pendidikan Dokter kategori WNA, uang kuliah TA 2025/2026 berapa?",
+    "reference": "Uang kuliah Magister Pendidikan Dokter kategori WNA TA 2025/2026 adalah Rp62.975.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Magister Pendidikan Dokter",
+      "WNA",
+      "Rp62.975.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Khusus",
+      "Rp26.250.000"
+    ],
+    "source_evidence": "Chunk 210 mencantumkan Magister Pendidikan Dokter kategori WNA dengan uang kuliah 62.975.000.",
+    "notes": "Menguji angka spesifik yang tidak bulat pada tabel magister.",
+    "ground_truth": "Uang kuliah Magister Pendidikan Dokter kategori WNA TA 2025/2026 adalah Rp62.975.000.",
+    "answer": "Uang kuliah Magister Pendidikan Dokter kategori WNA TA 2025/2026 adalah Rp62.975.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 210,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        210
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q026",
+    "question": "Di Magister FKM, berapa uang kuliah Keselamatan dan Kesehatan Kerja kategori WNA?",
+    "reference": "Uang kuliah Magister Keselamatan dan Kesehatan Kerja kategori WNA adalah Rp42.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Keselamatan dan Kesehatan Kerja",
+      "WNA",
+      "Rp42.000.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Ilmu Kesehatan Masyarakat",
+      "Rp21.000.000"
+    ],
+    "source_evidence": "Chunk 211 mencantumkan Magister Keselamatan dan Kesehatan Kerja (K3) kategori WNA dengan uang kuliah 42.000.000.",
+    "notes": "Menguji lookup program FKM dengan kategori WNA.",
+    "ground_truth": "Uang kuliah Magister Keselamatan dan Kesehatan Kerja kategori WNA adalah Rp42.000.000.",
+    "answer": "Uang kuliah Magister Keselamatan dan Kesehatan Kerja kategori WNA adalah Rp42.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 211,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        211
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q027",
+    "question": "Berapa uang kuliah Magister Ilmu Kesehatan Masyarakat kategori WNI?",
+    "reference": "Uang kuliah Magister Ilmu Kesehatan Masyarakat kategori WNI adalah Rp20.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Kesehatan Masyarakat",
+      "WNI",
+      "Rp20.000.000"
+    ],
+    "should_not_include": [
+      "WNA",
+      "Keselamatan dan Kesehatan Kerja",
+      "Rp40.000.000"
+    ],
+    "source_evidence": "Chunk 211 mencantumkan Magister Ilmu Kesehatan Masyarakat (IKM) kategori WNI dengan uang kuliah 20.000.000.",
+    "notes": "Menguji kategori WNI pada program magister FKM.",
+    "ground_truth": "Uang kuliah Magister Ilmu Kesehatan Masyarakat kategori WNI adalah Rp20.000.000.",
+    "answer": "Uang kuliah Magister Ilmu Kesehatan Masyarakat kategori WNI adalah Rp20.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 211,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        211
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q028",
+    "question": "Untuk mahasiswa program profesi yang berstatus overseas, biaya registrasi per semester atau term berapa?",
+    "reference": "Mahasiswa program profesi berstatus overseas membayar Rp1.000.000 per semester atau term.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "program profesi",
+      "overseas",
+      "Rp1.000.000"
+    ],
+    "should_not_include": [
+      "Rp1.250.000",
+      "magister",
+      "doktor"
+    ],
+    "source_evidence": "Chunk 203 mencantumkan Rp1.000.000 bagi mahasiswa program profesi berstatus overseas per semester/term.",
+    "notes": "Menguji aturan biaya overseas pascasarjana untuk kategori profesi.",
+    "ground_truth": "Mahasiswa program profesi berstatus overseas membayar Rp1.000.000 per semester atau term.",
+    "answer": "Mahasiswa program profesi berstatus overseas membayar Rp1.000.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 203,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        203
+      ],
+      "benchmark_group": "overseas_fee"
+    }
+  },
+  {
+    "id": "q029",
+    "question": "Untuk mahasiswa magister, doktor, spesialis, dan subspesialis yang overseas, biaya registrasinya berapa per semester atau term?",
+    "reference": "Mahasiswa magister, doktor, spesialis, dan subspesialis berstatus overseas membayar Rp1.250.000 per semester atau term.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "magister",
+      "doktor",
+      "spesialis",
+      "subspesialis",
+      "Rp1.250.000"
+    ],
+    "should_not_include": [
+      "program profesi",
+      "Rp1.000.000",
+      "Rp1.100.000"
+    ],
+    "source_evidence": "Chunk 203 mencantumkan Rp1.250.000 bagi mahasiswa program magister, doktor, spesialis, dan subspesialis per semester/term.",
+    "notes": "Menguji aturan overseas dengan beberapa jenjang sekaligus.",
+    "ground_truth": "Mahasiswa magister, doktor, spesialis, dan subspesialis berstatus overseas membayar Rp1.250.000 per semester atau term.",
+    "answer": "Mahasiswa magister, doktor, spesialis, dan subspesialis berstatus overseas membayar Rp1.250.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 203,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        203
+      ],
+      "benchmark_group": "overseas_fee"
+    }
+  },
+  {
+    "id": "q030",
+    "question": "Tarif biaya tunda kuliah pascasarjana dihitung berapa persen dari uang kuliah?",
+    "reference": "Tarif biaya tunda kuliah pascasarjana adalah 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "10%",
+      "uang kuliah",
+      "semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan"
+    ],
+    "should_not_include": [
+      "dicicil",
+      "Rp1.000.000",
+      "Rp1.250.000"
+    ],
+    "source_evidence": "Chunk 186 menyebut tarif tunda kuliah sebesar 10% dari uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi.",
+    "notes": "Menguji jawaban formula, bukan nominal tetap.",
+    "ground_truth": "Tarif biaya tunda kuliah pascasarjana adalah 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "answer": "Tarif biaya tunda kuliah pascasarjana adalah 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1",
+    "chunk_id": 186,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        186
+      ],
+      "benchmark_group": "tunda_kuliah"
+    }
+  },
+  {
+    "id": "q031",
+    "question": "Biaya tunda kuliah pascasarjana dikenakan kapan?",
+    "reference": "Biaya tunda kuliah dikenakan untuk setiap semester pada saat calon mahasiswa yang bersangkutan menunda kuliah.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "procedure",
+    "must_include": [
+      "setiap semester",
+      "menunda kuliah"
+    ],
+    "should_not_include": [
+      "sekali saja",
+      "setiap tahun",
+      "jadwal pembayaran"
+    ],
+    "source_evidence": "Chunk 186 menyebut tarif biaya tunda kuliah dikenakan untuk setiap semester saat yang bersangkutan menunda kuliah.",
+    "notes": "Menguji ketentuan waktu pengenaan biaya.",
+    "ground_truth": "Biaya tunda kuliah dikenakan untuk setiap semester pada saat calon mahasiswa yang bersangkutan menunda kuliah.",
+    "answer": "Biaya tunda kuliah dikenakan untuk setiap semester pada saat calon mahasiswa yang bersangkutan menunda kuliah.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1",
+    "chunk_id": 186,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        186
+      ],
+      "benchmark_group": "tunda_kuliah"
+    }
+  },
+  {
+    "id": "q032",
+    "question": "SK tarif biaya tunda kuliah bagi calon mahasiswa pascasarjana ditetapkan tanggal berapa?",
+    "reference": "SK tarif biaya tunda kuliah pascasarjana ditetapkan pada 11 Maret 2026.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "date",
+    "must_include": [
+      "11 Maret 2026"
+    ],
+    "should_not_include": [
+      "16 Maret 2026",
+      "14 Maret 2025"
+    ],
+    "source_evidence": "Chunk 189 menyebut ditetapkan di Jakarta pada tanggal 11 Maret 2026.",
+    "notes": "Menguji tanggal spesifik dari dokumen tunda kuliah.",
+    "ground_truth": "SK tarif biaya tunda kuliah pascasarjana ditetapkan pada 11 Maret 2026.",
+    "answer": "SK tarif biaya tunda kuliah pascasarjana ditetapkan pada 11 Maret 2026.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1",
+    "chunk_id": 189,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        189
+      ],
+      "benchmark_group": "tunda_kuliah"
+    }
+  },
+  {
+    "id": "q033",
+    "question": "Link unduhan untuk dokumen Sarjana Kelas Internasional di halaman SK Biaya Pendidikan UI 2026 apa?",
+    "reference": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "url",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf"
+    ],
+    "should_not_include": [
+      "pdf-proxy-4.pdf",
+      "SK-Tarif-Pascasarjana-.pdf"
+    ],
+    "source_evidence": "Chunk 143 pada bagian Sarjana Kelas Internasional berisi tautan unduh ke pdf-proxy.pdf.",
+    "notes": "Menguji retrieval URL sumber dokumen KKI.",
+    "ground_truth": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "answer": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 143,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        143
+      ],
+      "benchmark_group": "source_url"
+    }
+  },
+  {
+    "id": "q034",
+    "question": "Situs resmi yang dirujuk untuk info lebih lanjut penetapan UKT UI apa?",
+    "reference": "Situs resmi yang dirujuk adalah https://ukt.ui.ac.id/.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "url",
+    "must_include": [
+      "https://ukt.ui.ac.id/"
+    ],
+    "should_not_include": [
+      "penerimaan.ui.ac.id",
+      "admission.ui.ac.id",
+      "enrollment.ui.ac.id"
+    ],
+    "source_evidence": "Chunk 151 mencantumkan Situs UKT Universitas Indonesia dengan URL https://ukt.ui.ac.id/.",
+    "notes": "Menguji URL resmi UKT tanpa menambahkan fungsi situs yang tidak didukung.",
+    "ground_truth": "Situs resmi yang dirujuk adalah https://ukt.ui.ac.id/.",
+    "answer": "Situs resmi yang dirujuk adalah https://ukt.ui.ac.id/.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 151,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        151
+      ],
+      "benchmark_group": "source_url"
+    }
+  },
+  {
+    "id": "q035",
+    "question": "Mahasiswa jalur kerja sama yang berstatus overseas membayar biaya registrasi status kuliah di luar negeri berapa?",
+    "reference": "Mahasiswa jalur kerja sama berstatus overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "overseas",
+      "Rp1.100.000",
+      "per semester/term"
+    ],
+    "should_not_include": [
+      "Rp1.000.000",
+      "Rp1.250.000",
+      "student exchange"
+    ],
+    "source_evidence": "Chunk 162 menyebut mahasiswa berstatus overseas membayar biaya registrasi status kuliah di luar negeri Rp1.100.000 per semester/term.",
+    "notes": "Menguji aturan overseas khusus dokumen jalur kerja sama.",
+    "ground_truth": "Mahasiswa jalur kerja sama berstatus overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "answer": "Mahasiswa jalur kerja sama berstatus overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 162,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        162
+      ],
+      "benchmark_group": "overseas_fee"
+    }
+  },
+  {
+    "id": "q036",
+    "question": "Keputusan tarif UKT sarjana dan vokasi berlaku untuk tahun akademik berapa, dan berapa UKT 11 Program Studi Pendidikan Dokter?",
+    "reference": "Keputusan tarif UKT sarjana dan vokasi berlaku untuk Tahun Akademik 2026/2027, dan UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "near_source",
+    "answer_type": "list",
+    "must_include": [
+      "Tahun Akademik 2026/2027",
+      "UKT 11",
+      "Pendidikan Dokter",
+      "Rp20.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Kelas Khusus Internasional",
+      "Kedokteran Gigi"
+    ],
+    "source_evidence": "Chunk 8 menyebut keputusan berlaku untuk Tahun Akademik 2026/2027; chunk 22 mencantumkan Pendidikan Dokter dengan UKT 11 sebesar 20.000.000.",
+    "notes": "Menguji gabungan konteks masa berlaku SK dan lookup tarif pada lampiran.",
+    "ground_truth": "Keputusan tarif UKT sarjana dan vokasi berlaku untuk Tahun Akademik 2026/2027, dan UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "answer": "Keputusan tarif UKT sarjana dan vokasi berlaku untuk Tahun Akademik 2026/2027, dan UKT 11 Program Studi Pendidikan Dokter adalah Rp20.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        8,
+        22
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q037",
+    "question": "Untuk Program Pendidikan Vokasi pada Tahun Akademik 2026/2027, sebutkan UKT 1 dan UKT 9 Sarjana Terapan Fisioterapi.",
+    "reference": "Untuk Program Pendidikan Vokasi Tahun Akademik 2026/2027, Sarjana Terapan Fisioterapi memiliki UKT 1 sebesar Rp500.000 dan UKT 9 sebesar Rp15.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "near_source",
+    "answer_type": "list",
+    "must_include": [
+      "Tahun Akademik 2026/2027",
+      "Sarjana Terapan Fisioterapi",
+      "UKT 1 Rp500.000",
+      "UKT 9 Rp15.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Terapi Okupasi",
+      "D3"
+    ],
+    "source_evidence": "Chunk 8 memberi tahun akademik 2026/2027; chunk 27 mencantumkan Sarjana Terapan Fisioterapi dengan UKT 1 = 500.000 dan UKT 9 = 15.000.000.",
+    "notes": "Menguji penggabungan konteks tahun akademik dan baris Vokasi D4.",
+    "ground_truth": "Untuk Program Pendidikan Vokasi Tahun Akademik 2026/2027, Sarjana Terapan Fisioterapi memiliki UKT 1 sebesar Rp500.000 dan UKT 9 sebesar Rp15.000.000.",
+    "answer": "Untuk Program Pendidikan Vokasi Tahun Akademik 2026/2027, Sarjana Terapan Fisioterapi memiliki UKT 1 sebesar Rp500.000 dan UKT 9 sebesar Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        8,
+        27
+      ],
+      "benchmark_group": "ukt_reguler"
+    }
+  },
+  {
+    "id": "q038",
+    "question": "Apa nomor SK IPI jalur seleksi mandiri, dan sebutkan IPI 1 sampai IPI 4 untuk Program Studi Pendidikan Dokter?",
+    "reference": "Nomor SK IPI jalur seleksi mandiri adalah 300/SK/R/UI/2026. Untuk Pendidikan Dokter, IPI 1 adalah Rp0, IPI 2 Rp60.000.000, IPI 3 Rp90.000.000, dan IPI 4 Rp120.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "near_source",
+    "answer_type": "list",
+    "must_include": [
+      "300/SK/R/UI/2026",
+      "IPI 1 Rp0",
+      "IPI 2 Rp60.000.000",
+      "IPI 3 Rp90.000.000",
+      "IPI 4 Rp120.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Kedokteran Gigi",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 70 mencantumkan nomor 300/SK/R/UI/2026; chunk 86 mencantumkan empat kategori IPI Pendidikan Dokter.",
+    "notes": "Menguji retrieval nomor SK yang terpisah dari tabel tarif IPI.",
+    "ground_truth": "Nomor SK IPI jalur seleksi mandiri adalah 300/SK/R/UI/2026. Untuk Pendidikan Dokter, IPI 1 adalah Rp0, IPI 2 Rp60.000.000, IPI 3 Rp90.000.000, dan IPI 4 Rp120.000.000.",
+    "answer": "Nomor SK IPI jalur seleksi mandiri adalah 300/SK/R/UI/2026. Untuk Pendidikan Dokter, IPI 1 adalah Rp0, IPI 2 Rp60.000.000, IPI 3 Rp90.000.000, dan IPI 4 Rp120.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        70,
+        86
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q039",
+    "question": "Untuk Program Pendidikan Vokasi jalur seleksi mandiri Tahun Akademik 2026/2027, sebutkan IPI 1 sampai IPI 4 Sarjana Terapan Fisioterapi.",
+    "reference": "Untuk Sarjana Terapan Fisioterapi jalur seleksi mandiri Tahun Akademik 2026/2027, IPI 1 adalah Rp0, IPI 2 Rp6.500.000, IPI 3 Rp13.000.000, dan IPI 4 Rp15.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "near_source",
+    "answer_type": "list",
+    "must_include": [
+      "jalur seleksi mandiri",
+      "Tahun Akademik 2026/2027",
+      "IPI 1 Rp0",
+      "IPI 2 Rp6.500.000",
+      "IPI 3 Rp13.000.000",
+      "IPI 4 Rp15.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "D3",
+      "Administrasi Asuransi dan Aktuaria"
+    ],
+    "source_evidence": "Chunks 77 dan 78 menyebut Program Pendidikan Vokasi jalur seleksi mandiri Tahun Akademik 2026/2027; chunk 92 mencantumkan IPI Sarjana Terapan Fisioterapi.",
+    "notes": "Menguji gabungan konteks jalur/tahun dari judul dan nilai IPI dari lampiran.",
+    "ground_truth": "Untuk Sarjana Terapan Fisioterapi jalur seleksi mandiri Tahun Akademik 2026/2027, IPI 1 adalah Rp0, IPI 2 Rp6.500.000, IPI 3 Rp13.000.000, dan IPI 4 Rp15.000.000.",
+    "answer": "Untuk Sarjana Terapan Fisioterapi jalur seleksi mandiri Tahun Akademik 2026/2027, IPI 1 adalah Rp0, IPI 2 Rp6.500.000, IPI 3 Rp13.000.000, dan IPI 4 Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        77,
+        78,
+        92
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q040",
+    "question": "Apa link unduhan dokumen Sarjana Kelas Internasional, dan berapa UKT serta IPI Program Studi Pendidikan Dokter pada dokumen itu?",
+    "reference": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, UKT Pendidikan Dokter adalah Rp51.700.000 dan IPI-nya Rp111.100.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "near_source",
+    "answer_type": "list",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf",
+      "UKT Rp51.700.000",
+      "IPI Rp111.100.000"
+    ],
+    "should_not_include": [
+      "pdf-proxy-4.pdf",
+      "jalur kerja sama",
+      "Kedokteran Gigi"
+    ],
+    "source_evidence": "Chunk 143 memberi link unduhan Sarjana Kelas Internasional; chunk 110 mencantumkan UKT dan IPI Pendidikan Dokter KKI.",
+    "notes": "Menguji gabungan source URL dan nilai tabel KKI.",
+    "ground_truth": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, UKT Pendidikan Dokter adalah Rp51.700.000 dan IPI-nya Rp111.100.000.",
+    "answer": "Link unduhan dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, UKT Pendidikan Dokter adalah Rp51.700.000 dan IPI-nya Rp111.100.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "near_source",
+      "source_chunk_ids": [
+        143,
+        110
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q041",
+    "question": "Kalau buka dokumen Sarjana Kelas Internasional, linknya apa dan Ilmu Komputer UKT/IPI-nya berapa?",
+    "reference": "Link dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komputer, UKT-nya Rp29.300.000 dan IPI-nya Rp60.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf",
+      "Ilmu Komputer",
+      "UKT Rp29.300.000",
+      "IPI Rp60.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "RPL",
+      "Rp80.000.000"
+    ],
+    "source_evidence": "Chunk 143 memberi link dokumen KKI; chunk 111 mencantumkan Ilmu Komputer KKI dengan UKT 29.300.000 dan IPI 60.000.000.",
+    "notes": "Menguji pertanyaan natural yang butuh URL sumber dan isi tabel.",
+    "ground_truth": "Link dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komputer, UKT-nya Rp29.300.000 dan IPI-nya Rp60.000.000.",
+    "answer": "Link dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komputer, UKT-nya Rp29.300.000 dan IPI-nya Rp60.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        143,
+        111
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q042",
+    "question": "Untuk dokumen jalur khusus kerja sama Tahun Akademik 2026/2027, berapa UKT dan IPI Ilmu Komputer?",
+    "reference": "Pada dokumen jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp80.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "jalur khusus kerja sama",
+      "Tahun Akademik 2026/2027",
+      "UKT Rp29.300.000",
+      "IPI Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "RPL",
+      "Rp60.000.000"
+    ],
+    "source_evidence": "Chunks 175 dan 176 menyebut Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027; chunk 177 mencantumkan Ilmu Komputer dengan UKT 29.300.000 dan IPI 80.000.000.",
+    "notes": "Menguji penggabungan judul/jalur dokumen dengan lookup tarif kerja sama.",
+    "ground_truth": "Pada dokumen jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp80.000.000.",
+    "answer": "Pada dokumen jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        175,
+        176,
+        177
+      ],
+      "benchmark_group": "kerja_sama_fee"
+    }
+  },
+  {
+    "id": "q043",
+    "question": "Di dokumen Sarjana RPL, berapa UKT dan IPI untuk Program Studi Ilmu Komputer?",
+    "reference": "Pada dokumen Sarjana RPL, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp50.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Sarjana RPL",
+      "Ilmu Komputer",
+      "UKT Rp29.300.000",
+      "IPI Rp50.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "Kelas Khusus Internasional",
+      "Rp80.000.000"
+    ],
+    "source_evidence": "Chunk 145 memberi link dokumen Sarjana RPL; chunk 137 mencantumkan Ilmu Komputer RPL dengan UKT 29.300.000 dan IPI 50.000.000.",
+    "notes": "Menguji gabungan kategori dokumen RPL dan nilai tabel.",
+    "ground_truth": "Pada dokumen Sarjana RPL, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp50.000.000.",
+    "answer": "Pada dokumen Sarjana RPL, UKT Ilmu Komputer adalah Rp29.300.000 dan IPI-nya Rp50.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        145,
+        137
+      ],
+      "benchmark_group": "rpl_fee"
+    }
+  },
+  {
+    "id": "q044",
+    "question": "Pada dokumen Program Pascasarjana, berapa uang kuliah Profesi Kedokteran Gigi kategori WNI, Khusus, dan WNA?",
+    "reference": "Pada dokumen Program Pascasarjana, uang kuliah Profesi Kedokteran Gigi kategori WNI adalah Rp17.500.000, Khusus Rp25.000.000, dan WNA Rp61.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Program Pascasarjana",
+      "WNI Rp17.500.000",
+      "Khusus Rp25.000.000",
+      "WNA Rp61.000.000"
+    ],
+    "should_not_include": [
+      "Kedokteran Gigi - KKI",
+      "Rp100.000.000",
+      "Rp125.000.000"
+    ],
+    "source_evidence": "Chunk 144 memberi link dokumen Program Pascasarjana; chunk 209 mencantumkan Profesi Kedokteran Gigi kategori WNI, Khusus, dan WNA beserta uang kuliahnya.",
+    "notes": "Menguji gabungan source document dan tiga kategori tarif profesi.",
+    "ground_truth": "Pada dokumen Program Pascasarjana, uang kuliah Profesi Kedokteran Gigi kategori WNI adalah Rp17.500.000, Khusus Rp25.000.000, dan WNA Rp61.000.000.",
+    "answer": "Pada dokumen Program Pascasarjana, uang kuliah Profesi Kedokteran Gigi kategori WNI adalah Rp17.500.000, Khusus Rp25.000.000, dan WNA Rp61.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        144,
+        209
+      ],
+      "benchmark_group": "pascasarjana_fee"
+    }
+  },
+  {
+    "id": "q045",
+    "question": "Pada dokumen tarif biaya tunda kuliah pascasarjana, siapa yang dibebani biaya tunda dan berapa besar tarifnya?",
+    "reference": "Biaya tunda kuliah pascasarjana dibebankan kepada mahasiswa yang mengajukan tunda kuliah dan telah memperoleh persetujuan; tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "procedure",
+    "must_include": [
+      "tarif biaya tunda kuliah pascasarjana",
+      "mahasiswa yang mengajukan tunda kuliah",
+      "telah memperoleh persetujuan",
+      "10%"
+    ],
+    "should_not_include": [
+      "semua mahasiswa",
+      "dicicil",
+      "Rp1.100.000"
+    ],
+    "source_evidence": "Chunk 150 memberi link dokumen tarif biaya tunda kuliah pascasarjana; chunk 186 menyebut pihak yang dibebani dan tarif 10% dari uang kuliah.",
+    "notes": "Menguji gabungan dokumen sumber dan ketentuan biaya tunda.",
+    "ground_truth": "Biaya tunda kuliah pascasarjana dibebankan kepada mahasiswa yang mengajukan tunda kuliah dan telah memperoleh persetujuan; tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "answer": "Biaya tunda kuliah pascasarjana dibebankan kepada mahasiswa yang mengajukan tunda kuliah dan telah memperoleh persetujuan; tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        150,
+        186
+      ],
+      "benchmark_group": "tunda_kuliah"
+    }
+  },
+  {
+    "id": "q046",
+    "question": "Dalam dokumen jalur khusus kerja sama, apa ketentuan biaya untuk student exchange dan untuk mahasiswa overseas?",
+    "reference": "Dalam dokumen jalur khusus kerja sama, mahasiswa student exchange membayar UKT sebesar tarif UKT yang ditanggung dan dibayarkan untuk periode semester atau term berjalan, sedangkan mahasiswa overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "jalur khusus kerja sama",
+      "student exchange",
+      "tarif UKT",
+      "overseas",
+      "Rp1.100.000"
+    ],
+    "should_not_include": [
+      "Rp1.000.000",
+      "Rp1.250.000",
+      "pascasarjana"
+    ],
+    "source_evidence": "Chunk 160 mengidentifikasi dokumen jalur khusus kerja sama; chunk 162 menyebut ketentuan student exchange dan overseas.",
+    "notes": "Menguji dua status mahasiswa dalam dokumen kerja sama.",
+    "ground_truth": "Dalam dokumen jalur khusus kerja sama, mahasiswa student exchange membayar UKT sebesar tarif UKT yang ditanggung dan dibayarkan untuk periode semester atau term berjalan, sedangkan mahasiswa overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "answer": "Dalam dokumen jalur khusus kerja sama, mahasiswa student exchange membayar UKT sebesar tarif UKT yang ditanggung dan dibayarkan untuk periode semester atau term berjalan, sedangkan mahasiswa overseas membayar biaya registrasi status kuliah di luar negeri sebesar Rp1.100.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        160,
+        162
+      ],
+      "benchmark_group": "overseas_fee"
+    }
+  },
+  {
+    "id": "q047",
+    "question": "Apa link unduhan untuk Sarjana Reguler dan Vokasi serta untuk Sarjana Kelas Internasional?",
+    "reference": "Link unduhan Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf, sedangkan Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "url",
+    "must_include": [
+      "pdf-proxy-4.pdf",
+      "pdf-proxy.pdf"
+    ],
+    "should_not_include": [
+      "SK-Tarif-Pascasarjana-.pdf",
+      "SK-Tarif-UKT-Jalur-Mandiri.pdf"
+    ],
+    "source_evidence": "Chunks 142 dan 143 mencantumkan link unduh Sarjana Reguler dan Vokasi serta Sarjana Kelas Internasional.",
+    "notes": "Menguji penggabungan dua URL dari dua bagian halaman.",
+    "ground_truth": "Link unduhan Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf, sedangkan Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "answer": "Link unduhan Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf, sedangkan Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        142,
+        143
+      ],
+      "benchmark_group": "source_url"
+    }
+  },
+  {
+    "id": "q048",
+    "question": "Kalau lihat dokumen Program Pascasarjana, biaya overseas per term beda untuk profesi dan magister/doktor?",
+    "reference": "Ya. Pada dokumen Program Pascasarjana, program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan magister, doktor, spesialis, dan subspesialis dikenakan Rp1.250.000 per semester atau term.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "Program Pascasarjana",
+      "profesi Rp1.000.000",
+      "magister, doktor, spesialis, dan subspesialis Rp1.250.000"
+    ],
+    "should_not_include": [
+      "Rp1.100.000",
+      "jalur kerja sama",
+      "student exchange"
+    ],
+    "source_evidence": "Chunk 144 memberi link dokumen Program Pascasarjana; chunk 203 membedakan biaya overseas program profesi dan magister/doktor/spesialis/subspesialis.",
+    "notes": "Menguji pertanyaan user-like yang membutuhkan identifikasi dokumen dan aturan kategori overseas.",
+    "ground_truth": "Ya. Pada dokumen Program Pascasarjana, program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan magister, doktor, spesialis, dan subspesialis dikenakan Rp1.250.000 per semester atau term.",
+    "answer": "Ya. Pada dokumen Program Pascasarjana, program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan magister, doktor, spesialis, dan subspesialis dikenakan Rp1.250.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        144,
+        203
+      ],
+      "benchmark_group": "overseas_fee"
+    }
+  },
+  {
+    "id": "q049",
+    "question": "Kalau dari dokumen IPI Jalur Mandiri, Sastra Arab IPI 2 dan IPI 4 masing-masing berapa?",
+    "reference": "Pada dokumen IPI Jalur Mandiri, Sastra Arab memiliki IPI 2 sebesar Rp11.500.000 dan IPI 4 sebesar Rp28.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "IPI Jalur Mandiri",
+      "Sastra Arab",
+      "IPI 2 Rp11.500.000",
+      "IPI 4 Rp28.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Kelas Khusus Internasional",
+      "Rp16.600.000"
+    ],
+    "source_evidence": "Chunk 148 memberi link dokumen IPI Jalur Mandiri; chunk 89 mencantumkan Sastra Arab dengan IPI 2 = 11.500.000 dan IPI 4 = 28.000.000.",
+    "notes": "Menguji gabungan dokumen IPI Mandiri dan dua kategori IPI.",
+    "ground_truth": "Pada dokumen IPI Jalur Mandiri, Sastra Arab memiliki IPI 2 sebesar Rp11.500.000 dan IPI 4 sebesar Rp28.000.000.",
+    "answer": "Pada dokumen IPI Jalur Mandiri, Sastra Arab memiliki IPI 2 sebesar Rp11.500.000 dan IPI 4 sebesar Rp28.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        148,
+        89
+      ],
+      "benchmark_group": "ipi_mandiri"
+    }
+  },
+  {
+    "id": "q050",
+    "question": "Dari dokumen Sarjana Kelas Internasional, KKI Kedokteran Gigi itu UKT dan IPI-nya berapa?",
+    "reference": "Pada dokumen Sarjana Kelas Internasional, Kedokteran Gigi memiliki UKT Rp64.500.000 dan IPI Rp225.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "Sarjana Kelas Internasional",
+      "Kedokteran Gigi",
+      "UKT Rp64.500.000",
+      "IPI Rp225.000.000"
+    ],
+    "should_not_include": [
+      "Pendidikan Dokter",
+      "Profesi Kedokteran Gigi",
+      "Rp61.000.000"
+    ],
+    "source_evidence": "Chunk 143 memberi link dokumen Sarjana Kelas Internasional; chunk 110 mencantumkan Kedokteran Gigi KKI dengan UKT 64.500.000 dan IPI 225.000.000.",
+    "notes": "Menguji istilah user-like KKI dengan dokumen sumber dan tabel biaya.",
+    "ground_truth": "Pada dokumen Sarjana Kelas Internasional, Kedokteran Gigi memiliki UKT Rp64.500.000 dan IPI Rp225.000.000.",
+    "answer": "Pada dokumen Sarjana Kelas Internasional, Kedokteran Gigi memiliki UKT Rp64.500.000 dan IPI Rp225.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        143,
+        110
+      ],
+      "benchmark_group": "kki_fee"
+    }
+  },
+  {
+    "id": "q051",
+    "question": "Bandingkan UKT Ilmu Komputer pada Kelas Khusus Internasional dan jalur khusus kerja sama Tahun Akademik 2026/2027.",
+    "reference": "UKT Ilmu Komputer pada Kelas Khusus Internasional adalah Rp29.300.000, dan pada jalur khusus kerja sama juga Rp29.300.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "Kelas Khusus Internasional Rp29.300.000",
+      "jalur khusus kerja sama Rp29.300.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "RPL",
+      "Rp80.000.000"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan UKT Ilmu Komputer KKI 29.300.000; chunk 177 mencantumkan UKT Ilmu Komputer jalur kerja sama 29.300.000.",
+    "notes": "Menguji perbandingan antarjalur dengan nilai UKT yang sama.",
+    "ground_truth": "UKT Ilmu Komputer pada Kelas Khusus Internasional adalah Rp29.300.000, dan pada jalur khusus kerja sama juga Rp29.300.000.",
+    "answer": "UKT Ilmu Komputer pada Kelas Khusus Internasional adalah Rp29.300.000, dan pada jalur khusus kerja sama juga Rp29.300.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        111,
+        177
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q052",
+    "question": "Bandingkan IPI Ilmu Komputer pada jalur RPL dan jalur khusus kerja sama.",
+    "reference": "IPI Ilmu Komputer pada jalur RPL adalah Rp50.000.000, sedangkan pada jalur khusus kerja sama Rp80.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "RPL Rp50.000.000",
+      "jalur khusus kerja sama Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "Rp60.000.000"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan IPI Ilmu Komputer RPL 50.000.000; chunk 177 mencantumkan IPI Ilmu Komputer kerja sama 80.000.000.",
+    "notes": "Menguji perbandingan IPI antarjalur yang sering tertukar.",
+    "ground_truth": "IPI Ilmu Komputer pada jalur RPL adalah Rp50.000.000, sedangkan pada jalur khusus kerja sama Rp80.000.000.",
+    "answer": "IPI Ilmu Komputer pada jalur RPL adalah Rp50.000.000, sedangkan pada jalur khusus kerja sama Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        137,
+        177
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q053",
+    "question": "Bandingkan IPI Pendidikan Dokter pada Kelas Khusus Internasional dan IPI 4 Pendidikan Dokter jalur seleksi mandiri.",
+    "reference": "IPI Pendidikan Dokter pada Kelas Khusus Internasional adalah Rp111.100.000, sedangkan IPI 4 Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "Kelas Khusus Internasional Rp111.100.000",
+      "jalur seleksi mandiri Rp120.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Kedokteran Gigi",
+      "Rp51.700.000"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan IPI Pendidikan Dokter KKI 111.100.000; chunk 86 mencantumkan IPI 4 Pendidikan Dokter jalur seleksi mandiri 120.000.000.",
+    "notes": "Menguji perbandingan IPI Pendidikan Dokter lintas jalur dari dua dokumen.",
+    "ground_truth": "IPI Pendidikan Dokter pada Kelas Khusus Internasional adalah Rp111.100.000, sedangkan IPI 4 Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "answer": "IPI Pendidikan Dokter pada Kelas Khusus Internasional adalah Rp111.100.000, sedangkan IPI 4 Pendidikan Dokter jalur seleksi mandiri adalah Rp120.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        110,
+        86
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q054",
+    "question": "Bandingkan IPI 4 jalur seleksi mandiri untuk Pendidikan Dokter dan Farmasi.",
+    "reference": "IPI 4 jalur seleksi mandiri untuk Pendidikan Dokter adalah Rp120.000.000, sedangkan untuk Farmasi Rp75.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "Pendidikan Dokter Rp120.000.000",
+      "Farmasi Rp75.000.000"
+    ],
+    "should_not_include": [
+      "UKT",
+      "IPI 3",
+      "Rp90.000.000"
+    ],
+    "source_evidence": "Chunk 86 mencantumkan IPI 4 Pendidikan Dokter 120.000.000; chunk 87 mencantumkan IPI 4 Farmasi 75.000.000.",
+    "notes": "Menguji perbandingan program pada kategori IPI yang sama.",
+    "ground_truth": "IPI 4 jalur seleksi mandiri untuk Pendidikan Dokter adalah Rp120.000.000, sedangkan untuk Farmasi Rp75.000.000.",
+    "answer": "IPI 4 jalur seleksi mandiri untuk Pendidikan Dokter adalah Rp120.000.000, sedangkan untuk Farmasi Rp75.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        86,
+        87
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q055",
+    "question": "Bandingkan UKT Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi dan pada jalur khusus kerja sama Tahun Akademik 2026/2027.",
+    "reference": "Pada Program Pendidikan Vokasi, UKT 9 Sarjana Terapan Fisioterapi adalah Rp15.000.000. Pada jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Sarjana Terapan Fisioterapi juga Rp15.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "Program Pendidikan Vokasi Rp15.000.000",
+      "jalur khusus kerja sama Rp15.000.000",
+      "Sarjana Terapan Fisioterapi"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Terapi Okupasi",
+      "Administrasi Asuransi dan Aktuaria"
+    ],
+    "source_evidence": "Chunk 27 mencantumkan UKT 9 Sarjana Terapan Fisioterapi sebesar 15.000.000; chunk 179 mencantumkan UKT Sarjana Terapan Fisioterapi jalur khusus kerja sama sebesar 15.000.000.",
+    "notes": "Menguji perbandingan Vokasi reguler dan jalur kerja sama untuk program yang sama.",
+    "ground_truth": "Pada Program Pendidikan Vokasi, UKT 9 Sarjana Terapan Fisioterapi adalah Rp15.000.000. Pada jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Sarjana Terapan Fisioterapi juga Rp15.000.000.",
+    "answer": "Pada Program Pendidikan Vokasi, UKT 9 Sarjana Terapan Fisioterapi adalah Rp15.000.000. Pada jalur khusus kerja sama Tahun Akademik 2026/2027, UKT Sarjana Terapan Fisioterapi juga Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "source_chunk_ids": [
+        27,
+        179
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q056",
+    "question": "IPI Ilmu Komputer KKI sama nggak dengan jalur kerja sama?",
+    "reference": "Tidak sama. IPI Ilmu Komputer KKI adalah Rp60.000.000, sedangkan IPI Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI Rp60.000.000",
+      "jalur khusus kerja sama Rp80.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "Rp50.000.000",
+      "UKT"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan IPI Ilmu Komputer KKI 60.000.000; chunk 177 mencantumkan IPI Ilmu Komputer kerja sama 80.000.000.",
+    "notes": "Menguji pertanyaan user-like yang membandingkan dua jalur.",
+    "ground_truth": "Tidak sama. IPI Ilmu Komputer KKI adalah Rp60.000.000, sedangkan IPI Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "answer": "Tidak sama. IPI Ilmu Komputer KKI adalah Rp60.000.000, sedangkan IPI Ilmu Komputer jalur khusus kerja sama adalah Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        111,
+        177
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q057",
+    "question": "IPI Ilmu Hukum lebih besar di RPL atau jalur kerja sama?",
+    "reference": "IPI Ilmu Hukum lebih besar di jalur kerja sama, yaitu Rp70.000.000; pada jalur RPL IPI-nya Rp22.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "RPL Rp22.000.000",
+      "jalur kerja sama Rp70.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "Rp98.000.000",
+      "UKT"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan IPI Ilmu Hukum RPL 22.000.000; chunk 178 mencantumkan IPI Ilmu Hukum kerja sama 70.000.000.",
+    "notes": "Menguji pertanyaan komparatif natural dengan jawaban arah perbandingan.",
+    "ground_truth": "IPI Ilmu Hukum lebih besar di jalur kerja sama, yaitu Rp70.000.000; pada jalur RPL IPI-nya Rp22.000.000.",
+    "answer": "IPI Ilmu Hukum lebih besar di jalur kerja sama, yaitu Rp70.000.000; pada jalur RPL IPI-nya Rp22.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        137,
+        178
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q058",
+    "question": "Sastra Arab di tabel UKT Program Sarjana dan Sastra Arab KKI masing-masing berapa UKT-nya?",
+    "reference": "Pada tabel UKT Program Sarjana, Sastra Arab memiliki UKT 8 sebesar Rp8.300.000; pada KKI, UKT Sastra Arab sebesar Rp16.600.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "UKT 8 Rp8.300.000",
+      "KKI Rp16.600.000",
+      "Sastra Arab"
+    ],
+    "should_not_include": [
+      "UKT 10",
+      "IPI",
+      "Rp45.000.000"
+    ],
+    "source_evidence": "Chunk 82 mencantumkan Sastra Arab UKT 8 = 8.300.000; chunk 111 mencantumkan Sastra Arab KKI UKT = 16.600.000.",
+    "notes": "Menguji perbandingan program sama antar dokumen/jalur.",
+    "ground_truth": "Pada tabel UKT Program Sarjana, Sastra Arab memiliki UKT 8 sebesar Rp8.300.000; pada KKI, UKT Sastra Arab sebesar Rp16.600.000.",
+    "answer": "Pada tabel UKT Program Sarjana, Sastra Arab memiliki UKT 8 sebesar Rp8.300.000; pada KKI, UKT Sastra Arab sebesar Rp16.600.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        82,
+        111
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q059",
+    "question": "Biaya overseas pascasarjana profesi sama nggak dengan overseas di jalur kerja sama?",
+    "reference": "Tidak sama. Overseas pascasarjana program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan overseas pada jalur kerja sama dikenakan Rp1.100.000 per semester atau term.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "pascasarjana program profesi Rp1.000.000",
+      "jalur kerja sama Rp1.100.000"
+    ],
+    "should_not_include": [
+      "Rp1.250.000",
+      "student exchange",
+      "semua mahasiswa"
+    ],
+    "source_evidence": "Chunk 203 mencantumkan overseas program profesi Rp1.000.000; chunk 162 mencantumkan overseas jalur kerja sama Rp1.100.000.",
+    "notes": "Menguji perbandingan dua aturan overseas dari dokumen berbeda.",
+    "ground_truth": "Tidak sama. Overseas pascasarjana program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan overseas pada jalur kerja sama dikenakan Rp1.100.000 per semester atau term.",
+    "answer": "Tidak sama. Overseas pascasarjana program profesi dikenakan Rp1.000.000 per semester atau term, sedangkan overseas pada jalur kerja sama dikenakan Rp1.100.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        203,
+        162
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  },
+  {
+    "id": "q060",
+    "question": "Pendidikan Dokter reguler UKT tertingginya lebih murah atau lebih mahal dibanding UKT KKI?",
+    "reference": "UKT tertinggi Pendidikan Dokter pada tabel Program Sarjana adalah UKT 11 sebesar Rp20.000.000, sedangkan UKT Pendidikan Dokter KKI adalah Rp51.700.000; jadi UKT KKI lebih mahal.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "UKT 11 Rp20.000.000",
+      "KKI Rp51.700.000",
+      "KKI lebih mahal"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Kedokteran Gigi",
+      "Rp111.100.000"
+    ],
+    "source_evidence": "Chunk 22 mencantumkan Pendidikan Dokter UKT 11 = 20.000.000; chunk 110 mencantumkan Pendidikan Dokter KKI UKT = 51.700.000.",
+    "notes": "Menguji perbandingan user-like antara reguler dan KKI tanpa mencampur IPI.",
+    "ground_truth": "UKT tertinggi Pendidikan Dokter pada tabel Program Sarjana adalah UKT 11 sebesar Rp20.000.000, sedangkan UKT Pendidikan Dokter KKI adalah Rp51.700.000; jadi UKT KKI lebih mahal.",
+    "answer": "UKT tertinggi Pendidikan Dokter pada tabel Program Sarjana adalah UKT 11 sebesar Rp20.000.000, sedangkan UKT Pendidikan Dokter KKI adalah Rp51.700.000; jadi UKT KKI lebih mahal.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "source_chunk_ids": [
+        22,
+        110
+      ],
+      "benchmark_group": "fee_comparison"
+    }
+  }
+]
