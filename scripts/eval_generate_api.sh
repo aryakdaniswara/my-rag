@@ -8,6 +8,8 @@ API_BASE_URL="${4:-http://127.0.0.1:8000}"
 OUTPUT_PATH="${5:-}"
 RUN_NAME="${RUN_NAME:-eval_generate_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
+EVAL_GENERATE_STREAM="${EVAL_GENERATE_STREAM:-true}"
+EVAL_SHOW_ANSWERS="${EVAL_SHOW_ANSWERS:-true}"
 
 if [ -z "$MODEL" ]; then
   echo "Usage: sh /app/scripts/eval_generate_api.sh <model> [label] [config_path] [api_base_url] [output_path]"
@@ -26,6 +28,16 @@ echo "[$(date -Iseconds)] Starting eval-generate model=$MODEL label=$LABEL"
 echo "Config: $CONFIG_PATH"
 echo "API base URL: $API_BASE_URL"
 echo "Run dir: $RUN_DIR"
+echo "Stream generation: $EVAL_GENERATE_STREAM"
+echo "Show answers: $EVAL_SHOW_ANSWERS"
+
+EXTRA_ARGS=""
+if [ "$EVAL_GENERATE_STREAM" = "true" ]; then
+  EXTRA_ARGS="$EXTRA_ARGS --stream"
+fi
+if [ "$EVAL_SHOW_ANSWERS" = "true" ]; then
+  EXTRA_ARGS="$EXTRA_ARGS --show-answers"
+fi
 
 PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --mode generate \
@@ -34,20 +46,24 @@ PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --run-dir "$RUN_DIR"
 
 if [ -n "$OUTPUT_PATH" ]; then
+  # shellcheck disable=SC2086
   PYTHONUNBUFFERED=1 python cli.py eval-generate \
     --config "$CONFIG_PATH" \
     --api-base-url "$API_BASE_URL" \
     --model "$MODEL" \
     --label "$LABEL" \
     --run-dir "$RUN_DIR" \
-    --output "$OUTPUT_PATH"
+    --output "$OUTPUT_PATH" \
+    $EXTRA_ARGS
 else
+  # shellcheck disable=SC2086
   PYTHONUNBUFFERED=1 python cli.py eval-generate \
     --config "$CONFIG_PATH" \
     --api-base-url "$API_BASE_URL" \
     --model "$MODEL" \
     --label "$LABEL" \
-    --run-dir "$RUN_DIR"
+    --run-dir "$RUN_DIR" \
+    $EXTRA_ARGS
 fi
 
 echo "[$(date -Iseconds)] Finished eval-generate model=$MODEL label=$LABEL"

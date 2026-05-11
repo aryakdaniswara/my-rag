@@ -7,6 +7,7 @@ CONFIG_PATH="${3:-evaluation/configs/eval_judge_local_qwen36.yaml}"
 OUTPUT_PATH="${4:-}"
 RUN_NAME="${RUN_NAME:-eval_score_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
+EVAL_METRIC_PROFILE="${EVAL_METRIC_PROFILE:-generation}"
 
 usage() {
   echo "Usage:"
@@ -48,6 +49,7 @@ exec >>"$LOG_PATH" 2>&1
 echo "[$(date -Iseconds)] Starting eval-score predictions=$PREDICTIONS_PATH label=$LABEL"
 echo "Config: $CONFIG_PATH"
 echo "Run dir: $RUN_DIR"
+echo "Metric profile: $EVAL_METRIC_PROFILE"
 
 PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
   --mode score \
@@ -60,12 +62,14 @@ if [ -n "$OUTPUT_PATH" ]; then
     --config "$CONFIG_PATH" \
     --predictions "$PREDICTIONS_PATH" \
     --run-dir "$RUN_DIR" \
+    --metric-profile "$EVAL_METRIC_PROFILE" \
     --output "$OUTPUT_PATH"
 else
   PYTHONUNBUFFERED=1 python cli.py eval-score \
     --config "$CONFIG_PATH" \
     --predictions "$PREDICTIONS_PATH" \
-    --run-dir "$RUN_DIR"
+    --run-dir "$RUN_DIR" \
+    --metric-profile "$EVAL_METRIC_PROFILE"
 fi
 
 echo "[$(date -Iseconds)] Finished eval-score predictions=$PREDICTIONS_PATH label=$LABEL"

@@ -93,6 +93,16 @@ def _judge_label_from_config(config: RAGConfig) -> str:
     return f"{mode}_{model}"
 
 
+def _metrics_for_profile(profile: str | None) -> list[str] | None:
+    if not profile or profile == "all":
+        return None
+    profiles = {
+        "generation": ["faithfulness", "answer_relevancy"],
+        "retrieval": ["context_precision", "context_recall"],
+    }
+    return profiles.get(profile)
+
+
 def _build_run_name(
     mode: str,
     dataset_label: str,
@@ -102,11 +112,12 @@ def _build_run_name(
 ) -> str:
     if run_name:
         return _slugify_label(run_name) or _now_timestamp()
-    parts = [_now_timestamp(), _slugify_label(mode) or "eval", dataset_label]
+    parts = [_slugify_label(mode) or "eval", dataset_label]
     if generation_label:
         parts.append(f"gen_{_slugify_label(generation_label) or 'model'}")
     if judge_label:
         parts.append(f"judge_{_slugify_label(judge_label) or 'judge'}")
+    parts.append(_now_timestamp())
     return "__".join(parts)
 
 
@@ -152,15 +163,14 @@ def _artifact_file_name(
     generation_model: str | None = None,
     judge_label: str | None = None,
 ) -> str:
-    parts = [_now_timestamp(), _slugify_label(artifact_kind) or "artifact", dataset_label]
+    parts = [_slugify_label(artifact_kind) or "artifact", dataset_label]
     if generation_label:
         parts.append(f"gen_{_slugify_label(generation_label) or 'model'}")
     elif generation_model:
         parts.append(f"gen_{_slugify_label(generation_model) or 'model'}")
-    if generation_model:
-        parts.append(f"model_{_slugify_label(generation_model) or 'model'}")
     if judge_label:
         parts.append(f"judge_{_slugify_label(judge_label) or 'judge'}")
+    parts.append(_now_timestamp())
     return "__".join(parts) + ".json"
 
 
@@ -436,6 +446,9 @@ def _apply_eval_score_overrides(config: RAGConfig, args) -> None:
         config.evaluation.eval_reasoning_effort = args.judge_reasoning_effort
     if args.judge_include_thoughts:
         config.evaluation.eval_include_thoughts = True
+    metrics = _metrics_for_profile(getattr(args, "metric_profile", None))
+    if metrics is not None:
+        config.evaluation.metrics = metrics
 
 
 def _runtime_settings_snapshot(config: RAGConfig, config_path: str | None = None) -> dict:
@@ -517,6 +530,92 @@ def _unload_ollama_model(llm_endpoint: str, model_name: str) -> None:
         print(f"Warning: failed to unload Ollama model {model_name}: {exc}")
 
 
+def _clean_stream_answer(answer: str) -> str:
+    return re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL).strip()
+
+
+def _stream_prediction_sample(
+    client: httpx.Client,
+    api_url: str,
+    payload: dict,
+    question: str,
+    started: float,
+) -> dict:
+    tokens: list[str] = []
+    metadata: dict = {}
+    timings: dict = {}
+    sources: list = []
+    context = ""
+    confidence_score = None
+    first_token_time: float | None = None
+    event_counts: dict[str, int] = {}
+
+    with client.stream("POST", api_url, json=payload) as response:
+        response.raise_for_status()
+        for line in response.iter_lines():
+            if not line or not line.startswith("data:"):
+                continue
+            raw_event = line.removeprefix("data:").strip()
+            if not raw_event or raw_event == "[DONE]":
+                continue
+            try:
+                event = json.loads(raw_event)
+            except json.JSONDecodeError:
+                continue
+            event_type = event.get("type")
+            content = event.get("content")
+            if not event_type:
+                continue
+            event_counts[event_type] = event_counts.get(event_type, 0) + 1
+
+            if event_type == "metadata" and isinstance(content, dict):
+                metadata.update(content)
+            elif event_type == "context" and isinstance(content, str):
+                context = content
+            elif event_type == "sources" and isinstance(content, list):
+                sources = content
+            elif event_type == "token":
+                if first_token_time is None:
+                    first_token_time = time.time()
+                tokens.append(str(content or ""))
+            elif event_type == "confidence" and isinstance(content, dict):
+                confidence_score = content.get("confidence_score")
+            elif event_type == "timings" and isinstance(content, dict):
+                timings.update(content)
+            elif event_type == "error":
+                raise RuntimeError(str(content))
+
+    answer = _clean_stream_answer("".join(tokens))
+    if not context:
+        raise RuntimeError(
+            "Streaming response did not include a context event. "
+            "Restart the RAG API after updating the code, or rerun eval-generate without --stream."
+        )
+    end_to_end_time_ms = (time.time() - started) * 1000
+    retrieval_time_ms = timings.get("retrieval_time_ms", metadata.get("retrieval_time_ms"))
+    generation_time_ms = timings.get("generation_time_ms")
+    api_end_to_end_time_ms = timings.get("end_to_end_time_ms")
+    ttft_ms = (first_token_time - started) * 1000 if first_token_time else None
+
+    return {
+        "question": question,
+        "answer": answer,
+        "context": context,
+        "retrieved_contexts": [context],
+        "sources": sources,
+        "confidence_score": confidence_score,
+        "num_docs": metadata.get("num_docs"),
+        "timings": {
+            "retrieval_time_ms": retrieval_time_ms,
+            "generation_time_ms": generation_time_ms,
+            "end_to_end_time_ms": api_end_to_end_time_ms or end_to_end_time_ms,
+            "ttft_ms": ttft_ms,
+            "stream_completed": True,
+        },
+        "stream_events": event_counts,
+    }
+
+
 def _generate_eval_predictions_via_api(
     config: RAGConfig,
     api_base_url: str,
@@ -526,8 +625,10 @@ def _generate_eval_predictions_via_api(
     generation_override: dict | None = None,
     retrieval_override: dict | None = None,
     artifact_label: str | None = None,
+    use_stream: bool = False,
+    show_answers: bool = False,
 ) -> dict:
-    api_url = f"{api_base_url.rstrip('/')}/query"
+    api_url = f"{api_base_url.rstrip('/')}/{'query/stream' if use_stream else 'query'}"
     samples = []
     timing_rows = []
     run_started = time.time()
@@ -543,31 +644,40 @@ def _generate_eval_predictions_via_api(
                 if retrieval_override:
                     payload["config_override"]["retrieval"] = retrieval_override
 
-            response = client.post(api_url, json=payload)
-            response.raise_for_status()
-            body = response.json()
-            metadata = body.get("metadata", {})
-            end_to_end_time_ms = (time.time() - started) * 1000
-            retrieval_time_ms = metadata.get("retrieval_time_ms")
-            generation_time_ms = metadata.get("generation_time_ms")
-            api_end_to_end_time_ms = metadata.get("end_to_end_time_ms")
+            if use_stream:
+                sample = _stream_prediction_sample(
+                    client=client,
+                    api_url=api_url,
+                    payload=payload,
+                    question=question,
+                    started=started,
+                )
+            else:
+                response = client.post(api_url, json=payload)
+                response.raise_for_status()
+                body = response.json()
+                metadata = body.get("metadata", {})
+                end_to_end_time_ms = (time.time() - started) * 1000
+                retrieval_time_ms = metadata.get("retrieval_time_ms")
+                generation_time_ms = metadata.get("generation_time_ms")
+                api_end_to_end_time_ms = metadata.get("end_to_end_time_ms")
 
-            sample = {
-                "question": question,
-                "answer": body.get("answer", ""),
-                "context": body.get("context", ""),
-                "retrieved_contexts": [body.get("context", "")],
-                "sources": body.get("sources", []),
-                "confidence_score": metadata.get("confidence_score"),
-                "num_docs": metadata.get("num_docs"),
-                "timings": {
-                    "retrieval_time_ms": retrieval_time_ms,
-                    "generation_time_ms": generation_time_ms,
-                    "end_to_end_time_ms": api_end_to_end_time_ms or end_to_end_time_ms,
-                    "ttft_ms": None,
-                    "stream_completed": None,
-                },
-            }
+                sample = {
+                    "question": question,
+                    "answer": body.get("answer", ""),
+                    "context": body.get("context", ""),
+                    "retrieved_contexts": [body.get("context", "")],
+                    "sources": body.get("sources", []),
+                    "confidence_score": metadata.get("confidence_score"),
+                    "num_docs": metadata.get("num_docs"),
+                    "timings": {
+                        "retrieval_time_ms": retrieval_time_ms,
+                        "generation_time_ms": generation_time_ms,
+                        "end_to_end_time_ms": api_end_to_end_time_ms or end_to_end_time_ms,
+                        "ttft_ms": None,
+                        "stream_completed": None,
+                    },
+                }
             if ground_truths and index < len(ground_truths):
                 sample["ground_truth"] = ground_truths[index]
             samples.append(sample)
@@ -577,6 +687,10 @@ def _generate_eval_predictions_via_api(
                     **sample["timings"],
                 }
             )
+            if show_answers:
+                print(f"\n[{index + 1}/{len(questions)}] {question}")
+                print(sample.get("answer", ""))
+                print("", flush=True)
 
     report = {
         "generated_at": datetime.now().isoformat(),
@@ -617,6 +731,7 @@ def _generate_eval_predictions_via_api(
             },
         },
         "api_base_url": api_base_url,
+        "api_query_mode": "stream" if use_stream else "json",
         "models": {
             "generation_label": artifact_label,
             "generation_model": generation_override.get("model_name", config.generation.model_name)
@@ -1282,6 +1397,16 @@ def main():
     )
     eval_generate_parser.add_argument("--run-dir", help="Existing or new eval run directory")
     eval_generate_parser.add_argument("--run-name", help="Optional eval run folder name when --run-dir is omitted")
+    eval_generate_parser.add_argument(
+        "--stream",
+        action="store_true",
+        help="Generate predictions through /query/stream and save the reconstructed answer/context",
+    )
+    eval_generate_parser.add_argument(
+        "--show-answers",
+        action="store_true",
+        help="Print each generated answer while saving the prediction artifact",
+    )
 
     eval_score_parser = subparsers.add_parser(
         "eval-score",
@@ -1325,6 +1450,15 @@ def main():
         "--judge-include-thoughts",
         action="store_true",
         help="Request judge thoughts when the backend supports them",
+    )
+    eval_score_parser.add_argument(
+        "--metric-profile",
+        choices=["generation", "retrieval", "all"],
+        default="generation",
+        help=(
+            "Metrics to score. Defaults to generation-only "
+            "(faithfulness + answer_relevancy); use retrieval for context metrics."
+        ),
     )
     eval_score_parser.add_argument("--run-dir", help="Existing or new eval run directory")
     eval_score_parser.add_argument("--run-name", help="Optional eval run folder name when --run-dir is omitted")
@@ -1603,6 +1737,8 @@ def main():
             generation_override=generation_override,
             retrieval_override=retrieval_override,
             artifact_label=output_label,
+            use_stream=args.stream,
+            show_answers=args.show_answers,
         )
         output_path = Path(args.output) if args.output else run_layout["predictions_dir"] / _artifact_file_name(
             artifact_kind="predictions",
@@ -1626,6 +1762,7 @@ def main():
                 "generation_label": output_label,
                 "generation_model": config.generation.model_name,
                 "generation_endpoint": config.generation.llm_endpoint,
+                "api_query_mode": "stream" if args.stream else "json",
             },
             artifact_entry=_build_manifest_artifact_entry(
                 artifact_type="predictions",
@@ -1815,6 +1952,10 @@ def main():
                 prediction_path=str(prediction_path),
                 output_path=str(output_path),
             )
+            results["score_settings"] = {
+                "metric_profile": args.metric_profile,
+                "metrics": list(rag.config.evaluation.metrics),
+            }
             results["run"] = {
                 "run_id": run_layout["root"].name,
                 "run_dir": str(run_layout["root"]),
@@ -1834,6 +1975,8 @@ def main():
                     "judge_label": _judge_label_from_config(rag.config),
                     "judge_mode": rag.config.evaluation.judge_mode,
                     "judge_model": rag.config.evaluation.eval_llm,
+                    "metric_profile": args.metric_profile,
+                    "metrics": list(rag.config.evaluation.metrics),
                 },
                 artifact_entry=_build_manifest_artifact_entry(
                     artifact_type="scores",

@@ -42,11 +42,142 @@ Generate predictions only through the live API:
 sh /app/scripts/eval_generate_api.sh qwen3.5:4b qwen35_4b
 ```
 
+The generate helper uses `/query/stream` by default and prints each final answer
+to the run log while still saving the full prediction artifact. Disable that with:
+
+```sh
+EVAL_GENERATE_STREAM=false EVAL_SHOW_ANSWERS=false \
+sh /app/scripts/eval_generate_api.sh qwen3.5:4b qwen35_4b
+```
+
 Score the latest saved predictions for a label:
 
 ```sh
 sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
 ```
+
+Score helpers default to generation-quality metrics only:
+
+```text
+faithfulness, answer_relevancy
+```
+
+Run retrieval-quality metrics separately when needed:
+
+```sh
+EVAL_METRIC_PROFILE=retrieval \
+sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+Use `EVAL_METRIC_PROFILE=all` to score every configured metric in one run.
+
+## Step-by-Step Eval Run
+
+Use this flow when comparing multiple generation models. It keeps retrieval
+quality separate from generation quality.
+
+### 1. Restart the API after code changes
+
+The streaming eval path requires `/query/stream` to emit `context`, so restart
+the API container after pulling or editing this code:
+
+```sh
+docker compose restart rag-api
+```
+
+### 2. Generate streamed predictions for one model
+
+This calls the live API, streams answers, prints each final answer to the run
+log, and saves a prediction artifact under `storage/eval_runs/<run>/predictions/`.
+
+```sh
+sh /app/scripts/eval_generate_api.sh \
+  qwen3.5:4b \
+  qwen35_4b \
+  config_server.yaml \
+  http://127.0.0.1:8000
+```
+
+To watch the generated answers while the detached command is running, tail the
+run log:
+
+```sh
+tail -f /app/storage/eval_runs/<run_name>/logs/eval-generate__qwen35_4b.log
+```
+
+### 3. Score generation quality for that model
+
+By default, scoring uses only generation-quality metrics:
+
+```text
+faithfulness, answer_relevancy
+```
+
+Run:
+
+```sh
+sh /app/scripts/eval_score.sh \
+  --latest qwen35_4b \
+  evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+The score report is saved under `storage/eval_runs/<run>/scores/`.
+
+### 4. Generate predictions for a model matrix
+
+Use this when comparing several generation models with the same retrieval
+settings:
+
+```sh
+sh /app/scripts/eval_generate_matrix.sh \
+  evaluation/configs/eval_matrix_8models_rerank8.yaml \
+  http://127.0.0.1:8000
+```
+
+The helper uses the model labels from `evaluation.model_matrix`.
+
+### 5. Score generation quality for the matrix
+
+This scores the latest prediction artifact for each matrix label and keeps the
+metric profile at generation-only by default:
+
+```sh
+sh /app/scripts/eval_score_matrix.sh \
+  evaluation/configs/eval_matrix_8models_rerank8.yaml
+```
+
+### 6. Score retrieval quality separately
+
+Run this once per retrieval setting or dataset snapshot, not for every generation
+model unless retrieval settings changed:
+
+```sh
+EVAL_METRIC_PROFILE=retrieval \
+sh /app/scripts/eval_score.sh \
+  --latest qwen35_4b \
+  evaluation/configs/eval_judge_local_qwen36.yaml
+```
+
+Retrieval-only scoring uses:
+
+```text
+context_precision, context_recall
+```
+
+### 7. Find artifacts
+
+Each run folder contains:
+
+```text
+storage/eval_runs/<run_name>/
+  run_manifest.json
+  predictions/
+  scores/
+  logs/
+```
+
+Use the manifest for the authoritative list of generated prediction and score
+artifacts.
 
 Full matrix run from the Python CLI:
 
@@ -119,6 +250,12 @@ Each run folder contains:
 - `logs/`
 
 Rich filenames help when files are copied elsewhere, but the manifest is the canonical lookup source for "latest" resolution.
+Prediction and score filenames use this shorter pattern:
+
+```text
+predictions__<dataset>__gen_<label>__<timestamp>.json
+score__<dataset>__gen_<label>__judge_<judge>__<timestamp>.json
+```
 
 ## Environment
 
