@@ -2244,5 +2244,1502 @@
       ],
       "benchmark_group": "fee_comparison"
     }
+  },
+  {
+    "id": "q061",
+    "question": "Apa nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri?",
+    "reference": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri adalah 300/SK/R/UI/2026.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "other",
+    "must_include": [
+      "300/SK/R/UI/2026"
+    ],
+    "should_not_include": [
+      "299/SK/R/UI/2026",
+      "564/SK/R/UI/2025"
+    ],
+    "source_evidence": "Chunk 70 mencantumkan NOMOR 300/SK/R/UI/2026.",
+    "notes": "Menguji lookup nomor SK jalur seleksi mandiri.",
+    "ground_truth": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri adalah 300/SK/R/UI/2026.",
+    "answer": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri adalah 300/SK/R/UI/2026.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-5",
+    "chunk_id": 70,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "ipi_mandiri",
+      "source_chunk_ids": [
+        70
+      ]
+    }
+  },
+  {
+    "id": "q062",
+    "question": "Apa nomor SK untuk dokumen jalur khusus kerja sama?",
+    "reference": "Nomor SK untuk dokumen jalur khusus kerja sama adalah 299/SK/R/UI/2026.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "other",
+    "must_include": [
+      "299/SK/R/UI/2026"
+    ],
+    "should_not_include": [
+      "300/SK/R/UI/2026",
+      "pdf-proxy-5"
+    ],
+    "source_evidence": "Chunk 168 mencantumkan NOMOR 299/SK/R/UI/2026.",
+    "notes": "Menguji lookup nomor SK jalur kerja sama.",
+    "ground_truth": "Nomor SK untuk dokumen jalur khusus kerja sama adalah 299/SK/R/UI/2026.",
+    "answer": "Nomor SK untuk dokumen jalur khusus kerja sama adalah 299/SK/R/UI/2026.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 168,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "kerja_sama_fee",
+      "source_chunk_ids": [
+        168
+      ]
+    }
+  },
+  {
+    "id": "q063",
+    "question": "Apa link unduhan untuk dokumen Sarjana RPL?",
+    "reference": "Link unduhan dokumen Sarjana RPL adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "url",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf"
+    ],
+    "should_not_include": [
+      "pdf-proxy.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "source_evidence": "Chunk 145 pada bagian Sarjana RPL berisi link unduh ke pdf-proxy-3.pdf.",
+    "notes": "Menguji URL sumber dokumen RPL.",
+    "ground_truth": "Link unduhan dokumen Sarjana RPL adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf.",
+    "answer": "Link unduhan dokumen Sarjana RPL adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 145,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "source_url",
+      "source_chunk_ids": [
+        145
+      ]
+    }
+  },
+  {
+    "id": "q064",
+    "question": "Apa link unduhan untuk dokumen IPI Jalur Mandiri?",
+    "reference": "Link unduhan dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "url",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf"
+    ],
+    "should_not_include": [
+      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "source_evidence": "Chunk 148 pada bagian IPI Jalur Mandiri berisi link unduh ke pdf-proxy-5.pdf.",
+    "notes": "Menguji URL dokumen IPI mandiri.",
+    "ground_truth": "Link unduhan dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf.",
+    "answer": "Link unduhan dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 148,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "source_url",
+      "source_chunk_ids": [
+        148
+      ]
+    }
+  },
+  {
+    "id": "q065",
+    "question": "Apa link unduhan untuk dokumen Jalur Kerjasama?",
+    "reference": "Link unduhan dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "url",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf"
+    ],
+    "should_not_include": [
+      "pdf-proxy-3.pdf",
+      "pdf-proxy-5.pdf"
+    ],
+    "source_evidence": "Chunk 149 pada bagian Jalur Kerjasama berisi link unduh ke pdf-proxy-1.pdf.",
+    "notes": "Menguji URL dokumen jalur kerja sama.",
+    "ground_truth": "Link unduhan dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf.",
+    "answer": "Link unduhan dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 149,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "source_url",
+      "source_chunk_ids": [
+        149
+      ]
+    }
+  },
+  {
+    "id": "q066",
+    "question": "Kapan dokumen Sarjana Kelas Internasional ditetapkan di Jakarta?",
+    "reference": "Dokumen Sarjana Kelas Internasional ditetapkan di Jakarta pada 16 Maret 2026.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "date",
+    "must_include": [
+      "16 Maret 2026"
+    ],
+    "should_not_include": [
+      "11 Maret 2026",
+      "14 Maret 2025"
+    ],
+    "source_evidence": "Chunk 113 menyebut ditetapkan di Jakarta pada tanggal 16 Maret 2026.",
+    "notes": "Menguji tanggal penetapan dokumen KKI.",
+    "ground_truth": "Dokumen Sarjana Kelas Internasional ditetapkan di Jakarta pada 16 Maret 2026.",
+    "answer": "Dokumen Sarjana Kelas Internasional ditetapkan di Jakarta pada 16 Maret 2026.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 113,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "kki_fee",
+      "source_chunk_ids": [
+        113
+      ]
+    }
+  },
+  {
+    "id": "q067",
+    "question": "Keputusan Rektor pada dokumen jalur khusus kerja sama mengatur tentang apa?",
+    "reference": "Keputusan Rektor itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027.",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "answer_type": "definition",
+    "must_include": [
+      "tarif biaya pendidikan",
+      "Program Sarjana",
+      "Program Pendidikan Vokasi",
+      "Jalur Khusus Kerja Sama",
+      "Tahun Akademik 2026/2027"
+    ],
+    "should_not_include": [
+      "jalur seleksi mandiri",
+      "Kelas Khusus Internasional",
+      "Pascasarjana"
+    ],
+    "source_evidence": "Chunk 160 memuat judul keputusan tentang tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027.",
+    "notes": "Menguji pemahaman cakupan dokumen kerja sama.",
+    "ground_truth": "Keputusan Rektor itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027.",
+    "answer": "Keputusan Rektor itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": 160,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "near_source",
+      "benchmark_group": "kerja_sama_fee",
+      "source_chunk_ids": [
+        160
+      ]
+    }
+  },
+  {
+    "id": "q068",
+    "question": "Untuk KKI Farmasi, UKT dan IPI-nya berapa?",
+    "reference": "Untuk Farmasi jalur Kelas Khusus Internasional, UKT adalah Rp55.000.000 dan IPI adalah Rp190.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Farmasi",
+      "UKT Rp55.000.000",
+      "IPI Rp190.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "RPL",
+      "Gizi"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan Farmasi KKI dengan UKT 55.000.000 dan IPI 190.000.000.",
+    "notes": "Menguji lookup dua komponen biaya KKI dari satu chunk.",
+    "ground_truth": "Untuk Farmasi jalur Kelas Khusus Internasional, UKT adalah Rp55.000.000 dan IPI adalah Rp190.000.000.",
+    "answer": "Untuk Farmasi jalur Kelas Khusus Internasional, UKT adalah Rp55.000.000 dan IPI adalah Rp190.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 110,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "kki_fee",
+      "source_chunk_ids": [
+        110
+      ]
+    }
+  },
+  {
+    "id": "q069",
+    "question": "Berapa UKT dan IPI Sistem Informasi pada Sarjana Kelas Internasional?",
+    "reference": "Untuk Sistem Informasi jalur Sarjana Kelas Internasional, UKT adalah Rp29.334.000 dan IPI adalah Rp60.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Sistem Informasi",
+      "UKT Rp29.334.000",
+      "IPI Rp60.000.000"
+    ],
+    "should_not_include": [
+      "Ilmu Komputer",
+      "jalur kerja sama",
+      "Rp29.300.000 sebagai UKT KKI Sistem Informasi"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Sistem Informasi KKI dengan UKT 29.334.000 dan IPI 60.000.000.",
+    "notes": "Menguji angka UKT KKI Sistem Informasi yang berbeda tipis dari Ilmu Komputer.",
+    "ground_truth": "Untuk Sistem Informasi jalur Sarjana Kelas Internasional, UKT adalah Rp29.334.000 dan IPI adalah Rp60.000.000.",
+    "answer": "Untuk Sistem Informasi jalur Sarjana Kelas Internasional, UKT adalah Rp29.334.000 dan IPI adalah Rp60.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": 111,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "kki_fee",
+      "source_chunk_ids": [
+        111
+      ]
+    }
+  },
+  {
+    "id": "q070",
+    "question": "Di jalur RPL, Manajemen dikenakan UKT dan IPI berapa?",
+    "reference": "Pada jalur RPL, Manajemen dikenakan UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Manajemen",
+      "UKT Rp13.000.000",
+      "IPI Rp18.500.000"
+    ],
+    "should_not_include": [
+      "Akuntansi",
+      "jalur kerja sama",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan Manajemen jalur RPL dengan UKT 13.000.000 dan IPI 18.500.000.",
+    "notes": "Menguji lookup RPL untuk program FEB.",
+    "ground_truth": "Pada jalur RPL, Manajemen dikenakan UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "answer": "Pada jalur RPL, Manajemen dikenakan UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": 137,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "rpl_fee",
+      "source_chunk_ids": [
+        137
+      ]
+    }
+  },
+  {
+    "id": "q071",
+    "question": "Uang kuliah Profesi Fisika Medis kategori WNA berapa?",
+    "reference": "Uang kuliah Profesi Fisika Medis kategori WNA TA 2025/2026 adalah Rp40.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Fisika Medis",
+      "WNA",
+      "Rp40.000.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Rp20.000.000",
+      "Akuntansi"
+    ],
+    "source_evidence": "Chunk 209 mencantumkan Profesi Fisika Medis kategori WNA dengan uang kuliah 40.000.000.",
+    "notes": "Menguji lookup profesi dengan kategori WNA.",
+    "ground_truth": "Uang kuliah Profesi Fisika Medis kategori WNA TA 2025/2026 adalah Rp40.000.000.",
+    "answer": "Uang kuliah Profesi Fisika Medis kategori WNA TA 2025/2026 adalah Rp40.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 209,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "pascasarjana_fee",
+      "source_chunk_ids": [
+        209
+      ]
+    }
+  },
+  {
+    "id": "q072",
+    "question": "Berapa uang kuliah Magister Ilmu Kefarmasian kategori WNA?",
+    "reference": "Uang kuliah Magister Ilmu Kefarmasian kategori WNA TA 2025/2026 adalah Rp57.500.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "answer_type": "fee",
+    "must_include": [
+      "Ilmu Kefarmasian",
+      "WNA",
+      "Rp57.500.000"
+    ],
+    "should_not_include": [
+      "WNI",
+      "Rp23.500.000",
+      "Ilmu Herbal"
+    ],
+    "source_evidence": "Chunk 211 mencantumkan Magister Ilmu Kefarmasian kategori WNA dengan uang kuliah 57.500.000.",
+    "notes": "Menguji lookup magister farmasi kategori WNA.",
+    "ground_truth": "Uang kuliah Magister Ilmu Kefarmasian kategori WNA TA 2025/2026 adalah Rp57.500.000.",
+    "answer": "Uang kuliah Magister Ilmu Kefarmasian kategori WNA TA 2025/2026 adalah Rp57.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 211,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "pascasarjana_fee",
+      "source_chunk_ids": [
+        211
+      ]
+    }
+  },
+  {
+    "id": "q073",
+    "question": "Kalau mau buka file Jalur Mandiri, link unduhnya yang mana?",
+    "reference": "Link unduhan file Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "answer_type": "url",
+    "must_include": [
+      "https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf"
+    ],
+    "should_not_include": [
+      "pdf-proxy-5.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "source_evidence": "Chunk 147 pada bagian Jalur Mandiri berisi link unduh SK-Tarif-UKT-Jalur-Mandiri.pdf.",
+    "notes": "Menguji pertanyaan user-like untuk mencari dokumen sumber mandiri.",
+    "ground_truth": "Link unduhan file Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf.",
+    "answer": "Link unduhan file Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 147,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "source_url",
+      "source_chunk_ids": [
+        147
+      ]
+    }
+  },
+  {
+    "id": "q074",
+    "question": "Kalau mau cek file biaya tunda kuliah pascasarjana, link unduhnya apa?",
+    "reference": "Link unduhan file biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf.",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "answer_type": "url",
+    "must_include": [
+      "SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf"
+    ],
+    "should_not_include": [
+      "SK-Tarif-Pascasarjana-.pdf",
+      "pdf-proxy-3.pdf"
+    ],
+    "source_evidence": "Chunk 150 pada bagian Tarif Biaya Tunda Kuliah Pascasarjana berisi link unduh dokumen SK No. 266.",
+    "notes": "Menguji user-like URL lookup untuk dokumen tunda kuliah.",
+    "ground_truth": "Link unduhan file biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf.",
+    "answer": "Link unduhan file biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": 150,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "source_url",
+      "source_chunk_ids": [
+        150
+      ]
+    }
+  },
+  {
+    "id": "q075",
+    "question": "Apoteker WNI uang kuliahnya berapa di TA 2025/2026?",
+    "reference": "Uang kuliah Apoteker kategori WNI TA 2025/2026 adalah Rp25.000.000.",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "answer_type": "fee",
+    "must_include": [
+      "Apoteker",
+      "WNI",
+      "Rp25.000.000"
+    ],
+    "should_not_include": [
+      "Khusus (S1 Non UI)",
+      "Rp40.000.000",
+      "WNA"
+    ],
+    "source_evidence": "Chunk 210 mencantumkan Apoteker kategori WNI dengan uang kuliah 25.000.000.",
+    "notes": "Menguji pertanyaan user-like untuk tarif profesi.",
+    "ground_truth": "Uang kuliah Apoteker kategori WNI TA 2025/2026 adalah Rp25.000.000.",
+    "answer": "Uang kuliah Apoteker kategori WNI TA 2025/2026 adalah Rp25.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "SK-Tarif-Pascasarjana-",
+    "chunk_id": 210,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "single_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "pascasarjana_fee",
+      "source_chunk_ids": [
+        210
+      ]
+    }
+  },
+  {
+    "id": "q076",
+    "question": "Apa link dokumen IPI Jalur Mandiri, dan berapa IPI 4 Ilmu Hukum pada dokumen itu?",
+    "reference": "Link dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf, dan IPI 4 Ilmu Hukum pada dokumen itu adalah Rp48.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy-5.pdf",
+      "Ilmu Hukum",
+      "IPI 4 Rp48.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "jalur kerja sama",
+      "Rp70.000.000"
+    ],
+    "source_evidence": "Chunk 148 memberi link dokumen IPI Jalur Mandiri; chunk 89 mencantumkan Ilmu Hukum dengan IPI 4 sebesar 48.000.000.",
+    "notes": "Menguji gabungan link dokumen dan lookup IPI mandiri.",
+    "ground_truth": "Link dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf, dan IPI 4 Ilmu Hukum pada dokumen itu adalah Rp48.000.000.",
+    "answer": "Link dokumen IPI Jalur Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf, dan IPI 4 Ilmu Hukum pada dokumen itu adalah Rp48.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "ipi_mandiri",
+      "source_chunk_ids": [
+        148,
+        89
+      ]
+    }
+  },
+  {
+    "id": "q077",
+    "question": "Apa link dokumen Jalur Kerjasama, dan berapa UKT serta IPI Sistem Informasi pada jalur itu?",
+    "reference": "Link dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Pada jalur itu, Sistem Informasi memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy-1.pdf",
+      "Sistem Informasi",
+      "UKT Rp29.300.000",
+      "IPI Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "Rp60.000.000 sebagai IPI kerja sama",
+      "RPL"
+    ],
+    "source_evidence": "Chunk 149 memberi link Jalur Kerjasama; chunk 178 mencantumkan Sistem Informasi jalur kerja sama dengan UKT 29.300.000 dan IPI 80.000.000.",
+    "notes": "Menguji link sumber dan tarif kerja sama.",
+    "ground_truth": "Link dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Pada jalur itu, Sistem Informasi memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "answer": "Link dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Pada jalur itu, Sistem Informasi memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "kerja_sama_fee",
+      "source_chunk_ids": [
+        149,
+        178
+      ]
+    }
+  },
+  {
+    "id": "q078",
+    "question": "Pada dokumen jalur khusus kerja sama, apa judul/cakupan dokumennya dan berapa biaya overseas-nya?",
+    "reference": "Dokumen itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027. Biaya overseas pada dokumen itu adalah Rp1.100.000 per semester atau term.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Jalur Khusus Kerja Sama",
+      "Tahun Akademik 2026/2027",
+      "Rp1.100.000 per semester/term"
+    ],
+    "should_not_include": [
+      "Program Pascasarjana",
+      "Rp1.000.000",
+      "Rp1.250.000"
+    ],
+    "source_evidence": "Chunk 160 memuat cakupan dokumen jalur khusus kerja sama; chunk 162 mencantumkan biaya overseas Rp1.100.000 per semester/term.",
+    "notes": "Menguji gabungan cakupan dokumen dan aturan overseas.",
+    "ground_truth": "Dokumen itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027. Biaya overseas pada dokumen itu adalah Rp1.100.000 per semester atau term.",
+    "answer": "Dokumen itu mengatur tarif biaya pendidikan bagi mahasiswa Program Sarjana dan Program Pendidikan Vokasi Jalur Khusus Kerja Sama Tahun Akademik 2026/2027. Biaya overseas pada dokumen itu adalah Rp1.100.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "overseas_fee",
+      "source_chunk_ids": [
+        160,
+        162
+      ]
+    }
+  },
+  {
+    "id": "q079",
+    "question": "Apa nomor SK jalur khusus kerja sama, dan berapa UKT serta IPI D3 Akuntansi pada jalur itu?",
+    "reference": "Nomor SK jalur khusus kerja sama adalah 299/SK/R/UI/2026. Untuk D3 Akuntansi pada jalur itu, UKT adalah Rp13.000.000 dan IPI adalah Rp13.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "299/SK/R/UI/2026",
+      "D3 Akuntansi",
+      "UKT Rp13.000.000",
+      "IPI Rp13.000.000"
+    ],
+    "should_not_include": [
+      "300/SK/R/UI/2026",
+      "Administrasi Asuransi dan Aktuaria",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 168 mencantumkan nomor 299/SK/R/UI/2026; chunk 179 mencantumkan D3 Akuntansi jalur kerja sama dengan UKT 13.000.000 dan IPI 13.000.000.",
+    "notes": "Menguji nomor SK dan tarif D3 kerja sama.",
+    "ground_truth": "Nomor SK jalur khusus kerja sama adalah 299/SK/R/UI/2026. Untuk D3 Akuntansi pada jalur itu, UKT adalah Rp13.000.000 dan IPI adalah Rp13.000.000.",
+    "answer": "Nomor SK jalur khusus kerja sama adalah 299/SK/R/UI/2026. Untuk D3 Akuntansi pada jalur itu, UKT adalah Rp13.000.000 dan IPI adalah Rp13.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "kerja_sama_fee",
+      "source_chunk_ids": [
+        168,
+        179
+      ]
+    }
+  },
+  {
+    "id": "q080",
+    "question": "Di dokumen Sarjana RPL, berapa UKT dan IPI Akuntansi?",
+    "reference": "Pada dokumen Sarjana RPL, Akuntansi memiliki UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "Sarjana RPL",
+      "Akuntansi",
+      "UKT Rp13.000.000",
+      "IPI Rp18.500.000"
+    ],
+    "should_not_include": [
+      "Manajemen",
+      "jalur kerja sama",
+      "Kelas Khusus Internasional"
+    ],
+    "source_evidence": "Chunk 145 memberi link dokumen Sarjana RPL; chunk 137 mencantumkan Akuntansi RPL dengan UKT 13.000.000 dan IPI 18.500.000.",
+    "notes": "Menguji dokumen sumber RPL dan tarif program.",
+    "ground_truth": "Pada dokumen Sarjana RPL, Akuntansi memiliki UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "answer": "Pada dokumen Sarjana RPL, Akuntansi memiliki UKT Rp13.000.000 dan IPI Rp18.500.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "rpl_fee",
+      "source_chunk_ids": [
+        145,
+        137
+      ]
+    }
+  },
+  {
+    "id": "q081",
+    "question": "Apa link Sarjana Kelas Internasional, dan berapa UKT serta IPI Psikologi pada dokumen itu?",
+    "reference": "Link Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, Psikologi memiliki UKT Rp34.000.000 dan IPI Rp40.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy.pdf",
+      "Psikologi",
+      "UKT Rp34.000.000",
+      "IPI Rp40.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "RPL",
+      "Ilmu Komunikasi"
+    ],
+    "source_evidence": "Chunk 143 memberi link Sarjana Kelas Internasional; chunk 111 mencantumkan Psikologi KKI dengan UKT 34.000.000 dan IPI 40.000.000.",
+    "notes": "Menguji link sumber KKI dan lookup tarif psikologi.",
+    "ground_truth": "Link Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, Psikologi memiliki UKT Rp34.000.000 dan IPI Rp40.000.000.",
+    "answer": "Link Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Pada dokumen itu, Psikologi memiliki UKT Rp34.000.000 dan IPI Rp40.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "kki_fee",
+      "source_chunk_ids": [
+        143,
+        111
+      ]
+    }
+  },
+  {
+    "id": "q082",
+    "question": "Pada dokumen Program Pascasarjana, berapa uang kuliah Apoteker kategori WNI dan Khusus S1 Non UI?",
+    "reference": "Pada dokumen Program Pascasarjana, uang kuliah Apoteker kategori WNI adalah Rp25.000.000, sedangkan kategori Khusus (S1 Non UI) adalah Rp40.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "Program Pascasarjana",
+      "Apoteker WNI Rp25.000.000",
+      "Khusus (S1 Non UI) Rp40.000.000"
+    ],
+    "should_not_include": [
+      "WNA",
+      "Kedokteran Gigi",
+      "Rp61.000.000"
+    ],
+    "source_evidence": "Chunk 144 memberi link dokumen Program Pascasarjana; chunk 210 mencantumkan Apoteker WNI 25.000.000 dan Khusus (S1 Non UI) 40.000.000.",
+    "notes": "Menguji kategori profesi dalam dokumen pascasarjana.",
+    "ground_truth": "Pada dokumen Program Pascasarjana, uang kuliah Apoteker kategori WNI adalah Rp25.000.000, sedangkan kategori Khusus (S1 Non UI) adalah Rp40.000.000.",
+    "answer": "Pada dokumen Program Pascasarjana, uang kuliah Apoteker kategori WNI adalah Rp25.000.000, sedangkan kategori Khusus (S1 Non UI) adalah Rp40.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "pascasarjana_fee",
+      "source_chunk_ids": [
+        144,
+        210
+      ]
+    }
+  },
+  {
+    "id": "q083",
+    "question": "Apa link dokumen biaya tunda kuliah pascasarjana, kapan ditetapkan, dan berapa rumus tarifnya?",
+    "reference": "Link dokumen biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf. Dokumen itu ditetapkan pada 11 Maret 2026, dan tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "answer_type": "procedure",
+    "must_include": [
+      "SK-No-266",
+      "11 Maret 2026",
+      "10% dari besaran uang kuliah"
+    ],
+    "should_not_include": [
+      "16 Maret 2026",
+      "Rp1.100.000",
+      "dicicil"
+    ],
+    "source_evidence": "Chunk 150 memberi link dokumen biaya tunda kuliah; chunk 189 menyebut tanggal 11 Maret 2026; chunk 186 menyebut tarif 10% dari uang kuliah.",
+    "notes": "Menguji tiga konteks: URL, tanggal, dan formula biaya.",
+    "ground_truth": "Link dokumen biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf. Dokumen itu ditetapkan pada 11 Maret 2026, dan tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "answer": "Link dokumen biaya tunda kuliah pascasarjana adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf. Dokumen itu ditetapkan pada 11 Maret 2026, dan tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "shifted",
+      "benchmark_group": "tunda_kuliah",
+      "source_chunk_ids": [
+        150,
+        189,
+        186
+      ]
+    }
+  },
+  {
+    "id": "q084",
+    "question": "Kalau cari IPI mandiri buat Ilmu Komputer, dokumennya yang mana dan IPI paling tingginya berapa?",
+    "reference": "Dokumen IPI Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf. Untuk Ilmu Komputer, IPI paling tinggi yang tercantum adalah IPI 4 sebesar Rp60.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy-5.pdf",
+      "Ilmu Komputer",
+      "IPI 4 Rp60.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "jalur kerja sama",
+      "Rp80.000.000"
+    ],
+    "source_evidence": "Chunk 148 memberi link dokumen IPI Jalur Mandiri; chunk 88 mencantumkan Ilmu Komputer dengan IPI 4 sebesar 60.000.000.",
+    "notes": "Menguji user-like lookup dokumen dan nilai IPI tertinggi.",
+    "ground_truth": "Dokumen IPI Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf. Untuk Ilmu Komputer, IPI paling tinggi yang tercantum adalah IPI 4 sebesar Rp60.000.000.",
+    "answer": "Dokumen IPI Mandiri adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf. Untuk Ilmu Komputer, IPI paling tinggi yang tercantum adalah IPI 4 sebesar Rp60.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "ipi_mandiri",
+      "source_chunk_ids": [
+        148,
+        88
+      ]
+    }
+  },
+  {
+    "id": "q085",
+    "question": "Kalau Fisioterapi di jalur kerja sama, dokumennya mana dan biaya UKT/IPI-nya apa aja?",
+    "reference": "Dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Untuk Sarjana Terapan Fisioterapi jalur kerja sama, UKT adalah Rp15.000.000 dan IPI adalah Rp15.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy-1.pdf",
+      "Sarjana Terapan Fisioterapi",
+      "UKT Rp15.000.000",
+      "IPI Rp15.000.000"
+    ],
+    "should_not_include": [
+      "Program Pendidikan Vokasi reguler",
+      "Terapi Okupasi",
+      "IPI mandiri"
+    ],
+    "source_evidence": "Chunk 149 memberi link Jalur Kerjasama; chunk 179 mencantumkan Sarjana Terapan Fisioterapi dengan UKT 15.000.000 dan IPI 15.000.000.",
+    "notes": "Menguji user-like pertanyaan dokumen + biaya Vokasi kerja sama.",
+    "ground_truth": "Dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Untuk Sarjana Terapan Fisioterapi jalur kerja sama, UKT adalah Rp15.000.000 dan IPI adalah Rp15.000.000.",
+    "answer": "Dokumen Jalur Kerjasama adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf. Untuk Sarjana Terapan Fisioterapi jalur kerja sama, UKT adalah Rp15.000.000 dan IPI adalah Rp15.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "kerja_sama_fee",
+      "source_chunk_ids": [
+        149,
+        179
+      ]
+    }
+  },
+  {
+    "id": "q086",
+    "question": "Kalau KARS Magister di Program Pascasarjana, WNI dan WNA bayarnya berapa?",
+    "reference": "Pada Program Pascasarjana, Magister Kajian Administrasi Rumah Sakit (KARS) kategori WNI membayar Rp21.000.000 dan kategori WNA Rp42.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "Program Pascasarjana",
+      "KARS",
+      "WNI Rp21.000.000",
+      "WNA Rp42.000.000"
+    ],
+    "should_not_include": [
+      "IKM",
+      "K3",
+      "Rp20.000.000"
+    ],
+    "source_evidence": "Chunk 144 memberi link Program Pascasarjana; chunk 211 mencantumkan KARS kategori WNI 21.000.000 dan WNA 42.000.000.",
+    "notes": "Menguji user-like pertanyaan kategori WNI/WNA pascasarjana.",
+    "ground_truth": "Pada Program Pascasarjana, Magister Kajian Administrasi Rumah Sakit (KARS) kategori WNI membayar Rp21.000.000 dan kategori WNA Rp42.000.000.",
+    "answer": "Pada Program Pascasarjana, Magister Kajian Administrasi Rumah Sakit (KARS) kategori WNI membayar Rp21.000.000 dan kategori WNA Rp42.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "pascasarjana_fee",
+      "source_chunk_ids": [
+        144,
+        211
+      ]
+    }
+  },
+  {
+    "id": "q087",
+    "question": "Dokumen Sarjana Reguler dan Vokasi linknya mana, terus UKT Kedokteran Gigi tertingginya berapa?",
+    "reference": "Link dokumen Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf. UKT tertinggi Kedokteran Gigi yang tercantum adalah UKT 11 sebesar Rp20.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy-4.pdf",
+      "Kedokteran Gigi",
+      "UKT 11 Rp20.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "IPI",
+      "Pendidikan Dokter"
+    ],
+    "source_evidence": "Chunk 142 memberi link Sarjana Reguler dan Vokasi; chunk 22 mencantumkan Kedokteran Gigi dengan UKT 11 sebesar 20.000.000.",
+    "notes": "Menguji user-like gabungan URL sumber dan tarif UKT.",
+    "ground_truth": "Link dokumen Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf. UKT tertinggi Kedokteran Gigi yang tercantum adalah UKT 11 sebesar Rp20.000.000.",
+    "answer": "Link dokumen Sarjana Reguler dan Vokasi adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf. UKT tertinggi Kedokteran Gigi yang tercantum adalah UKT 11 sebesar Rp20.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "ukt_reguler",
+      "source_chunk_ids": [
+        142,
+        22
+      ]
+    }
+  },
+  {
+    "id": "q088",
+    "question": "Kalau tunda kuliah pascasarjana disetujui, bayarnya tiap kapan dan berapa persen?",
+    "reference": "Jika tunda kuliah pascasarjana disetujui, tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan, dan dikenakan untuk setiap semester saat yang bersangkutan menunda kuliah.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "procedure",
+    "must_include": [
+      "10%",
+      "setiap semester",
+      "menunda kuliah"
+    ],
+    "should_not_include": [
+      "dicicil",
+      "sekali saja",
+      "Rp1.100.000"
+    ],
+    "source_evidence": "Chunk 150 menunjukkan dokumen tarif biaya tunda kuliah pascasarjana; chunk 186 menyebut tarif 10% dan dikenakan setiap semester saat menunda kuliah.",
+    "notes": "Menguji user-like prosedur biaya tunda kuliah.",
+    "ground_truth": "Jika tunda kuliah pascasarjana disetujui, tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan, dan dikenakan untuk setiap semester saat yang bersangkutan menunda kuliah.",
+    "answer": "Jika tunda kuliah pascasarjana disetujui, tarifnya 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan, dan dikenakan untuk setiap semester saat yang bersangkutan menunda kuliah.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "tunda_kuliah",
+      "source_chunk_ids": [
+        150,
+        186
+      ]
+    }
+  },
+  {
+    "id": "q089",
+    "question": "Kalau overseas di jalur kerja sama, dokumennya apa dan bayar berapa?",
+    "reference": "Dokumennya adalah keputusan tarif biaya pendidikan jalur khusus kerja sama Tahun Akademik 2026/2027, dan mahasiswa overseas membayar Rp1.100.000 per semester atau term.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "jalur khusus kerja sama",
+      "Tahun Akademik 2026/2027",
+      "Rp1.100.000 per semester/term"
+    ],
+    "should_not_include": [
+      "Program Pascasarjana",
+      "Rp1.000.000",
+      "Rp1.250.000"
+    ],
+    "source_evidence": "Chunk 160 mengidentifikasi dokumen jalur khusus kerja sama Tahun Akademik 2026/2027; chunk 162 mencantumkan biaya overseas Rp1.100.000 per semester/term.",
+    "notes": "Menguji user-like aturan overseas kerja sama.",
+    "ground_truth": "Dokumennya adalah keputusan tarif biaya pendidikan jalur khusus kerja sama Tahun Akademik 2026/2027, dan mahasiswa overseas membayar Rp1.100.000 per semester atau term.",
+    "answer": "Dokumennya adalah keputusan tarif biaya pendidikan jalur khusus kerja sama Tahun Akademik 2026/2027, dan mahasiswa overseas membayar Rp1.100.000 per semester atau term.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-1",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "overseas_fee",
+      "source_chunk_ids": [
+        160,
+        162
+      ]
+    }
+  },
+  {
+    "id": "q090",
+    "question": "Kalau mau cek Ilmu Komunikasi KKI, dokumennya mana dan UKT/IPI-nya berapa?",
+    "reference": "Dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komunikasi KKI, UKT adalah Rp28.000.000 dan IPI adalah Rp50.000.000.",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "answer_type": "list",
+    "must_include": [
+      "pdf-proxy.pdf",
+      "Ilmu Komunikasi",
+      "UKT Rp28.000.000",
+      "IPI Rp50.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "Sastra Inggris",
+      "RPL"
+    ],
+    "source_evidence": "Chunk 143 memberi link dokumen Sarjana Kelas Internasional; chunk 111 mencantumkan Ilmu Komunikasi KKI dengan UKT 28.000.000 dan IPI 50.000.000.",
+    "notes": "Menguji user-like lookup KKI dengan link dokumen dan tarif program.",
+    "ground_truth": "Dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komunikasi KKI, UKT adalah Rp28.000.000 dan IPI adalah Rp50.000.000.",
+    "answer": "Dokumen Sarjana Kelas Internasional adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf. Untuk Ilmu Komunikasi KKI, UKT adalah Rp28.000.000 dan IPI adalah Rp50.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "page",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "multi_chunk",
+      "wording_style": "user_like",
+      "benchmark_group": "kki_fee",
+      "source_chunk_ids": [
+        143,
+        111
+      ]
+    }
+  },
+  {
+    "id": "q091",
+    "question": "Bandingkan UKT dan IPI Farmasi pada jalur RPL dan jalur khusus kerja sama.",
+    "reference": "Pada jalur RPL, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "RPL UKT Rp55.000.000",
+      "RPL IPI Rp190.000.000",
+      "kerja sama UKT Rp55.000.000",
+      "kerja sama IPI Rp190.000.000"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "Gizi",
+      "Ilmu Keperawatan"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan Farmasi RPL dengan UKT 55.000.000 dan IPI 190.000.000; chunk 177 mencantumkan Farmasi kerja sama dengan nilai yang sama.",
+    "notes": "Menguji perbandingan lintas jalur dengan nilai sama.",
+    "ground_truth": "Pada jalur RPL, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "answer": "Pada jalur RPL, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        137,
+        177
+      ]
+    }
+  },
+  {
+    "id": "q092",
+    "question": "Bandingkan UKT dan IPI Farmasi pada Kelas Khusus Internasional dan jalur khusus kerja sama.",
+    "reference": "Pada Kelas Khusus Internasional, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI UKT Rp55.000.000",
+      "KKI IPI Rp190.000.000",
+      "kerja sama UKT Rp55.000.000",
+      "kerja sama IPI Rp190.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "Gizi",
+      "Pendidikan Dokter"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan Farmasi KKI dengan UKT 55.000.000 dan IPI 190.000.000; chunk 177 mencantumkan Farmasi kerja sama dengan UKT 55.000.000 dan IPI 190.000.000.",
+    "notes": "Menguji perbandingan KKI dan kerja sama untuk program yang sama.",
+    "ground_truth": "Pada Kelas Khusus Internasional, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "answer": "Pada Kelas Khusus Internasional, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000. Pada jalur khusus kerja sama, Farmasi juga memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        110,
+        177
+      ]
+    }
+  },
+  {
+    "id": "q093",
+    "question": "Bandingkan IPI Sastra Arab pada Kelas Khusus Internasional dan jalur khusus kerja sama.",
+    "reference": "IPI Sastra Arab pada Kelas Khusus Internasional adalah Rp45.000.000, sedangkan pada jalur khusus kerja sama Rp35.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI Rp45.000.000",
+      "jalur khusus kerja sama Rp35.000.000",
+      "Sastra Arab"
+    ],
+    "should_not_include": [
+      "UKT",
+      "RPL",
+      "Sastra Inggris"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan IPI Sastra Arab KKI 45.000.000; chunk 178 mencantumkan IPI Sastra Arab kerja sama 35.000.000.",
+    "notes": "Menguji perbandingan IPI program humaniora antarjalur.",
+    "ground_truth": "IPI Sastra Arab pada Kelas Khusus Internasional adalah Rp45.000.000, sedangkan pada jalur khusus kerja sama Rp35.000.000.",
+    "answer": "IPI Sastra Arab pada Kelas Khusus Internasional adalah Rp45.000.000, sedangkan pada jalur khusus kerja sama Rp35.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "shifted",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        111,
+        178
+      ]
+    }
+  },
+  {
+    "id": "q094",
+    "question": "IPI Ilmu Komunikasi lebih besar di KKI atau jalur kerja sama?",
+    "reference": "IPI Ilmu Komunikasi lebih besar di KKI, yaitu Rp50.000.000; pada jalur kerja sama IPI-nya Rp20.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI Rp50.000.000",
+      "jalur kerja sama Rp20.000.000",
+      "KKI lebih besar"
+    ],
+    "should_not_include": [
+      "UKT",
+      "Ilmu Hubungan Internasional",
+      "RPL"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan IPI Ilmu Komunikasi KKI 50.000.000; chunk 178 mencantumkan IPI Ilmu Komunikasi kerja sama 20.000.000.",
+    "notes": "Menguji user-like perbandingan IPI antarjalur.",
+    "ground_truth": "IPI Ilmu Komunikasi lebih besar di KKI, yaitu Rp50.000.000; pada jalur kerja sama IPI-nya Rp20.000.000.",
+    "answer": "IPI Ilmu Komunikasi lebih besar di KKI, yaitu Rp50.000.000; pada jalur kerja sama IPI-nya Rp20.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        111,
+        178
+      ]
+    }
+  },
+  {
+    "id": "q095",
+    "question": "Sistem Informasi KKI dan kerja sama UKT/IPI-nya beda gimana?",
+    "reference": "Sistem Informasi KKI memiliki UKT Rp29.334.000 dan IPI Rp60.000.000, sedangkan Sistem Informasi jalur kerja sama memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI UKT Rp29.334.000",
+      "KKI IPI Rp60.000.000",
+      "kerja sama UKT Rp29.300.000",
+      "kerja sama IPI Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Ilmu Komputer",
+      "RPL",
+      "Rp50.000.000"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Sistem Informasi KKI dengan UKT 29.334.000 dan IPI 60.000.000; chunk 178 mencantumkan Sistem Informasi kerja sama dengan UKT 29.300.000 dan IPI 80.000.000.",
+    "notes": "Menguji perbandingan detail angka yang sangat mirip.",
+    "ground_truth": "Sistem Informasi KKI memiliki UKT Rp29.334.000 dan IPI Rp60.000.000, sedangkan Sistem Informasi jalur kerja sama memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "answer": "Sistem Informasi KKI memiliki UKT Rp29.334.000 dan IPI Rp60.000.000, sedangkan Sistem Informasi jalur kerja sama memiliki UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        111,
+        178
+      ]
+    }
+  },
+  {
+    "id": "q096",
+    "question": "Farmasi RPL dan KKI biayanya sama atau beda?",
+    "reference": "Farmasi RPL dan Farmasi KKI memiliki nilai yang sama pada sumber: UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "RPL UKT Rp55.000.000",
+      "RPL IPI Rp190.000.000",
+      "KKI UKT Rp55.000.000",
+      "KKI IPI Rp190.000.000"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "Gizi",
+      "Ilmu Keperawatan"
+    ],
+    "source_evidence": "Chunk 137 mencantumkan Farmasi RPL dengan UKT 55.000.000 dan IPI 190.000.000; chunk 110 mencantumkan Farmasi KKI dengan nilai yang sama.",
+    "notes": "Menguji user-like perbandingan sama/beda lintas jalur.",
+    "ground_truth": "Farmasi RPL dan Farmasi KKI memiliki nilai yang sama pada sumber: UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "answer": "Farmasi RPL dan Farmasi KKI memiliki nilai yang sama pada sumber: UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-3",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        137,
+        110
+      ]
+    }
+  },
+  {
+    "id": "q097",
+    "question": "Ilmu Hukum KKI vs kerja sama, biaya UKT dan IPI-nya beda berapa?",
+    "reference": "Ilmu Hukum KKI memiliki UKT Rp28.000.000 dan IPI Rp98.000.000, sedangkan Ilmu Hukum jalur kerja sama memiliki UKT Rp20.000.000 dan IPI Rp70.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI UKT Rp28.000.000",
+      "KKI IPI Rp98.000.000",
+      "kerja sama UKT Rp20.000.000",
+      "kerja sama IPI Rp70.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "Rp22.000.000",
+      "Akuntansi"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Ilmu Hukum KKI dengan UKT 28.000.000 dan IPI 98.000.000; chunk 178 mencantumkan Ilmu Hukum kerja sama dengan UKT 20.000.000 dan IPI 70.000.000.",
+    "notes": "Menguji perbandingan user-like untuk program hukum.",
+    "ground_truth": "Ilmu Hukum KKI memiliki UKT Rp28.000.000 dan IPI Rp98.000.000, sedangkan Ilmu Hukum jalur kerja sama memiliki UKT Rp20.000.000 dan IPI Rp70.000.000.",
+    "answer": "Ilmu Hukum KKI memiliki UKT Rp28.000.000 dan IPI Rp98.000.000, sedangkan Ilmu Hukum jalur kerja sama memiliki UKT Rp20.000.000 dan IPI Rp70.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        111,
+        178
+      ]
+    }
+  },
+  {
+    "id": "q098",
+    "question": "Kedokteran Gigi KKI UKT-nya lebih besar atau lebih kecil dari uang kuliah Profesi Kedokteran Gigi WNA?",
+    "reference": "UKT Kedokteran Gigi KKI adalah Rp64.500.000, sedangkan uang kuliah Profesi Kedokteran Gigi kategori WNA adalah Rp61.000.000; jadi UKT KKI lebih besar.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI Rp64.500.000",
+      "Profesi WNA Rp61.000.000",
+      "KKI lebih besar"
+    ],
+    "should_not_include": [
+      "IPI KKI",
+      "Rp225.000.000",
+      "WNI"
+    ],
+    "source_evidence": "Chunk 110 mencantumkan UKT Kedokteran Gigi KKI 64.500.000; chunk 209 mencantumkan Profesi Kedokteran Gigi WNA 61.000.000.",
+    "notes": "Menguji perbandingan lintas jenjang dan kategori tanpa mencampur IPI.",
+    "ground_truth": "UKT Kedokteran Gigi KKI adalah Rp64.500.000, sedangkan uang kuliah Profesi Kedokteran Gigi kategori WNA adalah Rp61.000.000; jadi UKT KKI lebih besar.",
+    "answer": "UKT Kedokteran Gigi KKI adalah Rp64.500.000, sedangkan uang kuliah Profesi Kedokteran Gigi kategori WNA adalah Rp61.000.000; jadi UKT KKI lebih besar.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        110,
+        209
+      ]
+    }
+  },
+  {
+    "id": "q099",
+    "question": "Administrasi Rumah Sakit di Vokasi reguler dan jalur kerja sama UKT-nya beda nggak?",
+    "reference": "Ya, berbeda. UKT 9 Administrasi Rumah Sakit pada Program Pendidikan Vokasi adalah Rp14.000.000, sedangkan UKT Administrasi Rumah Sakit pada jalur khusus kerja sama adalah Rp13.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "Vokasi Rp14.000.000",
+      "jalur kerja sama Rp13.000.000",
+      "Administrasi Rumah Sakit"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Administrasi Perkantoran",
+      "Rp15.000.000 sebagai UKT"
+    ],
+    "source_evidence": "Chunk 28 mencantumkan UKT 9 Administrasi Rumah Sakit 14.000.000; chunk 179 mencantumkan UKT Administrasi Rumah Sakit jalur kerja sama 13.000.000.",
+    "notes": "Menguji perbandingan Vokasi reguler dan kerja sama untuk program D3.",
+    "ground_truth": "Ya, berbeda. UKT 9 Administrasi Rumah Sakit pada Program Pendidikan Vokasi adalah Rp14.000.000, sedangkan UKT Administrasi Rumah Sakit pada jalur khusus kerja sama adalah Rp13.000.000.",
+    "answer": "Ya, berbeda. UKT 9 Administrasi Rumah Sakit pada Program Pendidikan Vokasi adalah Rp14.000.000, sedangkan UKT Administrasi Rumah Sakit pada jalur khusus kerja sama adalah Rp13.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy-4",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        28,
+        179
+      ]
+    }
+  },
+  {
+    "id": "q100",
+    "question": "Sastra Arab KKI dan kerja sama UKT/IPI-nya beda apa?",
+    "reference": "Sastra Arab KKI memiliki UKT Rp16.600.000 dan IPI Rp45.000.000, sedangkan Sastra Arab jalur kerja sama memiliki UKT Rp16.600.000 dan IPI Rp35.000.000.",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "answer_type": "comparison",
+    "must_include": [
+      "KKI UKT Rp16.600.000",
+      "KKI IPI Rp45.000.000",
+      "kerja sama UKT Rp16.600.000",
+      "kerja sama IPI Rp35.000.000"
+    ],
+    "should_not_include": [
+      "RPL",
+      "UKT reguler",
+      "Rp8.300.000"
+    ],
+    "source_evidence": "Chunk 111 mencantumkan Sastra Arab KKI dengan UKT 16.600.000 dan IPI 45.000.000; chunk 178 mencantumkan Sastra Arab kerja sama dengan UKT 16.600.000 dan IPI 35.000.000.",
+    "notes": "Menguji user-like perbandingan program sama di dua jalur.",
+    "ground_truth": "Sastra Arab KKI memiliki UKT Rp16.600.000 dan IPI Rp45.000.000, sedangkan Sastra Arab jalur kerja sama memiliki UKT Rp16.600.000 dan IPI Rp35.000.000.",
+    "answer": "Sastra Arab KKI memiliki UKT Rp16.600.000 dan IPI Rp45.000.000, sedangkan Sastra Arab jalur kerja sama memiliki UKT Rp16.600.000 dan IPI Rp35.000.000.",
+    "sample_label": "snapshot_skbp_answerable_v4",
+    "doc_id": "pdf-proxy",
+    "chunk_id": null,
+    "source_path": "snapshot-chunk.json",
+    "snapshot_path": "snapshot-chunk.json",
+    "metadata": {
+      "benchmark_split": "snapshot_main_v4",
+      "expected_behavior": "answer",
+      "evidence_span": "cross_section",
+      "wording_style": "user_like",
+      "benchmark_group": "fee_comparison",
+      "source_chunk_ids": [
+        111,
+        178
+      ]
+    }
   }
 ]
