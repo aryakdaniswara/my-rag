@@ -1,0 +1,1215 @@
+[
+  {
+    "id": "v5_001",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau mau cek tarif Sarjana Reguler dan Vokasi UI, file resminya yang mana dan itu dipakai untuk tahun akademik berapa?",
+    "ground_truth": "File resminya adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf dan keputusan itu berlaku untuk Tahun Akademik 2026/2027.",
+    "source_chunk_ids": [
+      "142",
+      "8"
+    ],
+    "must_include": [
+      "pdf-proxy-4.pdf",
+      "2026/2027"
+    ],
+    "should_not_include": [
+      "pdf-proxy.pdf",
+      "2025/2026"
+    ],
+    "retrieval_notes": "Ambil link Sarjana Reguler dan Vokasi dari halaman indeks dan tahun berlaku dari dokumen reguler."
+  },
+  {
+    "id": "v5_002",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Dokumen biaya untuk Sarjana Kelas Internasional ada di file apa, dan SK-nya ditetapkan kapan?",
+    "ground_truth": "Dokumen biaya Sarjana Kelas Internasional ada di https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf dan ditetapkan pada 16 Maret 2026.",
+    "source_chunk_ids": [
+      "143",
+      "113"
+    ],
+    "must_include": [
+      "pdf-proxy.pdf",
+      "16 Maret 2026"
+    ],
+    "should_not_include": [
+      "pdf-proxy-3.pdf",
+      "11 Maret 2026"
+    ],
+    "retrieval_notes": "Butuh tautan dokumen KKI dari halaman indeks dan tanggal penetapan dari dokumen KKI."
+  },
+  {
+    "id": "v5_003",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Kalau mau buka dokumen Program Pascasarjana, filenya apa dan dokumen itu membahas tahun akademik berapa?",
+    "ground_truth": "Dokumen Program Pascasarjana ada di https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-Pascasarjana-.pdf dan membahas Tahun Akademik 2025/2026.",
+    "source_chunk_ids": [
+      "144",
+      "208"
+    ],
+    "must_include": [
+      "SK-Tarif-Pascasarjana-.pdf",
+      "2025/2026"
+    ],
+    "should_not_include": [
+      "SK-No-266",
+      "2026/2027"
+    ],
+    "retrieval_notes": "Ambil tautan pascasarjana dari halaman indeks dan tahun akademik dari judul dokumen pascasarjana."
+  },
+  {
+    "id": "v5_004",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau yang dicari dokumen RPL sarjana, link file-nya apa dan itu memang untuk jalur apa?",
+    "ground_truth": "Link file-nya adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf dan dokumen itu untuk jalur Khusus Rekognisi Pembelajaran Lampau (RPL).",
+    "source_chunk_ids": [
+      "145",
+      "137"
+    ],
+    "must_include": [
+      "pdf-proxy-3.pdf",
+      "Rekognisi Pembelajaran Lampau",
+      "RPL"
+    ],
+    "should_not_include": [
+      "jalur kerja sama",
+      "Kelas Khusus Internasional"
+    ],
+    "retrieval_notes": "Ambil tautan RPL dari halaman indeks lalu cocokkan dengan judul/tabel RPL."
+  },
+  {
+    "id": "v5_005",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Bagian Jalur Mandiri pada halaman SK Biaya Pendidikan UI 2026 mengarah ke file apa, dan itu untuk tahun akademik berapa?",
+    "ground_truth": "Bagian Jalur Mandiri mengarah ke https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf dan dokumen itu untuk Tahun Akademik 2025/2026.",
+    "source_chunk_ids": [
+      "147",
+      "37"
+    ],
+    "must_include": [
+      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
+      "2025/2026"
+    ],
+    "should_not_include": [
+      "pdf-proxy-5.pdf",
+      "2026/2027"
+    ],
+    "retrieval_notes": "Perlu tautan Jalur Mandiri dari halaman indeks dan tahun akademik dari judul dokumen mandiri."
+  },
+  {
+    "id": "v5_006",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Kalau butuh dokumen IPI Jalur Mandiri, file apa yang dibuka dan nomor SK-nya berapa?",
+    "ground_truth": "File yang dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf dan nomor SK-nya 300/SK/R/UI/2026.",
+    "source_chunk_ids": [
+      "148",
+      "70"
+    ],
+    "must_include": [
+      "pdf-proxy-5.pdf",
+      "300/SK/R/UI/2026"
+    ],
+    "should_not_include": [
+      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
+      "299/SK/R/UI/2026"
+    ],
+    "retrieval_notes": "Ambil tautan IPI Mandiri dari halaman indeks dan nomor SK dari dokumen IPI mandiri."
+  },
+  {
+    "id": "v5_007",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Dokumen Jalur Kerja Sama ada di file apa, dan keputusan itu untuk tahun akademik berapa?",
+    "ground_truth": "Dokumen Jalur Kerja Sama ada di https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf dan keputusan itu untuk Tahun Akademik 2026/2027.",
+    "source_chunk_ids": [
+      "149",
+      "160"
+    ],
+    "must_include": [
+      "pdf-proxy-1.pdf",
+      "2026/2027"
+    ],
+    "should_not_include": [
+      "pdf-proxy-3.pdf",
+      "2025/2026"
+    ],
+    "retrieval_notes": "Gabungkan tautan Jalur Kerja Sama dari halaman indeks dengan judul keputusan kerja sama."
+  },
+  {
+    "id": "v5_008",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Kalau mau lihat aturan biaya tunda kuliah pascasarjana, file apa yang dibuka dan dokumen itu ditetapkan kapan?",
+    "ground_truth": "File yang dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf dan dokumen itu ditetapkan pada 11 Maret 2026.",
+    "source_chunk_ids": [
+      "150",
+      "189"
+    ],
+    "must_include": [
+      "SK-No-266",
+      "11 Maret 2026"
+    ],
+    "should_not_include": [
+      "SK-Tarif-Pascasarjana-.pdf",
+      "16 Maret 2026"
+    ],
+    "retrieval_notes": "Ambil tautan dokumen tunda kuliah dari halaman indeks dan tanggal penetapan dari dokumen tunda kuliah."
+  },
+  {
+    "id": "v5_009",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Kalau butuh rujukan resmi untuk penetapan UKT UI, situs yang disebut di halaman itu apa?",
+    "ground_truth": "Situs yang disebut adalah https://ukt.ui.ac.id/.",
+    "source_chunk_ids": [
+      "151"
+    ],
+    "must_include": [
+      "https://ukt.ui.ac.id/"
+    ],
+    "should_not_include": [
+      "penerimaan.ui.ac.id",
+      "admission.ui.ac.id"
+    ],
+    "retrieval_notes": "Ambil URL situs resmi UKT dari halaman indeks."
+  },
+  {
+    "id": "v5_010",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "medium",
+    "question": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri berapa?",
+    "ground_truth": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri adalah 300/SK/R/UI/2026.",
+    "source_chunk_ids": [
+      "70"
+    ],
+    "must_include": [
+      "300/SK/R/UI/2026"
+    ],
+    "should_not_include": [
+      "299/SK/R/UI/2026",
+      "297/SK/R/UI/2026"
+    ],
+    "retrieval_notes": "Cari nomor SK pada dokumen IPI/mandiri yang relevan."
+  },
+  {
+    "id": "v5_011",
+    "main_category": "official_systems_and_contacts",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau dokumen jalur kerja sama, nomor SK-nya berapa?",
+    "ground_truth": "Nomor SK dokumen jalur kerja sama adalah 299/SK/R/UI/2026.",
+    "source_chunk_ids": [
+      "168"
+    ],
+    "must_include": [
+      "299/SK/R/UI/2026"
+    ],
+    "should_not_include": [
+      "300/SK/R/UI/2026",
+      "298/SK/R/UI/2026"
+    ],
+    "retrieval_notes": "Cari nomor SK pada dokumen kerja sama."
+  },
+  {
+    "id": "v5_012",
+    "main_category": "admission_pathways",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Dalam dokumen UKT sarjana-vokasi reguler 2026/2027, jalur nasional apa saja yang disebut?",
+    "ground_truth": "Dokumen itu menyebut jalur Seleksi Nasional Berbasis Prestasi dan jalur Seleksi Nasional Berbasis Tes.",
+    "source_chunk_ids": [
+      "6",
+      "20",
+      "21"
+    ],
+    "must_include": [
+      "Seleksi Nasional Berbasis Prestasi",
+      "Seleksi Nasional Berbasis Tes"
+    ],
+    "should_not_include": [
+      "RPL",
+      "Jalur Kerja Sama",
+      "Kelas Khusus Internasional"
+    ],
+    "retrieval_notes": "Ambil cakupan jalur dari diktum dan judul dokumen reguler sarjana-vokasi."
+  },
+  {
+    "id": "v5_013",
+    "main_category": "admission_pathways",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Dokumen biaya ini khusus untuk jalur apa: Kelas Khusus Internasional, RPL, atau kerja sama?",
+    "ground_truth": "Dokumen itu khusus untuk jalur Kelas Khusus Internasional.",
+    "source_chunk_ids": [
+      "109"
+    ],
+    "must_include": [
+      "Kelas Khusus Internasional"
+    ],
+    "should_not_include": [
+      "RPL",
+      "jalur kerja sama"
+    ],
+    "retrieval_notes": "Baca nama jalur langsung dari judul dokumen KKI."
+  },
+  {
+    "id": "v5_014",
+    "main_category": "admission_pathways",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Dokumen biaya pada chunk ini ditujukan untuk jalur apa?",
+    "ground_truth": "Dokumen itu ditujukan untuk jalur khusus kerja sama.",
+    "source_chunk_ids": [
+      "160"
+    ],
+    "must_include": [
+      "jalur khusus kerja sama"
+    ],
+    "should_not_include": [
+      "Kelas Khusus Internasional",
+      "RPL"
+    ],
+    "retrieval_notes": "Ambil nama jalur langsung dari judul keputusan kerja sama."
+  },
+  {
+    "id": "v5_015",
+    "main_category": "admission_pathways",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau aku mau cek biaya RPL buat program sarjana, file yang benar yang mana?",
+    "ground_truth": "File yang benar adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf untuk jalur Khusus Rekognisi Pembelajaran Lampau (RPL).",
+    "source_chunk_ids": [
+      "145",
+      "137"
+    ],
+    "must_include": [
+      "pdf-proxy-3.pdf",
+      "RPL"
+    ],
+    "should_not_include": [
+      "pdf-proxy.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "retrieval_notes": "Gabungkan link RPL dari halaman indeks dengan identitas jalur pada dokumen RPL."
+  },
+  {
+    "id": "v5_016",
+    "main_category": "admission_pathways",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau yang dicari khusus IPI jalur mandiri, dokumen yang tepat yang mana?",
+    "ground_truth": "Dokumen yang tepat adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf, yaitu dokumen IPI Jalur Mandiri.",
+    "source_chunk_ids": [
+      "148",
+      "70"
+    ],
+    "must_include": [
+      "pdf-proxy-5.pdf",
+      "IPI Jalur Mandiri"
+    ],
+    "should_not_include": [
+      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "retrieval_notes": "Pilih dokumen IPI Mandiri dari halaman indeks dan verifikasi identitasnya pada SK."
+  },
+  {
+    "id": "v5_017",
+    "main_category": "admission_pathways",
+    "scope_category": "multi_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau yang mau dicek biaya KKI sarjana, file mana yang harus dibuka?",
+    "ground_truth": "File yang harus dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf untuk jalur Kelas Khusus Internasional.",
+    "source_chunk_ids": [
+      "143",
+      "109"
+    ],
+    "must_include": [
+      "pdf-proxy.pdf",
+      "Kelas Khusus Internasional"
+    ],
+    "should_not_include": [
+      "pdf-proxy-3.pdf",
+      "pdf-proxy-1.pdf"
+    ],
+    "retrieval_notes": "Butuh tautan KKI dari halaman indeks dan identitas jalur dari judul dokumen."
+  },
+  {
+    "id": "v5_018",
+    "main_category": "admission_pathways",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Kalau statusnya student exchange di jalur kerja sama, tetap bayar apa?",
+    "ground_truth": "Mahasiswa berstatus student exchange di jalur kerja sama tetap membayar uang kuliah tunggal sebesar tarif yang ditanggung dan dibayarkan untuk periode semester/term berjalan.",
+    "source_chunk_ids": [
+      "162"
+    ],
+    "must_include": [
+      "student exchange",
+      "membayar uang kuliah tunggal",
+      "semester/term berjalan"
+    ],
+    "should_not_include": [
+      "Rp1.100.000",
+      "bebas biaya"
+    ],
+    "retrieval_notes": "Ambil aturan student exchange dari dokumen kerja sama, jangan tertukar dengan aturan overseas."
+  },
+  {
+    "id": "v5_019",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "difficulty": "hard",
+    "question": "Biaya overseas di KKI, RPL, dan jalur kerja sama itu sama semua atau beda?",
+    "ground_truth": "Tidak sama semua. KKI mengenakan Rp2.475.000 per semester/term, sedangkan RPL dan jalur kerja sama masing-masing Rp1.100.000 per semester/term.",
+    "source_chunk_ids": [
+      "103",
+      "122",
+      "162"
+    ],
+    "must_include": [
+      "KKI Rp2.475.000",
+      "RPL Rp1.100.000",
+      "jalur kerja sama Rp1.100.000",
+      "tidak sama"
+    ],
+    "should_not_include": [
+      "pascasarjana profesi Rp1.000.000",
+      "jalur mandiri 2025/2026 Rp1.000.000"
+    ],
+    "retrieval_notes": "Bandingkan aturan overseas pada tiga jalur sarjana yang berbeda."
+  },
+  {
+    "id": "v5_020",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "difficulty": "hard",
+    "question": "Untuk Ilmu Hukum, IPI lebih tinggi di KKI atau di jalur kerja sama?",
+    "ground_truth": "IPI Ilmu Hukum lebih tinggi di KKI. Di KKI nilainya Rp98.000.000, sedangkan di jalur kerja sama Rp70.000.000.",
+    "source_chunk_ids": [
+      "111",
+      "178"
+    ],
+    "must_include": [
+      "KKI Rp98.000.000",
+      "jalur kerja sama Rp70.000.000",
+      "KKI lebih tinggi"
+    ],
+    "should_not_include": [
+      "RPL Rp22.000.000",
+      "UKT"
+    ],
+    "retrieval_notes": "Bandingkan IPI Ilmu Hukum antar dua dokumen jalur yang berbeda."
+  },
+  {
+    "id": "v5_021",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Kalau dibandingkan, UKT tertinggi Pendidikan Dokter di jalur nasional reguler lebih murah atau lebih mahal daripada KKI?",
+    "ground_truth": "UKT tertinggi Pendidikan Dokter di jalur nasional reguler lebih murah. Pada reguler, UKT 11 adalah Rp20.000.000, sedangkan pada KKI UKT-nya Rp51.700.000.",
+    "source_chunk_ids": [
+      "22",
+      "110"
+    ],
+    "must_include": [
+      "reguler UKT 11 Rp20.000.000",
+      "KKI Rp51.700.000",
+      "reguler lebih murah"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Kedokteran Gigi"
+    ],
+    "retrieval_notes": "Bandingkan UKT Pendidikan Dokter pada dua jalur berbeda."
+  },
+  {
+    "id": "v5_022",
+    "main_category": "admission_pathways",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Di aturan jalur kerja sama ini, status yang dibedakan buat mahasiswa luar skema biasa itu apa aja?",
+    "ground_truth": "Status yang dibedakan adalah student exchange dan overseas.",
+    "source_chunk_ids": [
+      "162"
+    ],
+    "must_include": [
+      "student exchange",
+      "overseas"
+    ],
+    "should_not_include": [
+      "WNI",
+      "WNA",
+      "RPL"
+    ],
+    "retrieval_notes": "Ambil dua status khusus yang disebut pada aturan jalur kerja sama."
+  },
+  {
+    "id": "v5_023",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "difficulty": "hard",
+    "question": "Untuk Ilmu Komputer, selisih IPI antara RPL dan jalur kerja sama berapa?",
+    "ground_truth": "IPI Ilmu Komputer pada RPL adalah Rp50.000.000, sedangkan pada jalur kerja sama Rp80.000.000, jadi selisihnya Rp30.000.000.",
+    "source_chunk_ids": [
+      "137",
+      "177"
+    ],
+    "must_include": [
+      "RPL Rp50.000.000",
+      "jalur kerja sama Rp80.000.000",
+      "selisih Rp30.000.000"
+    ],
+    "should_not_include": [
+      "KKI Rp60.000.000"
+    ],
+    "retrieval_notes": "Bandingkan IPI Ilmu Komputer antar dua jalur dan hitung selisihnya."
+  },
+  {
+    "id": "v5_024",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "near_source",
+    "difficulty": "medium",
+    "question": "Bandingkan UKT dan IPI Farmasi pada jalur RPL dan jalur khusus kerja sama.",
+    "ground_truth": "Biayanya sama. Pada RPL Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000, dan pada jalur khusus kerja sama nilainya juga UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "source_chunk_ids": [
+      "137",
+      "177"
+    ],
+    "must_include": [
+      "RPL UKT Rp55.000.000",
+      "RPL IPI Rp190.000.000",
+      "kerja sama UKT Rp55.000.000",
+      "kerja sama IPI Rp190.000.000",
+      "sama"
+    ],
+    "should_not_include": [
+      "KKI",
+      "Rp28.500.000"
+    ],
+    "retrieval_notes": "Bandingkan biaya Farmasi antar dua jalur yang kebetulan memiliki nilai sama."
+  },
+  {
+    "id": "v5_025",
+    "main_category": "admission_pathways",
+    "scope_category": "cross_section",
+    "wording_style": "shifted",
+    "difficulty": "hard",
+    "question": "Di halaman indeks ada Jalur Mandiri dan IPI Jalur Mandiri. Bedanya, dokumen pertama mengatur apa dan dokumen kedua mengatur apa?",
+    "ground_truth": "Dokumen Jalur Mandiri mengatur tarif Uang Kuliah Tunggal (UKT), sedangkan dokumen IPI Jalur Mandiri mengatur Iuran Pengembangan Institusi (IPI).",
+    "source_chunk_ids": [
+      "147",
+      "148",
+      "37",
+      "70"
+    ],
+    "must_include": [
+      "Jalur Mandiri = UKT",
+      "IPI Jalur Mandiri = IPI"
+    ],
+    "should_not_include": [
+      "dua-duanya UKT",
+      "dua-duanya IPI"
+    ],
+    "retrieval_notes": "Bedakan fungsi dua dokumen mandiri yang terpisah di halaman indeks."
+  },
+  {
+    "id": "v5_026",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Pada dokumen jalur kerja sama, komponen biaya yang ditetapkan terdiri dari apa saja?",
+    "ground_truth": "Komponen biaya yang ditetapkan terdiri atas Uang Kuliah Tunggal dan Iuran Pengembangan Institusi.",
+    "source_chunk_ids": [
+      "161"
+    ],
+    "must_include": [
+      "Uang Kuliah Tunggal",
+      "Iuran Pengembangan Institusi"
+    ],
+    "should_not_include": [
+      "biaya tunda kuliah",
+      "beasiswa"
+    ],
+    "retrieval_notes": "Cari komponen biaya pada diktum utama dokumen kerja sama."
+  },
+  {
+    "id": "v5_027",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Aturan tunda kuliah pascasarjana ini berlaku buat jenjang apa aja?",
+    "ground_truth": "Aturan itu berlaku untuk program magister, doktor, profesi, spesialis, dan subspesialis.",
+    "source_chunk_ids": [
+      "186"
+    ],
+    "must_include": [
+      "magister",
+      "doktor",
+      "profesi",
+      "spesialis",
+      "subspesialis"
+    ],
+    "should_not_include": [
+      "Program Sarjana",
+      "Program Pendidikan Vokasi"
+    ],
+    "retrieval_notes": "Ambil daftar jenjang dari ketentuan tunda kuliah pascasarjana."
+  },
+  {
+    "id": "v5_028",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Calon mahasiswa pascasarjana yang sudah lolos seleksi boleh menunda registrasi sampai berapa lama?",
+    "ground_truth": "Calon mahasiswa pascasarjana dapat menunda registrasi pada semester berikutnya atau paling lama 1 tahun.",
+    "source_chunk_ids": [
+      "183"
+    ],
+    "must_include": [
+      "semester berikutnya",
+      "paling lama 1 tahun"
+    ],
+    "should_not_include": [
+      "2 tahun",
+      "tanpa batas"
+    ],
+    "retrieval_notes": "Cari batas waktu penundaan registrasi pada konsideran tunda kuliah."
+  },
+  {
+    "id": "v5_029",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Kalau mau ajukan tunda registrasi pascasarjana, medianya lewat apa menurut dokumen itu?",
+    "ground_truth": "Pengajuan tunda registrasi dilakukan melalui aplikasi berbasis web sesuai persyaratan yang ditetapkan.",
+    "source_chunk_ids": [
+      "183"
+    ],
+    "must_include": [
+      "aplikasi berbasis web"
+    ],
+    "should_not_include": [
+      "email",
+      "datang langsung",
+      "SSO"
+    ],
+    "retrieval_notes": "Cari media pengajuan tunda registrasi pada ketentuan pascasarjana."
+  },
+  {
+    "id": "v5_030",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Di potongan tabel pascasarjana ini, Profesi Kedokteran Gigi muncul dengan kategori apa saja?",
+    "ground_truth": "Profesi Kedokteran Gigi pada potongan itu muncul untuk kategori WNI, Khusus, dan WNA.",
+    "source_chunk_ids": [
+      "209"
+    ],
+    "must_include": [
+      "WNI",
+      "Khusus",
+      "WNA"
+    ],
+    "should_not_include": [
+      "RPL",
+      "Kerja Sama"
+    ],
+    "retrieval_notes": "Ambil kategori tarif yang tampil untuk Profesi Kedokteran Gigi."
+  },
+  {
+    "id": "v5_031",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Apoteker di cuplikan dokumen ini tersedia buat kategori apa aja?",
+    "ground_truth": "Pada cuplikan itu, Apoteker tersedia untuk kategori WNI dan Khusus (S1 Non UI).",
+    "source_chunk_ids": [
+      "210"
+    ],
+    "must_include": [
+      "WNI",
+      "Khusus (S1 Non UI)"
+    ],
+    "should_not_include": [
+      "RPL",
+      "WNA",
+      "Kerja Sama"
+    ],
+    "retrieval_notes": "Cari kategori yang muncul untuk Apoteker pada potongan tabel pascasarjana."
+  },
+  {
+    "id": "v5_032",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Untuk Kenotariatan di tabel pascasarjana, kategori yang tercantum apa saja?",
+    "ground_truth": "Kategori yang tercantum untuk Kenotariatan adalah WNI, RPL, Kerja Sama, dan WNA.",
+    "source_chunk_ids": [
+      "216"
+    ],
+    "must_include": [
+      "WNI",
+      "RPL",
+      "Kerja Sama",
+      "WNA"
+    ],
+    "should_not_include": [
+      "Khusus",
+      "Riset"
+    ],
+    "retrieval_notes": "Ambil semua kategori yang tercantum untuk Kenotariatan."
+  },
+  {
+    "id": "v5_033",
+    "main_category": "academic_program_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Sarjana Terapan Fisioterapi di jalur kerja sama itu masuk D4 atau D3?",
+    "ground_truth": "Sarjana Terapan Fisioterapi pada jalur kerja sama masuk D4.",
+    "source_chunk_ids": [
+      "179"
+    ],
+    "must_include": [
+      "D4"
+    ],
+    "should_not_include": [
+      "D3"
+    ],
+    "retrieval_notes": "Cari jenjang program Fisioterapi pada tabel kerja sama."
+  },
+  {
+    "id": "v5_034",
+    "main_category": "academic_program_information",
+    "scope_category": "multi_chunk",
+    "wording_style": "shifted",
+    "difficulty": "hard",
+    "question": "Dokumen jalur kerja sama ini mengatur mahasiswa program apa saja, dan komponen biayanya terdiri dari apa?",
+    "ground_truth": "Dokumen itu mengatur mahasiswa Program Sarjana dan Program Pendidikan Vokasi jalur khusus kerja sama Tahun Akademik 2026/2027, dan komponen biayanya terdiri atas Uang Kuliah Tunggal serta Iuran Pengembangan Institusi.",
+    "source_chunk_ids": [
+      "160",
+      "161"
+    ],
+    "must_include": [
+      "Program Sarjana",
+      "Program Pendidikan Vokasi",
+      "jalur khusus kerja sama",
+      "Uang Kuliah Tunggal",
+      "Iuran Pengembangan Institusi"
+    ],
+    "should_not_include": [
+      "Program Pascasarjana",
+      "biaya tunda kuliah"
+    ],
+    "retrieval_notes": "Gabungkan cakupan dokumen kerja sama dan komponen biaya yang ditetapkan."
+  },
+  {
+    "id": "v5_035",
+    "main_category": "academic_program_information",
+    "scope_category": "cross_section",
+    "wording_style": "user_like",
+    "difficulty": "hard",
+    "question": "Kalau dibandingkan, kategori tarif Kenotariatan lebih lengkap daripada Apoteker atau tidak?",
+    "ground_truth": "Ya, Kenotariatan lebih lengkap. Kenotariatan memiliki kategori WNI, RPL, Kerja Sama, dan WNA, sedangkan Apoteker pada cuplikan itu hanya menampilkan WNI dan Khusus (S1 Non UI).",
+    "source_chunk_ids": [
+      "216",
+      "210"
+    ],
+    "must_include": [
+      "Kenotariatan: WNI, RPL, Kerja Sama, WNA",
+      "Apoteker: WNI, Khusus (S1 Non UI)",
+      "Kenotariatan lebih lengkap"
+    ],
+    "should_not_include": [
+      "Apoteker punya RPL",
+      "Kenotariatan punya Khusus"
+    ],
+    "retrieval_notes": "Bandingkan kelengkapan kategori dua program berbeda pada tabel pascasarjana."
+  },
+  {
+    "id": "v5_036",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "UKT kelompok tertinggi untuk Pendidikan Dokter pada tabel sarjana reguler 2026/2027 berapa?",
+    "ground_truth": "UKT kelompok tertinggi untuk Pendidikan Dokter pada tabel sarjana reguler 2026/2027 adalah Rp20.000.000 pada UKT 11.",
+    "source_chunk_ids": [
+      "22"
+    ],
+    "must_include": [
+      "Pendidikan Dokter",
+      "UKT 11",
+      "Rp20.000.000"
+    ],
+    "should_not_include": [
+      "IPI",
+      "Rp17.500.000"
+    ],
+    "retrieval_notes": "Cari nilai UKT tertinggi Pendidikan Dokter pada tabel reguler."
+  },
+  {
+    "id": "v5_037",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "easy",
+    "question": "Untuk Administrasi Rumah Sakit di vokasi reguler, berapa nilai UKT paling atas yang masih tercantum di chunk itu?",
+    "ground_truth": "Untuk Administrasi Rumah Sakit di vokasi reguler, nilai UKT paling atas yang tercantum adalah Rp14.000.000 pada UKT 9.",
+    "source_chunk_ids": [
+      "28"
+    ],
+    "must_include": [
+      "Administrasi Rumah Sakit",
+      "UKT 9",
+      "Rp14.000.000"
+    ],
+    "should_not_include": [
+      "Rp13.000.000",
+      "IPI"
+    ],
+    "retrieval_notes": "Cari nilai UKT tertinggi yang terlihat untuk Administrasi Rumah Sakit pada tabel vokasi reguler."
+  },
+  {
+    "id": "v5_038",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Di tabel reguler, Sastra Arab masih punya angka buat UKT 10 atau sudah strip?",
+    "ground_truth": "Pada tabel reguler, Sastra Arab untuk UKT 10 sudah ditandai dengan strip.",
+    "source_chunk_ids": [
+      "25"
+    ],
+    "must_include": [
+      "Sastra Arab",
+      "UKT 10",
+      "strip"
+    ],
+    "should_not_include": [
+      "Rp8.300.000",
+      "Rp11.500.000"
+    ],
+    "retrieval_notes": "Pastikan jawaban membaca status sel UKT 10 untuk Sastra Arab, bukan UKT lain."
+  },
+  {
+    "id": "v5_039",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau Geofisika di tabel sarjana reguler, UKT 10 ada nominalnya atau kosong?",
+    "ground_truth": "UKT 10 Geofisika ada nominalnya, yaitu Rp16.900.000.",
+    "source_chunk_ids": [
+      "23"
+    ],
+    "must_include": [
+      "Geofisika",
+      "UKT 10",
+      "Rp16.900.000"
+    ],
+    "should_not_include": [
+      "UKT 11",
+      "strip"
+    ],
+    "retrieval_notes": "Cari entri Geofisika dan baca nilai pada kolom UKT 10."
+  },
+  {
+    "id": "v5_040",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "Berapa IPI 4 untuk Program Studi Pendidikan Dokter pada dokumen IPI jalur mandiri?",
+    "ground_truth": "IPI 4 untuk Program Studi Pendidikan Dokter pada dokumen IPI jalur mandiri adalah Rp120.000.000.",
+    "source_chunk_ids": [
+      "86"
+    ],
+    "must_include": [
+      "Pendidikan Dokter",
+      "IPI 4",
+      "Rp120.000.000"
+    ],
+    "should_not_include": [
+      "Rp111.100.000",
+      "UKT"
+    ],
+    "retrieval_notes": "Cari nilai IPI 4 Pendidikan Dokter pada tabel IPI mandiri."
+  },
+  {
+    "id": "v5_041",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "easy",
+    "question": "Untuk Farmasi jalur mandiri, IPI 2-nya berapa?",
+    "ground_truth": "IPI 2 Farmasi jalur mandiri adalah Rp28.500.000.",
+    "source_chunk_ids": [
+      "87"
+    ],
+    "must_include": [
+      "Farmasi",
+      "IPI 2",
+      "Rp28.500.000"
+    ],
+    "should_not_include": [
+      "IPI 4 Rp75.000.000",
+      "KKI"
+    ],
+    "retrieval_notes": "Cari nilai IPI 2 Farmasi pada tabel IPI mandiri."
+  },
+  {
+    "id": "v5_042",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "Berapa IPI 4 Ilmu Hukum pada dokumen IPI jalur mandiri?",
+    "ground_truth": "IPI 4 Ilmu Hukum pada dokumen IPI jalur mandiri adalah Rp48.000.000.",
+    "source_chunk_ids": [
+      "89"
+    ],
+    "must_include": [
+      "Ilmu Hukum",
+      "IPI 4",
+      "Rp48.000.000"
+    ],
+    "should_not_include": [
+      "Rp70.000.000",
+      "Rp98.000.000"
+    ],
+    "retrieval_notes": "Cari entri Ilmu Hukum pada tabel IPI mandiri."
+  },
+  {
+    "id": "v5_043",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Untuk Sastra Inggris di IPI mandiri, kelompok IPI 3 nilainya berapa?",
+    "ground_truth": "Untuk Sastra Inggris di IPI mandiri, IPI 3 adalah Rp23.000.000.",
+    "source_chunk_ids": [
+      "90"
+    ],
+    "must_include": [
+      "Sastra Inggris",
+      "IPI 3",
+      "Rp23.000.000"
+    ],
+    "should_not_include": [
+      "IPI 4 Rp28.000.000",
+      "UKT"
+    ],
+    "retrieval_notes": "Cari nilai IPI 3 Sastra Inggris pada tabel IPI mandiri."
+  },
+  {
+    "id": "v5_044",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau Ilmu Administrasi Niaga lewat mandiri, IPI 2-nya berapa?",
+    "ground_truth": "IPI 2 Ilmu Administrasi Niaga jalur mandiri adalah Rp12.000.000.",
+    "source_chunk_ids": [
+      "91"
+    ],
+    "must_include": [
+      "Ilmu Administrasi Niaga",
+      "IPI 2",
+      "Rp12.000.000"
+    ],
+    "should_not_include": [
+      "Ilmu Administrasi Negara",
+      "Rp24.000.000"
+    ],
+    "retrieval_notes": "Ambil nilai IPI 2 untuk Ilmu Administrasi Niaga, bukan program administrasi lain."
+  },
+  {
+    "id": "v5_045",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "Berapa IPI 2 untuk Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi jalur seleksi mandiri?",
+    "ground_truth": "IPI 2 untuk Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi jalur seleksi mandiri adalah Rp6.500.000.",
+    "source_chunk_ids": [
+      "92"
+    ],
+    "must_include": [
+      "Sarjana Terapan Fisioterapi",
+      "IPI 2",
+      "Rp6.500.000"
+    ],
+    "should_not_include": [
+      "Rp15.000.000",
+      "jalur kerja sama"
+    ],
+    "retrieval_notes": "Cari nilai IPI 2 Fisioterapi pada tabel IPI mandiri vokasi."
+  },
+  {
+    "id": "v5_046",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "medium",
+    "question": "Untuk Kelas Khusus Internasional, berapa UKT dan IPI Program Studi Farmasi?",
+    "ground_truth": "Untuk Kelas Khusus Internasional, Program Studi Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "source_chunk_ids": [
+      "110"
+    ],
+    "must_include": [
+      "Farmasi",
+      "UKT Rp55.000.000",
+      "IPI Rp190.000.000"
+    ],
+    "should_not_include": [
+      "Rp28.500.000",
+      "jalur kerja sama"
+    ],
+    "retrieval_notes": "Cari pasangan UKT dan IPI Farmasi pada tabel KKI."
+  },
+  {
+    "id": "v5_047",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau Ilmu Komputer masuk lewat RPL, paket biayanya berapa aja?",
+    "ground_truth": "Kalau Ilmu Komputer masuk lewat RPL, UKT-nya Rp29.300.000 dan IPI-nya Rp50.000.000.",
+    "source_chunk_ids": [
+      "137"
+    ],
+    "must_include": [
+      "Ilmu Komputer",
+      "UKT Rp29.300.000",
+      "IPI Rp50.000.000"
+    ],
+    "should_not_include": [
+      "Rp60.000.000",
+      "Rp80.000.000"
+    ],
+    "retrieval_notes": "Cari UKT dan IPI Ilmu Komputer pada tabel RPL."
+  },
+  {
+    "id": "v5_048",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Pada jalur kerja sama, Sistem Informasi dikenai UKT dan IPI berapa?",
+    "ground_truth": "Pada jalur kerja sama, Sistem Informasi dikenai UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "source_chunk_ids": [
+      "178"
+    ],
+    "must_include": [
+      "Sistem Informasi",
+      "UKT Rp29.300.000",
+      "IPI Rp80.000.000"
+    ],
+    "should_not_include": [
+      "Rp29.334.000",
+      "Ilmu Komputer KKI Rp60.000.000"
+    ],
+    "retrieval_notes": "Cari biaya Sistem Informasi pada tabel kerja sama."
+  },
+  {
+    "id": "v5_049",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "medium",
+    "question": "Mahasiswa status overseas pada jalur kerja sama dikenai biaya registrasi berapa per semester atau term?",
+    "ground_truth": "Mahasiswa status overseas pada jalur kerja sama dikenai biaya registrasi Rp1.100.000 per semester/term.",
+    "source_chunk_ids": [
+      "162"
+    ],
+    "must_include": [
+      "overseas",
+      "Rp1.100.000",
+      "per semester/term"
+    ],
+    "should_not_include": [
+      "Rp2.475.000",
+      "student exchange"
+    ],
+    "retrieval_notes": "Cari aturan biaya registrasi overseas pada dokumen kerja sama."
+  },
+  {
+    "id": "v5_050",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "Biaya tunda kuliah pascasarjana dihitung berdasarkan rumus apa?",
+    "ground_truth": "Biaya tunda kuliah pascasarjana dihitung sebesar 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "source_chunk_ids": [
+      "186"
+    ],
+    "must_include": [
+      "10%",
+      "besaran uang kuliah",
+      "semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan"
+    ],
+    "should_not_include": [
+      "Rp1.100.000",
+      "dicicil"
+    ],
+    "retrieval_notes": "Cari rumus tarif tunda kuliah pada diktum keputusan."
+  },
+  {
+    "id": "v5_051",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "hard",
+    "question": "Biaya tunda kuliah pascasarjana dikenakan kapan?",
+    "ground_truth": "Biaya tunda kuliah pascasarjana dikenakan untuk setiap semester pada saat yang bersangkutan menunda kuliah.",
+    "source_chunk_ids": [
+      "186"
+    ],
+    "must_include": [
+      "setiap semester",
+      "menunda kuliah"
+    ],
+    "should_not_include": [
+      "sekali saja",
+      "setiap tahun"
+    ],
+    "retrieval_notes": "Cari ketentuan waktu pengenaan biaya tunda kuliah."
+  },
+  {
+    "id": "v5_052",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "easy",
+    "question": "Untuk mahasiswa overseas, biaya registrasi status kuliah di luar negeri pada program profesi dan pada program magister/doktor/spesialis berbeda bagaimana?",
+    "ground_truth": "Biayanya berbeda. Program profesi dikenakan Rp1.000.000 per semester/term, sedangkan program magister, doktor, spesialis, dan subspesialis dikenakan Rp1.250.000 per semester/term.",
+    "source_chunk_ids": [
+      "203"
+    ],
+    "must_include": [
+      "profesi Rp1.000.000",
+      "magister/doktor/spesialis/subspesialis Rp1.250.000",
+      "berbeda"
+    ],
+    "should_not_include": [
+      "Rp1.100.000",
+      "student exchange"
+    ],
+    "retrieval_notes": "Cari dua kelompok tarif overseas pada dokumen pascasarjana."
+  },
+  {
+    "id": "v5_053",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "user_like",
+    "difficulty": "medium",
+    "question": "Kalau Profesi Kedokteran Gigi di dokumen pascasarjana, biaya WNI, Khusus, dan WNA masing-masing berapa?",
+    "ground_truth": "Biaya Profesi Kedokteran Gigi adalah Rp17.500.000 untuk WNI, Rp25.000.000 untuk Khusus, dan Rp61.000.000 untuk WNA.",
+    "source_chunk_ids": [
+      "209"
+    ],
+    "must_include": [
+      "WNI Rp17.500.000",
+      "Khusus Rp25.000.000",
+      "WNA Rp61.000.000"
+    ],
+    "should_not_include": [
+      "Kedokteran Gigi - KKI",
+      "Rp100.000.000",
+      "Rp125.000.000"
+    ],
+    "retrieval_notes": "Cari tiga nilai biaya untuk Profesi Kedokteran Gigi pada tabel pascasarjana."
+  },
+  {
+    "id": "v5_054",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "shifted",
+    "difficulty": "hard",
+    "question": "Untuk Apoteker, berapa biaya kategori WNI dan Khusus (S1 Non UI)?",
+    "ground_truth": "Untuk Apoteker, biaya kategori WNI adalah Rp25.000.000 dan kategori Khusus (S1 Non UI) adalah Rp40.000.000.",
+    "source_chunk_ids": [
+      "210"
+    ],
+    "must_include": [
+      "WNI Rp25.000.000",
+      "Khusus (S1 Non UI) Rp40.000.000"
+    ],
+    "should_not_include": [
+      "WNA",
+      "Rp57.500.000"
+    ],
+    "retrieval_notes": "Cari dua nilai biaya Apoteker pada tabel pascasarjana."
+  },
+  {
+    "id": "v5_055",
+    "main_category": "fees_and_financial_information",
+    "scope_category": "single_chunk",
+    "wording_style": "near_source",
+    "difficulty": "hard",
+    "question": "Berapa uang kuliah Magister Kajian Administrasi Rumah Sakit (KARS) kategori WNI dan WNA?",
+    "ground_truth": "Uang kuliah Magister Kajian Administrasi Rumah Sakit (KARS) adalah Rp21.000.000 untuk WNI dan Rp42.000.000 untuk WNA.",
+    "source_chunk_ids": [
+      "211"
+    ],
+    "must_include": [
+      "KARS",
+      "WNI Rp21.000.000",
+      "WNA Rp42.000.000"
+    ],
+    "should_not_include": [
+      "IKM",
+      "Rp20.000.000"
+    ],
+    "retrieval_notes": "Cari dua nilai biaya KARS pada tabel pascasarjana."
+  }
+]
