@@ -1,0 +1,4 @@
+extends: "./eval_judge_local_qwen36.yaml"
+
+evaluation:
+  metrics: ["context_precision", "context_recall"]

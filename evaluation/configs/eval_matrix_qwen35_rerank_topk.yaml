@@ -2,6 +2,7 @@
 extends: "./eval_judge_local_qwen36.yaml"
 
 evaluation:
+  metrics: ["context_precision", "context_recall"]
   model_matrix:
     - label: "qwen35_4b_rerank3"
       model_name: "qwen3.5:4b"

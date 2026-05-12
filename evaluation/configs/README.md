@@ -9,6 +9,15 @@ This folder contains the checked-in eval configs that are meant to load successf
   - Keeps retrieval and generation defaults from the live server config
   - Owns the eval judge settings for a fixed local OpenAI-compatible judge: `qwen3.6:27b`
   - Uses `EVAL_LLM_ENDPOINT` and `OPENAI_API_KEY`
+  - Inherits the full metric list from `config_server.yaml`
+
+- `eval_judge_local_qwen36_generation.yaml`
+  - Extends `eval_judge_local_qwen36.yaml`
+  - Scores generation quality only: `faithfulness`, `answer_relevancy`
+
+- `eval_judge_local_qwen36_retrieval.yaml`
+  - Extends `eval_judge_local_qwen36.yaml`
+  - Scores retrieval quality only: `context_precision`, `context_recall`
 
 - `eval_judge_gemini_api.yaml`
   - Extends `config_server.yaml`
@@ -19,14 +28,17 @@ This folder contains the checked-in eval configs that are meant to load successf
 - `eval_matrix_qwen35.yaml`
   - Extends `eval_judge_local_qwen36.yaml`
   - Runs the standard eight-model generation comparison with one shared judge
+  - Scores generation quality only
 
 - `eval_matrix_8models_rerank8.yaml`
   - Extends `eval_judge_local_qwen36.yaml`
   - Runs the current eight-model generation comparison with fixed `rerank_top_k: 8`
+  - Scores generation quality only
 
 - `eval_matrix_qwen35_rerank_topk.yaml`
   - Extends `eval_judge_local_qwen36.yaml`
   - Sweeps `rerank_top_k` for one generation model
+  - Scores retrieval quality only
 
 ## Recommended Flows
 
@@ -50,26 +62,27 @@ EVAL_GENERATE_STREAM=false EVAL_SHOW_ANSWERS=false \
 sh /app/scripts/eval_generate_api.sh qwen3.5:4b qwen35_4b
 ```
 
-Score the latest saved predictions for a label:
+Score the latest saved predictions with all four metrics:
 
 ```sh
 sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
 ```
 
-Score helpers default to generation-quality metrics only:
-
-```text
-faithfulness, answer_relevancy
-```
-
-Run retrieval-quality metrics separately when needed:
+Score helpers default to the metrics declared in the config. For generation
+quality, use:
 
 ```sh
-EVAL_METRIC_PROFILE=retrieval \
-sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36_generation.yaml
 ```
 
-Use `EVAL_METRIC_PROFILE=all` to score every configured metric in one run.
+For retrieval quality, use:
+
+```sh
+sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36_retrieval.yaml
+```
+
+`EVAL_METRIC_PROFILE` still exists for one-off overrides, but the preferred
+workflow is to make the metric choice explicit in the eval config.
 
 ## Step-by-Step Eval Run
 
@@ -107,7 +120,7 @@ tail -f /app/storage/eval_runs/<run_name>/logs/eval-generate__qwen35_4b.log
 
 ### 3. Score generation quality for that model
 
-By default, scoring uses only generation-quality metrics:
+This config scores generation-quality metrics:
 
 ```text
 faithfulness, answer_relevancy
@@ -118,7 +131,7 @@ Run:
 ```sh
 sh /app/scripts/eval_score.sh \
   --latest qwen35_4b \
-  evaluation/configs/eval_judge_local_qwen36.yaml
+  evaluation/configs/eval_judge_local_qwen36_generation.yaml
 ```
 
 The score report is saved under `storage/eval_runs/<run>/scores/`.
@@ -138,8 +151,8 @@ The helper uses the model labels from `evaluation.model_matrix`.
 
 ### 5. Score generation quality for the matrix
 
-This scores the latest prediction artifact for each matrix label and keeps the
-metric profile at generation-only by default:
+This scores the latest prediction artifact for each matrix label. The config
+declares generation-only metrics:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh \
@@ -149,19 +162,16 @@ sh /app/scripts/eval_score_matrix.sh \
 ### 6. Score retrieval quality separately
 
 Run this once per retrieval setting or dataset snapshot, not for every generation
-model unless retrieval settings changed:
-
-```sh
-EVAL_METRIC_PROFILE=retrieval \
-sh /app/scripts/eval_score.sh \
-  --latest qwen35_4b \
-  evaluation/configs/eval_judge_local_qwen36.yaml
-```
-
-Retrieval-only scoring uses:
+model unless retrieval settings changed. Retrieval-only scoring uses:
 
 ```text
 context_precision, context_recall
+```
+
+```sh
+sh /app/scripts/eval_score.sh \
+  --latest qwen35_4b \
+  evaluation/configs/eval_judge_local_qwen36_retrieval.yaml
 ```
 
 ### 7. Find artifacts

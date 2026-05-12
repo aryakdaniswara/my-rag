@@ -5,7 +5,7 @@ CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 RUN_NAME="${RUN_NAME:-eval_score_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
-EVAL_METRIC_PROFILE="${EVAL_METRIC_PROFILE:-generation}"
+EVAL_METRIC_PROFILE="${EVAL_METRIC_PROFILE:-config}"
 
 if [ -n "${EVAL_LABELS:-}" ]; then
   EVAL_SCORE_LABELS="$EVAL_LABELS"

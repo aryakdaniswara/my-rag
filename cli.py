@@ -94,11 +94,17 @@ def _judge_label_from_config(config: RAGConfig) -> str:
 
 
 def _metrics_for_profile(profile: str | None) -> list[str] | None:
-    if not profile or profile == "all":
+    if not profile or profile == "config":
         return None
     profiles = {
         "generation": ["faithfulness", "answer_relevancy"],
         "retrieval": ["context_precision", "context_recall"],
+        "all": [
+            "faithfulness",
+            "answer_relevancy",
+            "context_precision",
+            "context_recall",
+        ],
     }
     return profiles.get(profile)
 
@@ -1453,11 +1459,11 @@ def main():
     )
     eval_score_parser.add_argument(
         "--metric-profile",
-        choices=["generation", "retrieval", "all"],
-        default="generation",
+        choices=["config", "generation", "retrieval", "all"],
+        default="config",
         help=(
-            "Metrics to score. Defaults to generation-only "
-            "(faithfulness + answer_relevancy); use retrieval for context metrics."
+            "Metrics to score. Defaults to config, which uses evaluation.metrics. "
+            "Use generation/retrieval/all for explicit one-off overrides."
         ),
     )
     eval_score_parser.add_argument("--run-dir", help="Existing or new eval run directory")

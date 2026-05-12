@@ -7,7 +7,7 @@ CONFIG_PATH="${3:-evaluation/configs/eval_judge_local_qwen36.yaml}"
 OUTPUT_PATH="${4:-}"
 RUN_NAME="${RUN_NAME:-eval_score_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
-EVAL_METRIC_PROFILE="${EVAL_METRIC_PROFILE:-generation}"
+EVAL_METRIC_PROFILE="${EVAL_METRIC_PROFILE:-config}"
 
 usage() {
   echo "Usage:"
