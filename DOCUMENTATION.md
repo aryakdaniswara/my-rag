@@ -403,10 +403,10 @@ Use `EVALUATION_GUIDE.md` as the canonical evaluation document.
 Common commands:
 
 ```bash
-sh /app/scripts/eval_run.sh evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_run.sh evaluation/configs/base/qwen36_judge.yaml
 python cli.py eval-generate --config config_rag.yaml --model qwen3.5:4b --label qwen35_4b
-python cli.py eval-score --config evaluation/configs/eval_judge_gemini_api.yaml --predictions storage/eval_runs/<run_name>/predictions/<file>.json
-python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
+python cli.py eval-score --config evaluation/configs/profiles/generation.yaml --predictions storage/eval_runs/<run_name>/predictions/<file>.json
+python cli.py eval --config evaluation/configs/matrices/generation_rerank8.yaml
 ```
 
 The guide documents:
@@ -414,7 +414,7 @@ The guide documents:
 - what each RAGAS metric means
 - where the live prompt logic actually comes from
 - how the run manifest and structured eval folders work
-- how reasoning toggles work for local generation and Gemini API judging
+- how reasoning toggles work for local generation and qwen3.6:27b judging
 
 ---
 

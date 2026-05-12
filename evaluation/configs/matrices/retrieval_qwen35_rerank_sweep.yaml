@@ -1,8 +1,7 @@
-# Matrix evaluation config: one model, one judge, many rerank_top_k values.
-extends: "./eval_judge_local_qwen36.yaml"
+# Retrieval-quality sweep for rerank_top_k using one generation model label set.
+extends: "../profiles/retrieval.yaml"
 
 evaluation:
-  metrics: ["context_precision", "context_recall"]
   model_matrix:
     - label: "qwen35_4b_rerank3"
       model_name: "qwen3.5:4b"

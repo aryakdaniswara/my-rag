@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
+CONFIG_PATH="${1:-evaluation/configs/matrices/generation_rerank8.yaml}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 RUN_NAME="${RUN_NAME:-eval_score_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"

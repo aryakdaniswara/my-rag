@@ -1,4 +1,4 @@
-extends: "./eval_judge_local_qwen36.yaml"
+extends: "../base/qwen36_judge.yaml"
 
 evaluation:
   metrics: ["faithfulness", "answer_relevancy"]

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-GENERATE_CONFIG_PATH="${1:-evaluation/configs/eval_matrix_8models_rerank8.yaml}"
+GENERATE_CONFIG_PATH="${1:-evaluation/configs/matrices/generation_rerank8.yaml}"
 JUDGE_CONFIG_PATH="${2:-$GENERATE_CONFIG_PATH}"
 API_BASE_URL="${3:-http://127.0.0.1:8000}"
 RUN_NAME="${RUN_NAME:-eval_generate_and_score_matrix_$(date +%Y%m%d_%H%M%S)}"

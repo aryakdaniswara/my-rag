@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-CONFIG_PATH="${1:-evaluation/configs/eval_judge_local_qwen36.yaml}"
+CONFIG_PATH="${1:-evaluation/configs/base/qwen36_judge.yaml}"
 RUN_NAME="${RUN_NAME:-eval_run_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
 

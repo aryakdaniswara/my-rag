@@ -3,7 +3,7 @@ set -eu
 
 MODE="${1:-}"
 VALUE="${2:-}"
-CONFIG_PATH="${3:-evaluation/configs/eval_judge_local_qwen36.yaml}"
+CONFIG_PATH="${3:-evaluation/configs/profiles/generation.yaml}"
 OUTPUT_PATH="${4:-}"
 RUN_NAME="${RUN_NAME:-eval_score_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"

@@ -34,10 +34,12 @@ Judge ownership now lives in eval-side configs under `evaluation/configs/`.
 
 Use:
 
-- `evaluation/configs/eval_judge_local_qwen36.yaml` for a fixed local OpenAI-compatible judge
-- `evaluation/configs/eval_judge_gemini_api.yaml` for Gemini API judging with `gemini-3.1-flash-lite-preview`
+- `evaluation/configs/base/qwen36_judge.yaml` for the qwen3.6:27b judge with all four metrics
+- `evaluation/configs/profiles/generation.yaml` for generation quality only
+- `evaluation/configs/profiles/retrieval.yaml` for retrieval quality only
+- `evaluation/configs/matrices/generation_rerank8.yaml` for the standard generation-model matrix
 
-This keeps judge choice out of the main server config so scoring can switch judges cleanly.
+This keeps eval scoring explicit without keeping unused judge-provider configs around.
 
 ## Supported Metrics
 
@@ -101,7 +103,7 @@ Literature anchors for this design:
 Recommended wrapper:
 
 ```sh
-sh /app/scripts/eval_run.sh evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_run.sh evaluation/configs/base/qwen36_judge.yaml
 ```
 
 This is the main supported full-run entrypoint.
@@ -109,7 +111,7 @@ This is the main supported full-run entrypoint.
 You can also call the CLI directly:
 
 ```sh
-python cli.py eval --config evaluation/configs/eval_judge_local_qwen36.yaml
+python cli.py eval --config evaluation/configs/base/qwen36_judge.yaml
 ```
 
 If the config contains `evaluation.model_matrix`, the same command runs the matrix.
@@ -139,20 +141,20 @@ Score a specific saved prediction artifact:
 ```sh
 sh /app/scripts/eval_score.sh \
   --predictions /app/storage/eval_runs/<run_name>/predictions/<file>.json \
-  evaluation/configs/eval_judge_local_qwen36.yaml
+  evaluation/configs/profiles/generation.yaml
 ```
 
 Or resolve the latest saved predictions for a label from run manifests:
 
 ```sh
-sh /app/scripts/eval_score.sh --latest qwen35_4b evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_score.sh --latest qwen35_4b_rerank8 evaluation/configs/profiles/generation.yaml
 ```
 
 Direct CLI:
 
 ```sh
 python cli.py eval-score \
-  --config evaluation/configs/eval_judge_gemini_api.yaml \
+  --config evaluation/configs/profiles/generation.yaml \
   --predictions storage/eval_runs/<run_name>/predictions/<file>.json
 ```
 
@@ -187,7 +189,7 @@ Rich filenames are still used so copied files remain readable outside the manife
 Standard eight-model full matrix:
 
 ```sh
-python cli.py eval --config evaluation/configs/eval_matrix_qwen35.yaml
+python cli.py eval --config evaluation/configs/matrices/generation_rerank8.yaml
 ```
 
 Generate-only matrix:
@@ -205,7 +207,7 @@ sh /app/scripts/eval_generate_and_score_matrix.sh
 Score-only matrix against the latest saved predictions:
 
 ```sh
-sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/matrices/generation_rerank8.yaml
 ```
 
 Rerank sweep generation:
@@ -217,12 +219,13 @@ RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_generate_matrix.sh
 Rerank sweep scoring:
 
 ```sh
-RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_local_qwen36.yaml
+RERANK_TOP_K_VALUES="3 5 8 10" sh /app/scripts/eval_score_matrix.sh evaluation/configs/matrices/retrieval_qwen35_rerank_sweep.yaml
 ```
 
-### Generate First, Then Score With Gemini Flash Lite
+### Retrieval Sweep
 
-For only `qwen3.5:2b`, `qwen3.5:4b`, and `qwen3.5:9b` with `rerank_top_k` values `2`, `5`, `8`, and `10`, generate all predictions first:
+For retrieval-quality checks, keep the judge fixed and score saved predictions
+with retrieval metrics only. Generate the sweep labels first:
 
 ```sh
 EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
@@ -230,12 +233,12 @@ RERANK_TOP_K_VALUES="2 5 8 10" \
 sh /app/scripts/eval_generate_matrix.sh config_server.yaml http://127.0.0.1:8000
 ```
 
-Then score those saved predictions with Gemini:
+Then score those saved predictions with the retrieval profile:
 
 ```sh
 EVAL_LABELS="qwen35_9b qwen35_4b qwen35_2b" \
 RERANK_TOP_K_VALUES="2 5 8 10" \
-sh /app/scripts/eval_score_matrix.sh evaluation/configs/eval_judge_gemini_api.yaml
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/matrices/retrieval_qwen35_rerank_sweep.yaml
 ```
 
 This reuses the saved predictions and avoids regenerating answers during judging.
@@ -247,7 +250,7 @@ EVAL_MODELS="qwen3.5:9b=qwen35_9b qwen3.5:4b=qwen35_4b qwen3.5:2b=qwen35_2b" \
 RERANK_TOP_K_VALUES="2 5 8 10" \
 sh /app/scripts/eval_generate_and_score_matrix.sh \
   config_server.yaml \
-  evaluation/configs/eval_judge_gemini_api.yaml \
+  evaluation/configs/matrices/retrieval_qwen35_rerank_sweep.yaml \
   http://127.0.0.1:8000
 ```
 
@@ -259,13 +262,11 @@ The actual env surface for runtime plus eval is:
 OPENAI_API_KEY
 OLLAMA_LLM_ENDPOINT
 EVAL_LLM_ENDPOINT
-GEMINI_API_KEY
 ```
 
 Notes:
 
-- local OpenAI-compatible judge configs use `EVAL_LLM_ENDPOINT`
-- Gemini judge configs use `GEMINI_API_KEY`
+- qwen3.6:27b judge configs use `EVAL_LLM_ENDPOINT`
 - local OpenAI-compatible endpoints can fall back to `OPENAI_API_KEY=dummy`
 
 ## Output Provenance
