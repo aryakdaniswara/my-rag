@@ -1,7 +1,7 @@
 # Evaluation Configs
 
-This folder is intentionally small. The active judge is always `qwen3.6:27b`;
-configs differ only by metric profile or model matrix.
+The active judge is always `qwen3.6:27b`; configs differ by metric profile,
+single-model use case, or model matrix.
 
 ## Layout
 
@@ -12,6 +12,8 @@ evaluation/configs/
   profiles/
     generation.yaml
     retrieval.yaml
+  singles/
+    generation_v4_rerank8.yaml
   matrices/
     generation_rerank8.yaml
     retrieval_qwen35_rerank_sweep.yaml
@@ -34,6 +36,12 @@ evaluation/configs/
   - Scores retrieval quality only: `context_precision`, `context_recall`.
   - Use this when retrieval settings, corpus, chunking, or dataset evidence changes.
 
+- `singles/generation_v4_rerank8.yaml`
+  - Uses generation metrics only.
+  - Uses `storage/eval_datasets/main/ui_main_v4.json`.
+  - Fixes `retrieval.rerank_top_k: 8`.
+  - Use this for a quick one-model check against the expanded v4 dataset.
+
 - `matrices/generation_rerank8.yaml`
   - Uses generation metrics only.
   - Fixes `retrieval.rerank_top_k: 8`.
@@ -43,14 +51,49 @@ evaluation/configs/
   - Uses retrieval metrics only.
   - Sweeps `rerank_top_k` for `qwen3.5:4b` labels.
 
-## Recommended Run
+## One-Model v4 Check
 
-Restart the API after code changes because streamed eval needs `/query/stream`
-to emit `context`:
+Run generation and scoring automatically in one command:
 
 ```sh
-docker compose restart rag-api
+sh /app/scripts/eval_generate_and_score_api.sh \
+  qwen3.5:4b \
+  qwen35_4b_v4_rerank8 \
+  evaluation/configs/singles/generation_v4_rerank8.yaml \
+  http://127.0.0.1:8000
 ```
+
+To try another model, change only the model and label:
+
+```sh
+sh /app/scripts/eval_generate_and_score_api.sh \
+  qwen3.5:9b \
+  qwen35_9b_v4_rerank8 \
+  evaluation/configs/singles/generation_v4_rerank8.yaml \
+  http://127.0.0.1:8000
+```
+
+## Manual Split
+
+Generate only:
+
+```sh
+sh /app/scripts/eval_generate_api.sh \
+  qwen3.5:4b \
+  qwen35_4b_v4_rerank8 \
+  evaluation/configs/singles/generation_v4_rerank8.yaml \
+  http://127.0.0.1:8000
+```
+
+Score latest generated predictions:
+
+```sh
+sh /app/scripts/eval_score.sh \
+  --latest qwen35_4b_v4_rerank8 \
+  evaluation/configs/singles/generation_v4_rerank8.yaml
+```
+
+## Matrix Run
 
 Generate streamed predictions for the fixed rerank-8 generation matrix:
 
@@ -67,26 +110,13 @@ sh /app/scripts/eval_score_matrix.sh \
   evaluation/configs/matrices/generation_rerank8.yaml
 ```
 
-For a single model:
+Generate and score the matrix automatically:
 
 ```sh
-sh /app/scripts/eval_generate_api.sh \
-  qwen3.5:4b \
-  qwen35_4b_rerank8 \
-  evaluation/configs/profiles/generation.yaml \
+sh /app/scripts/eval_generate_and_score_matrix.sh \
+  evaluation/configs/matrices/generation_rerank8.yaml \
+  evaluation/configs/matrices/generation_rerank8.yaml \
   http://127.0.0.1:8000
-
-sh /app/scripts/eval_score.sh \
-  --latest qwen35_4b_rerank8 \
-  evaluation/configs/profiles/generation.yaml
-```
-
-Run retrieval scoring separately when needed:
-
-```sh
-sh /app/scripts/eval_score.sh \
-  --latest qwen35_4b_rerank8 \
-  evaluation/configs/profiles/retrieval.yaml
 ```
 
 ## Artifacts

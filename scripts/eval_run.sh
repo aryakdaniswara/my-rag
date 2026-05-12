@@ -9,7 +9,7 @@ mkdir -p "$RUN_DIR/logs"
 LOG_PATH="$RUN_DIR/logs/eval-run.log"
 exec >>"$LOG_PATH" 2>&1
 
-echo "[$(date -Iseconds)] Starting full eval run config=$CONFIG_PATH"
+echo "[$(date -Iseconds)] Starting eval run config=$CONFIG_PATH"
 echo "Run dir: $RUN_DIR"
 
 PYTHONUNBUFFERED=1 python /app/scripts/eval_preflight.py \
@@ -21,4 +21,4 @@ PYTHONUNBUFFERED=1 python cli.py eval \
   --config "$CONFIG_PATH" \
   --run-dir "$RUN_DIR"
 
-echo "[$(date -Iseconds)] Finished full eval run config=$CONFIG_PATH"
+echo "[$(date -Iseconds)] Finished eval run config=$CONFIG_PATH"

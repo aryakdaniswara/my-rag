@@ -1,0 +1,8 @@
+# Single-model generation-quality check against ui_main_v4 at rerank_top_k=8.
+extends: "../profiles/generation.yaml"
+
+retrieval:
+  rerank_top_k: 8
+
+evaluation:
+  dataset_path: "storage/eval_datasets/main/ui_main_v4.json"
