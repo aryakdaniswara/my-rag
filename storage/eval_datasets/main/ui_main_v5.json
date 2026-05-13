@@ -1,1215 +1,1327 @@
 [
   {
     "id": "v5_001",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau mau cek tarif Sarjana Reguler dan Vokasi UI, file resminya yang mana dan itu dipakai untuk tahun akademik berapa?",
-    "ground_truth": "File resminya adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-4.pdf dan keputusan itu berlaku untuk Tahun Akademik 2026/2027.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "document_or_url",
+    "question": "Untuk pendaftar internasional yang bukan WNI, portal pendaftaran UI yang digunakan apa?",
+    "ground_truth": "Pendaftar internasional yang bukan WNI menggunakan portal admission.ui.ac.id.",
+    "expected_answer": [
+      "admission.ui.ac.id"
+    ],
     "source_chunk_ids": [
-      "142",
-      "8"
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000"
     ],
-    "must_include": [
-      "pdf-proxy-4.pdf",
-      "2026/2027"
+    "source_doc_ids": [
+      "doc_9d96ec26bdaf"
     ],
-    "should_not_include": [
-      "pdf-proxy.pdf",
-      "2025/2026"
-    ],
-    "retrieval_notes": "Ambil link Sarjana Reguler dan Vokasi dari halaman indeks dan tahun berlaku dari dokumen reguler."
+    "source_urls": [
+      "https://admission.ui.ac.id/"
+    ]
   },
   {
     "id": "v5_002",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Dokumen biaya untuk Sarjana Kelas Internasional ada di file apa, dan SK-nya ditetapkan kapan?",
-    "ground_truth": "Dokumen biaya Sarjana Kelas Internasional ada di https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf dan ditetapkan pada 16 Maret 2026.",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "comparison",
+    "question": "Apa perbedaan portal pendaftaran untuk pendaftar WNA dan pendaftar WNI dalam konteks pendaftaran UI?",
+    "ground_truth": "Pendaftar WNA atau pendaftar internasional menggunakan admission.ui.ac.id, sedangkan pendaftar WNI diarahkan mendaftar melalui SIMAK UI di penerimaan.ui.ac.id.",
+    "expected_answer": [
+      "pendaftar WNA",
+      "admission.ui.ac.id",
+      "pendaftar WNI",
+      "SIMAK UI",
+      "penerimaan.ui.ac.id"
+    ],
     "source_chunk_ids": [
-      "143",
-      "113"
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000",
+      "doc_6bc21bfaa434__7852f532af__chunk_0000"
     ],
-    "must_include": [
-      "pdf-proxy.pdf",
-      "16 Maret 2026"
+    "source_doc_ids": [
+      "doc_9d96ec26bdaf",
+      "doc_6bc21bfaa434"
     ],
-    "should_not_include": [
-      "pdf-proxy-3.pdf",
-      "11 Maret 2026"
-    ],
-    "retrieval_notes": "Butuh tautan dokumen KKI dari halaman indeks dan tanggal penetapan dari dokumen KKI."
+    "source_urls": [
+      "https://admission.ui.ac.id/",
+      "https://admission.ui.ac.id/register"
+    ]
   },
   {
     "id": "v5_003",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Kalau mau buka dokumen Program Pascasarjana, filenya apa dan dokumen itu membahas tahun akademik berapa?",
-    "ground_truth": "Dokumen Program Pascasarjana ada di https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-Pascasarjana-.pdf dan membahas Tahun Akademik 2025/2026.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "SNBP UI menggunakan dasar seleksi apa?",
+    "ground_truth": "SNBP merupakan jalur seleksi nasional masuk perguruan tinggi negeri untuk siswa SMA dan sederajat yang menggunakan prestasi dan nilai rapor siswa.",
+    "expected_answer": [
+      "prestasi",
+      "nilai rapor"
+    ],
     "source_chunk_ids": [
-      "144",
-      "208"
+      "doc_b38476c69de5__e61221675f__chunk_0000"
     ],
-    "must_include": [
-      "SK-Tarif-Pascasarjana-.pdf",
-      "2025/2026"
+    "source_doc_ids": [
+      "doc_b38476c69de5"
     ],
-    "should_not_include": [
-      "SK-No-266",
-      "2026/2027"
-    ],
-    "retrieval_notes": "Ambil tautan pascasarjana dari halaman indeks dan tahun akademik dari judul dokumen pascasarjana."
+    "source_urls": [
+      "https://simak.ui.ac.id/snbp/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_004",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau yang dicari dokumen RPL sarjana, link file-nya apa dan itu memang untuk jalur apa?",
-    "ground_truth": "Link file-nya adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf dan dokumen itu untuk jalur Khusus Rekognisi Pembelajaran Lampau (RPL).",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Kapan periode pendaftaran SNBP UI tahun 2026 dan kapan pengumuman hasilnya?",
+    "ground_truth": "Pendaftaran SNBP UI tahun 2026 berlangsung pada 3–18 Februari 2026, dan pengumuman hasil SNBP pada 31 Maret 2026.",
+    "expected_answer": [
+      "3–18 Februari 2026",
+      "31 Maret 2026"
+    ],
     "source_chunk_ids": [
-      "145",
-      "137"
+      "doc_b38476c69de5__e61221675f__chunk_0000"
     ],
-    "must_include": [
-      "pdf-proxy-3.pdf",
-      "Rekognisi Pembelajaran Lampau",
-      "RPL"
+    "source_doc_ids": [
+      "doc_b38476c69de5"
     ],
-    "should_not_include": [
-      "jalur kerja sama",
-      "Kelas Khusus Internasional"
-    ],
-    "retrieval_notes": "Ambil tautan RPL dari halaman indeks lalu cocokkan dengan judul/tabel RPL."
+    "source_urls": [
+      "https://simak.ui.ac.id/snbp/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_005",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Bagian Jalur Mandiri pada halaman SK Biaya Pendidikan UI 2026 mengarah ke file apa, dan itu untuk tahun akademik berapa?",
-    "ground_truth": "Bagian Jalur Mandiri mengarah ke https://www.ui.ac.id/wp-content/uploads/2025/04/SK-Tarif-UKT-Jalur-Mandiri.pdf dan dokumen itu untuk Tahun Akademik 2025/2026.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "SNBT UI menggunakan jenis tes apa?",
+    "ground_truth": "SNBT adalah seleksi masuk perguruan tinggi negeri dengan tes berbasis komputer yang mencakup Tes Potensi Skolastik dan Tes Literasi.",
+    "expected_answer": [
+      "tes berbasis komputer",
+      "Tes Potensi Skolastik",
+      "Tes Literasi"
+    ],
     "source_chunk_ids": [
-      "147",
-      "37"
+      "doc_dade9390666e__3260e84a88__chunk_0000"
     ],
-    "must_include": [
-      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
-      "2025/2026"
+    "source_doc_ids": [
+      "doc_dade9390666e"
     ],
-    "should_not_include": [
-      "pdf-proxy-5.pdf",
-      "2026/2027"
-    ],
-    "retrieval_notes": "Perlu tautan Jalur Mandiri dari halaman indeks dan tahun akademik dari judul dokumen mandiri."
+    "source_urls": [
+      "https://simak.ui.ac.id/snbt/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_006",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Kalau butuh dokumen IPI Jalur Mandiri, file apa yang dibuka dan nomor SK-nya berapa?",
-    "ground_truth": "File yang dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf dan nomor SK-nya 300/SK/R/UI/2026.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Kapan pendaftaran UTBK-SNBT UI tahun 2026 dan kapan pelaksanaan UTBK?",
+    "ground_truth": "Pendaftaran UTBK-SNBT UI tahun 2026 berlangsung pada 25 Maret–7 April 2026, dan pelaksanaan UTBK pada 21–30 April 2026.",
+    "expected_answer": [
+      "25 Maret–7 April 2026",
+      "21–30 April 2026"
+    ],
     "source_chunk_ids": [
-      "148",
-      "70"
+      "doc_dade9390666e__3260e84a88__chunk_0000"
     ],
-    "must_include": [
-      "pdf-proxy-5.pdf",
-      "300/SK/R/UI/2026"
+    "source_doc_ids": [
+      "doc_dade9390666e"
     ],
-    "should_not_include": [
-      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
-      "299/SK/R/UI/2026"
-    ],
-    "retrieval_notes": "Ambil tautan IPI Mandiri dari halaman indeks dan nomor SK dari dokumen IPI mandiri."
+    "source_urls": [
+      "https://simak.ui.ac.id/snbt/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_007",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Dokumen Jalur Kerja Sama ada di file apa, dan keputusan itu untuk tahun akademik berapa?",
-    "ground_truth": "Dokumen Jalur Kerja Sama ada di https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-1.pdf dan keputusan itu untuk Tahun Akademik 2026/2027.",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "PPKB UI menggunakan dasar seleksi apa dan berapa biaya pendaftaran PPKB Sarjana S1 Tahun Akademik 2026/2027?",
+    "ground_truth": "PPKB UI menggunakan seleksi berdasarkan prestasi akademik siswa selama studi di sekolah asal. Biaya pendaftaran PPKB Sarjana S1 Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "prestasi akademik",
+      "Rp900.000"
+    ],
     "source_chunk_ids": [
-      "149",
-      "160"
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "pdf-proxy-1.pdf",
-      "2026/2027"
+    "source_doc_ids": [
+      "doc_f51aa1d97d07",
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "pdf-proxy-3.pdf",
-      "2025/2026"
-    ],
-    "retrieval_notes": "Gabungkan tautan Jalur Kerja Sama dari halaman indeks dengan judul keputusan kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_008",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Kalau mau lihat aturan biaya tunda kuliah pascasarjana, file apa yang dibuka dan dokumen itu ditetapkan kapan?",
-    "ground_truth": "File yang dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/SK-No-266-tentang-Penetapan-Tarif-Biaya-Tunda-Kuliah-bagi-Calon-Mahasiswa-Program-Pascasarjana-UI-1.pdf dan dokumen itu ditetapkan pada 11 Maret 2026.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Siapa peserta yang dapat mengikuti PPKB UI tahun 2026?",
+    "ground_truth": "Peserta PPKB berasal dari sekolah yang mendapat undangan PPKB dari UI dan merupakan siswa kelas XII atau kelas 3 SMA/MA/SMK sederajat yang akan lulus pada tahun 2026.",
+    "expected_answer": [
+      "sekolah undangan",
+      "kelas XII",
+      "lulus pada tahun 2026"
+    ],
     "source_chunk_ids": [
-      "150",
-      "189"
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
     ],
-    "must_include": [
-      "SK-No-266",
-      "11 Maret 2026"
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
     ],
-    "should_not_include": [
-      "SK-Tarif-Pascasarjana-.pdf",
-      "16 Maret 2026"
-    ],
-    "retrieval_notes": "Ambil tautan dokumen tunda kuliah dari halaman indeks dan tanggal penetapan dari dokumen tunda kuliah."
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_009",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Kalau butuh rujukan resmi untuk penetapan UKT UI, situs yang disebut di halaman itu apa?",
-    "ground_truth": "Situs yang disebut adalah https://ukt.ui.ac.id/.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Kapan periode pendaftaran dan pengumuman PPKB UI tahun 2026?",
+    "ground_truth": "Pendaftaran PPKB UI berlangsung pada 15 Mei–19 Juni 2026, dan pengumuman dilakukan paling lambat 1 Juli 2026.",
+    "expected_answer": [
+      "15 Mei–19 Juni 2026",
+      "1 Juli 2026"
+    ],
     "source_chunk_ids": [
-      "151"
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
     ],
-    "must_include": [
-      "https://ukt.ui.ac.id/"
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
     ],
-    "should_not_include": [
-      "penerimaan.ui.ac.id",
-      "admission.ui.ac.id"
-    ],
-    "retrieval_notes": "Ambil URL situs resmi UKT dari halaman indeks."
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_010",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "medium",
-    "question": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri berapa?",
-    "ground_truth": "Nomor SK untuk dokumen tarif biaya pendidikan jalur seleksi mandiri adalah 300/SK/R/UI/2026.",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Talent Scouting UI ditujukan untuk program apa dan berapa biaya pendaftaran Talentscouting/Global Talent S1 KKI?",
+    "ground_truth": "Talent Scouting UI ditujukan untuk program Sarjana S1 Kelas Internasional. Biaya pendaftaran Talentscouting/Global Talent S1 KKI adalah Rp1.800.000.",
+    "expected_answer": [
+      "Sarjana S1 Kelas Internasional",
+      "Rp1.800.000"
+    ],
     "source_chunk_ids": [
-      "70"
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "300/SK/R/UI/2026"
+    "source_doc_ids": [
+      "doc_4aa8dc97105e",
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "299/SK/R/UI/2026",
-      "297/SK/R/UI/2026"
-    ],
-    "retrieval_notes": "Cari nomor SK pada dokumen IPI/mandiri yang relevan."
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_011",
-    "main_category": "official_systems_and_contacts",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau dokumen jalur kerja sama, nomor SK-nya berapa?",
-    "ground_truth": "Nomor SK dokumen jalur kerja sama adalah 299/SK/R/UI/2026.",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Pada Talent Scouting UI, sertifikat bahasa Inggris apa yang wajib disertakan dan berapa standar minimumnya?",
+    "ground_truth": "Pada Talent Scouting UI, pendaftar wajib menyertakan sertifikat TOEFL atau IELTS yang masih berlaku, dengan standar minimum TOEFL ITP/PBT 500, iBT 61, CBT 173, atau IELTS 5.5.",
+    "expected_answer": [
+      "TOEFL ITP/PBT 500",
+      "iBT 61",
+      "CBT 173",
+      "IELTS 5.5"
+    ],
     "source_chunk_ids": [
-      "168"
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
     ],
-    "must_include": [
-      "299/SK/R/UI/2026"
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
     ],
-    "should_not_include": [
-      "300/SK/R/UI/2026",
-      "298/SK/R/UI/2026"
-    ],
-    "retrieval_notes": "Cari nomor SK pada dokumen kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_012",
-    "main_category": "admission_pathways",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Dalam dokumen UKT sarjana-vokasi reguler 2026/2027, jalur nasional apa saja yang disebut?",
-    "ground_truth": "Dokumen itu menyebut jalur Seleksi Nasional Berbasis Prestasi dan jalur Seleksi Nasional Berbasis Tes.",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Sebelum membuat pendaftaran baru di penerimaan.ui.ac.id, apa yang harus dilakukan pendaftar dan berapa biaya pendaftaran SIMAK Sarjana dan Vokasi UI?",
+    "ground_truth": "Sebelum membuat pendaftaran baru, pendaftar harus membuat akun di situs penerimaan UI dan mengunggah foto berwarna ukuran 4x6 cm. Biaya pendaftaran SIMAK Sarjana dan Vokasi UI Tahun Akademik 2026/2027 adalah Rp650.000.",
+    "expected_answer": [
+      "membuat akun",
+      "mengunggah foto berwarna ukuran 4x6 cm",
+      "Rp650.000"
+    ],
     "source_chunk_ids": [
-      "6",
-      "20",
-      "21"
+      "doc_1361d03fce6a__b4ddf7eee5__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "Seleksi Nasional Berbasis Prestasi",
-      "Seleksi Nasional Berbasis Tes"
+    "source_doc_ids": [
+      "doc_1361d03fce6a",
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "RPL",
-      "Jalur Kerja Sama",
-      "Kelas Khusus Internasional"
-    ],
-    "retrieval_notes": "Ambil cakupan jalur dari diktum dan judul dokumen reguler sarjana-vokasi."
+    "source_urls": [
+      "https://penerimaan.ui.ac.id/page/registration",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_013",
-    "main_category": "admission_pathways",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Dokumen biaya ini khusus untuk jalur apa: Kelas Khusus Internasional, RPL, atau kerja sama?",
-    "ground_truth": "Dokumen itu khusus untuk jalur Kelas Khusus Internasional.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Berapa biaya pendaftaran PPKB Sarjana S1 UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Biaya pendaftaran PPKB Sarjana S1 UI Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "Rp900.000"
+    ],
     "source_chunk_ids": [
-      "109"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "Kelas Khusus Internasional"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "RPL",
-      "jalur kerja sama"
-    ],
-    "retrieval_notes": "Baca nama jalur langsung dari judul dokumen KKI."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_014",
-    "main_category": "admission_pathways",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Dokumen biaya pada chunk ini ditujukan untuk jalur apa?",
-    "ground_truth": "Dokumen itu ditujukan untuk jalur khusus kerja sama.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Berapa biaya pendaftaran PPKB Vokasi D4 dan D3 UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Biaya pendaftaran PPKB Vokasi D4 dan D3 UI Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "Rp900.000"
+    ],
     "source_chunk_ids": [
-      "160"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "jalur khusus kerja sama"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "Kelas Khusus Internasional",
-      "RPL"
-    ],
-    "retrieval_notes": "Ambil nama jalur langsung dari judul keputusan kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_015",
-    "main_category": "admission_pathways",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau aku mau cek biaya RPL buat program sarjana, file yang benar yang mana?",
-    "ground_truth": "File yang benar adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-3.pdf untuk jalur Khusus Rekognisi Pembelajaran Lampau (RPL).",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Apakah biaya pendaftaran Talentscouting/Global Talent S1 KKI dan SIMAK S1 KKI sama?",
+    "ground_truth": "Ya. Biaya pendaftaran Talentscouting/Global Talent S1 KKI dan SIMAK S1 KKI sama-sama Rp1.800.000.",
+    "expected_answer": [
+      "Rp1.800.000"
+    ],
     "source_chunk_ids": [
-      "145",
-      "137"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "pdf-proxy-3.pdf",
-      "RPL"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "pdf-proxy.pdf",
-      "pdf-proxy-1.pdf"
-    ],
-    "retrieval_notes": "Gabungkan link RPL dari halaman indeks dengan identitas jalur pada dokumen RPL."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_016",
-    "main_category": "admission_pathways",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau yang dicari khusus IPI jalur mandiri, dokumen yang tepat yang mana?",
-    "ground_truth": "Dokumen yang tepat adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy-5.pdf, yaitu dokumen IPI Jalur Mandiri.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Berapa biaya pendaftaran SIMAK Sarjana dan Vokasi UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Biaya pendaftaran SIMAK Sarjana dan Vokasi UI Tahun Akademik 2026/2027 adalah Rp650.000.",
+    "expected_answer": [
+      "Rp650.000"
+    ],
     "source_chunk_ids": [
-      "148",
-      "70"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "pdf-proxy-5.pdf",
-      "IPI Jalur Mandiri"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "SK-Tarif-UKT-Jalur-Mandiri.pdf",
-      "pdf-proxy-1.pdf"
-    ],
-    "retrieval_notes": "Pilih dokumen IPI Mandiri dari halaman indeks dan verifikasi identitasnya pada SK."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_017",
-    "main_category": "admission_pathways",
-    "scope_category": "multi_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau yang mau dicek biaya KKI sarjana, file mana yang harus dibuka?",
-    "ground_truth": "File yang harus dibuka adalah https://www.ui.ac.id/wp-content/uploads/2026/03/pdf-proxy.pdf untuk jalur Kelas Khusus Internasional.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Berapa biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027 adalah Rp1.350.000.",
+    "expected_answer": [
+      "Rp1.350.000"
+    ],
     "source_chunk_ids": [
-      "143",
-      "109"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "pdf-proxy.pdf",
-      "Kelas Khusus Internasional"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "pdf-proxy-3.pdf",
-      "pdf-proxy-1.pdf"
-    ],
-    "retrieval_notes": "Butuh tautan KKI dari halaman indeks dan identitas jalur dari judul dokumen."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_018",
-    "main_category": "admission_pathways",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Kalau statusnya student exchange di jalur kerja sama, tetap bayar apa?",
-    "ground_truth": "Mahasiswa berstatus student exchange di jalur kerja sama tetap membayar uang kuliah tunggal sebesar tarif yang ditanggung dan dibayarkan untuk periode semester/term berjalan.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Berapa biaya pendaftaran Program Spesialis dan Subspesialis UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Biaya pendaftaran Program Spesialis dan Subspesialis UI Tahun Akademik 2026/2027 adalah Rp1.650.000.",
+    "expected_answer": [
+      "Rp1.650.000"
+    ],
     "source_chunk_ids": [
-      "162"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "student exchange",
-      "membayar uang kuliah tunggal",
-      "semester/term berjalan"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "Rp1.100.000",
-      "bebas biaya"
-    ],
-    "retrieval_notes": "Ambil aturan student exchange dari dokumen kerja sama, jangan tertukar dengan aturan overseas."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_019",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "user_like",
-    "difficulty": "hard",
-    "question": "Biaya overseas di KKI, RPL, dan jalur kerja sama itu sama semua atau beda?",
-    "ground_truth": "Tidak sama semua. KKI mengenakan Rp2.475.000 per semester/term, sedangkan RPL dan jalur kerja sama masing-masing Rp1.100.000 per semester/term.",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Untuk SIMAK Sarjana dan Vokasi UI, berapa biaya pendaftaran awal dan berapa biaya tambahan per pilihan program studi setelah dua pilihan awal?",
+    "ground_truth": "Biaya pendaftaran SIMAK Sarjana dan Vokasi UI adalah Rp650.000. Biaya tambahan setelah dua pilihan awal adalah Rp100.000 per pilihan program studi, dengan tambahan paling banyak empat pilihan.",
+    "expected_answer": [
+      "Rp650.000",
+      "Rp100.000 per pilihan program studi",
+      "paling banyak empat pilihan"
+    ],
     "source_chunk_ids": [
-      "103",
-      "122",
-      "162"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0001"
     ],
-    "must_include": [
-      "KKI Rp2.475.000",
-      "RPL Rp1.100.000",
-      "jalur kerja sama Rp1.100.000",
-      "tidak sama"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "pascasarjana profesi Rp1.000.000",
-      "jalur mandiri 2025/2026 Rp1.000.000"
-    ],
-    "retrieval_notes": "Bandingkan aturan overseas pada tiga jalur sarjana yang berbeda."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_020",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "shifted",
-    "difficulty": "hard",
-    "question": "Untuk Ilmu Hukum, IPI lebih tinggi di KKI atau di jalur kerja sama?",
-    "ground_truth": "IPI Ilmu Hukum lebih tinggi di KKI. Di KKI nilainya Rp98.000.000, sedangkan di jalur kerja sama Rp70.000.000.",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Untuk pendaftar WNA melalui UI Admission, berapa biaya pendaftaran dan portal yang digunakan?",
+    "ground_truth": "Pendaftar WNA melalui UI Admission membayar biaya pendaftaran US$150 dan menggunakan portal admission.ui.ac.id.",
+    "expected_answer": [
+      "US$150",
+      "admission.ui.ac.id"
+    ],
     "source_chunk_ids": [
-      "111",
-      "178"
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002",
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000"
     ],
-    "must_include": [
-      "KKI Rp98.000.000",
-      "jalur kerja sama Rp70.000.000",
-      "KKI lebih tinggi"
+    "source_doc_ids": [
+      "doc_70e6f5d0f243",
+      "doc_9d96ec26bdaf"
     ],
-    "should_not_include": [
-      "RPL Rp22.000.000",
-      "UKT"
-    ],
-    "retrieval_notes": "Bandingkan IPI Ilmu Hukum antar dua dokumen jalur yang berbeda."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf",
+      "https://admission.ui.ac.id/"
+    ]
   },
   {
     "id": "v5_021",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Kalau dibandingkan, UKT tertinggi Pendidikan Dokter di jalur nasional reguler lebih murah atau lebih mahal daripada KKI?",
-    "ground_truth": "UKT tertinggi Pendidikan Dokter di jalur nasional reguler lebih murah. Pada reguler, UKT 11 adalah Rp20.000.000, sedangkan pada KKI UKT-nya Rp51.700.000.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif KKI S1 UI 2026/2027, berapa UKT dan IPI untuk Pendidikan Dokter?",
+    "ground_truth": "Pada tarif KKI S1 UI 2026/2027, Pendidikan Dokter memiliki UKT Rp51.700.000 dan IPI Rp111.100.000.",
+    "expected_answer": [
+      "Rp51.700.000",
+      "Rp111.100.000"
+    ],
     "source_chunk_ids": [
-      "22",
-      "110"
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0004"
     ],
-    "must_include": [
-      "reguler UKT 11 Rp20.000.000",
-      "KKI Rp51.700.000",
-      "reguler lebih murah"
+    "source_doc_ids": [
+      "doc_8b6bc8d0be38"
     ],
-    "should_not_include": [
-      "IPI",
-      "Kedokteran Gigi"
-    ],
-    "retrieval_notes": "Bandingkan UKT Pendidikan Dokter pada dua jalur berbeda."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
   },
   {
     "id": "v5_022",
-    "main_category": "admission_pathways",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Di aturan jalur kerja sama ini, status yang dibedakan buat mahasiswa luar skema biasa itu apa aja?",
-    "ground_truth": "Status yang dibedakan adalah student exchange dan overseas.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif KKI S1 UI 2026/2027, berapa UKT dan IPI untuk Kedokteran Gigi?",
+    "ground_truth": "Pada tarif KKI S1 UI 2026/2027, Kedokteran Gigi memiliki UKT Rp64.500.000 dan IPI Rp225.000.000.",
+    "expected_answer": [
+      "Rp64.500.000",
+      "Rp225.000.000"
+    ],
     "source_chunk_ids": [
-      "162"
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0004"
     ],
-    "must_include": [
-      "student exchange",
-      "overseas"
+    "source_doc_ids": [
+      "doc_8b6bc8d0be38"
     ],
-    "should_not_include": [
-      "WNI",
-      "WNA",
-      "RPL"
-    ],
-    "retrieval_notes": "Ambil dua status khusus yang disebut pada aturan jalur kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
   },
   {
     "id": "v5_023",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "shifted",
-    "difficulty": "hard",
-    "question": "Untuk Ilmu Komputer, selisih IPI antara RPL dan jalur kerja sama berapa?",
-    "ground_truth": "IPI Ilmu Komputer pada RPL adalah Rp50.000.000, sedangkan pada jalur kerja sama Rp80.000.000, jadi selisihnya Rp30.000.000.",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada S1 KKI UI, skema apa yang tersedia untuk Ilmu Komputer dan berapa UKT serta IPI-nya?",
+    "ground_truth": "Pada S1 KKI UI, Ilmu Komputer tersedia dalam skema Double Degree. Tarif Ilmu Komputer adalah UKT Rp29.300.000 dan IPI Rp60.000.000.",
+    "expected_answer": [
+      "Double Degree",
+      "Rp29.300.000",
+      "Rp60.000.000"
+    ],
     "source_chunk_ids": [
-      "137",
-      "177"
+      "doc_54e90723a068__5f906a445a__chunk_0000",
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0005"
     ],
-    "must_include": [
-      "RPL Rp50.000.000",
-      "jalur kerja sama Rp80.000.000",
-      "selisih Rp30.000.000"
+    "source_doc_ids": [
+      "doc_54e90723a068",
+      "doc_8b6bc8d0be38"
     ],
-    "should_not_include": [
-      "KKI Rp60.000.000"
-    ],
-    "retrieval_notes": "Bandingkan IPI Ilmu Komputer antar dua jalur dan hitung selisihnya."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
   },
   {
     "id": "v5_024",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "near_source",
-    "difficulty": "medium",
-    "question": "Bandingkan UKT dan IPI Farmasi pada jalur RPL dan jalur khusus kerja sama.",
-    "ground_truth": "Biayanya sama. Pada RPL Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000, dan pada jalur khusus kerja sama nilainya juga UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif RPL Sarjana UI 2026/2027, berapa UKT dan IPI untuk Ilmu Keperawatan?",
+    "ground_truth": "Pada tarif RPL Sarjana UI 2026/2027, Ilmu Keperawatan memiliki UKT Rp10.000.000 dan IPI Rp20.000.000.",
+    "expected_answer": [
+      "Rp10.000.000",
+      "Rp20.000.000"
+    ],
     "source_chunk_ids": [
-      "137",
-      "177"
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
     ],
-    "must_include": [
-      "RPL UKT Rp55.000.000",
-      "RPL IPI Rp190.000.000",
-      "kerja sama UKT Rp55.000.000",
-      "kerja sama IPI Rp190.000.000",
-      "sama"
+    "source_doc_ids": [
+      "doc_1ed76d48b5f2"
     ],
-    "should_not_include": [
-      "KKI",
-      "Rp28.500.000"
-    ],
-    "retrieval_notes": "Bandingkan biaya Farmasi antar dua jalur yang kebetulan memiliki nilai sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
   },
   {
     "id": "v5_025",
-    "main_category": "admission_pathways",
-    "scope_category": "cross_section",
-    "wording_style": "shifted",
-    "difficulty": "hard",
-    "question": "Di halaman indeks ada Jalur Mandiri dan IPI Jalur Mandiri. Bedanya, dokumen pertama mengatur apa dan dokumen kedua mengatur apa?",
-    "ground_truth": "Dokumen Jalur Mandiri mengatur tarif Uang Kuliah Tunggal (UKT), sedangkan dokumen IPI Jalur Mandiri mengatur Iuran Pengembangan Institusi (IPI).",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif RPL Sarjana UI 2026/2027, berapa UKT dan IPI untuk Farmasi?",
+    "ground_truth": "Pada tarif RPL Sarjana UI 2026/2027, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "expected_answer": [
+      "Rp55.000.000",
+      "Rp190.000.000"
+    ],
     "source_chunk_ids": [
-      "147",
-      "148",
-      "37",
-      "70"
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
     ],
-    "must_include": [
-      "Jalur Mandiri = UKT",
-      "IPI Jalur Mandiri = IPI"
+    "source_doc_ids": [
+      "doc_1ed76d48b5f2"
     ],
-    "should_not_include": [
-      "dua-duanya UKT",
-      "dua-duanya IPI"
-    ],
-    "retrieval_notes": "Bedakan fungsi dua dokumen mandiri yang terpisah di halaman indeks."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
   },
   {
     "id": "v5_026",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Pada dokumen jalur kerja sama, komponen biaya yang ditetapkan terdiri dari apa saja?",
-    "ground_truth": "Komponen biaya yang ditetapkan terdiri atas Uang Kuliah Tunggal dan Iuran Pengembangan Institusi.",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada Program Sarjana Jalur RPL UI, apakah Ilmu Hukum tersedia dan berapa UKT serta IPI-nya?",
+    "ground_truth": "Ilmu Hukum tersedia pada Program Sarjana Jalur RPL UI. Tarif Ilmu Hukum adalah UKT Rp17.000.000 dan IPI Rp22.000.000.",
+    "expected_answer": [
+      "Ilmu Hukum",
+      "Rp17.000.000",
+      "Rp22.000.000"
+    ],
     "source_chunk_ids": [
-      "161"
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000",
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
     ],
-    "must_include": [
-      "Uang Kuliah Tunggal",
-      "Iuran Pengembangan Institusi"
+    "source_doc_ids": [
+      "doc_065d1b23186d",
+      "doc_1ed76d48b5f2"
     ],
-    "should_not_include": [
-      "biaya tunda kuliah",
-      "beasiswa"
-    ],
-    "retrieval_notes": "Cari komponen biaya pada diktum utama dokumen kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
   },
   {
     "id": "v5_027",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Aturan tunda kuliah pascasarjana ini berlaku buat jenjang apa aja?",
-    "ground_truth": "Aturan itu berlaku untuk program magister, doktor, profesi, spesialis, dan subspesialis.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada UKT Sarjana Reguler UI 2026/2027, berapa UKT 9 untuk Ilmu Komputer?",
+    "ground_truth": "Pada UKT Sarjana Reguler UI 2026/2027, UKT 9 untuk Ilmu Komputer adalah Rp14.600.000.",
+    "expected_answer": [
+      "Rp14.600.000"
+    ],
     "source_chunk_ids": [
-      "186"
+      "doc_0a2ab3e92430__4d742ec3cf__chunk_0006"
     ],
-    "must_include": [
-      "magister",
-      "doktor",
-      "profesi",
-      "spesialis",
-      "subspesialis"
+    "source_doc_ids": [
+      "doc_0a2ab3e92430"
     ],
-    "should_not_include": [
-      "Program Sarjana",
-      "Program Pendidikan Vokasi"
-    ],
-    "retrieval_notes": "Ambil daftar jenjang dari ketentuan tunda kuliah pascasarjana."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-skbp-sarjana-vokasi-2026.pdf"
+    ]
   },
   {
     "id": "v5_028",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Calon mahasiswa pascasarjana yang sudah lolos seleksi boleh menunda registrasi sampai berapa lama?",
-    "ground_truth": "Calon mahasiswa pascasarjana dapat menunda registrasi pada semester berikutnya atau paling lama 1 tahun.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada UKT Sarjana Reguler UI 2026/2027, berapa UKT 11 untuk Pendidikan Dokter?",
+    "ground_truth": "Pada UKT Sarjana Reguler UI 2026/2027, UKT 11 untuk Pendidikan Dokter adalah Rp20.000.000.",
+    "expected_answer": [
+      "Rp20.000.000"
+    ],
     "source_chunk_ids": [
-      "183"
+      "doc_0a2ab3e92430__4d742ec3cf__chunk_0003"
     ],
-    "must_include": [
-      "semester berikutnya",
-      "paling lama 1 tahun"
+    "source_doc_ids": [
+      "doc_0a2ab3e92430"
     ],
-    "should_not_include": [
-      "2 tahun",
-      "tanpa batas"
-    ],
-    "retrieval_notes": "Cari batas waktu penundaan registrasi pada konsideran tunda kuliah."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-skbp-sarjana-vokasi-2026.pdf"
+    ]
   },
   {
     "id": "v5_029",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Kalau mau ajukan tunda registrasi pascasarjana, medianya lewat apa menurut dokumen itu?",
-    "ground_truth": "Pengajuan tunda registrasi dilakukan melalui aplikasi berbasis web sesuai persyaratan yang ditetapkan.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif IPI Sarjana Reguler UI 2026/2027, berapa IPI 4 untuk Pendidikan Dokter?",
+    "ground_truth": "Pada tarif IPI Sarjana Reguler UI 2026/2027, IPI 4 untuk Pendidikan Dokter adalah Rp120.000.000.",
+    "expected_answer": [
+      "Rp120.000.000"
+    ],
     "source_chunk_ids": [
-      "183"
+      "doc_9df28125cf9a__a88ffac703__chunk_0013"
     ],
-    "must_include": [
-      "aplikasi berbasis web"
+    "source_doc_ids": [
+      "doc_9df28125cf9a"
     ],
-    "should_not_include": [
-      "email",
-      "datang langsung",
-      "SSO"
-    ],
-    "retrieval_notes": "Cari media pengajuan tunda registrasi pada ketentuan pascasarjana."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-tarif-IPI-sarjana-vokasi-2026.pdf"
+    ]
   },
   {
     "id": "v5_030",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Di potongan tabel pascasarjana ini, Profesi Kedokteran Gigi muncul dengan kategori apa saja?",
-    "ground_truth": "Profesi Kedokteran Gigi pada potongan itu muncul untuk kategori WNI, Khusus, dan WNA.",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Pada tarif IPI Program D4 UI 2026/2027, berapa IPI 3 untuk Sarjana Terapan Fisioterapi?",
+    "ground_truth": "Pada tarif IPI Program D4 UI 2026/2027, IPI 3 untuk Sarjana Terapan Fisioterapi adalah Rp13.000.000.",
+    "expected_answer": [
+      "Rp13.000.000"
+    ],
     "source_chunk_ids": [
-      "209"
+      "doc_9df28125cf9a__a88ffac703__chunk_0019"
     ],
-    "must_include": [
-      "WNI",
-      "Khusus",
-      "WNA"
+    "source_doc_ids": [
+      "doc_9df28125cf9a"
     ],
-    "should_not_include": [
-      "RPL",
-      "Kerja Sama"
-    ],
-    "retrieval_notes": "Ambil kategori tarif yang tampil untuk Profesi Kedokteran Gigi."
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-tarif-IPI-sarjana-vokasi-2026.pdf"
+    ]
   },
   {
     "id": "v5_031",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Apoteker di cuplikan dokumen ini tersedia buat kategori apa aja?",
-    "ground_truth": "Pada cuplikan itu, Apoteker tersedia untuk kategori WNI dan Khusus (S1 Non UI).",
-    "source_chunk_ids": [
-      "210"
-    ],
-    "must_include": [
-      "WNI",
-      "Khusus (S1 Non UI)"
-    ],
-    "should_not_include": [
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "program_or_faculty",
+    "question": "SIMAK UI dapat digunakan untuk menyaring calon mahasiswa pada jenjang apa saja?",
+    "ground_truth": "SIMAK UI menyaring calon mahasiswa dari jenjang Vokasi D3 dan D4, Sarjana, Sarjana Kelas Khusus Internasional, Sarjana RPL, Profesi, S2, Spesialis, hingga S3.",
+    "expected_answer": [
+      "Vokasi",
+      "Sarjana",
       "RPL",
-      "WNA",
-      "Kerja Sama"
+      "Profesi",
+      "S2",
+      "Spesialis",
+      "S3"
     ],
-    "retrieval_notes": "Cari kategori yang muncul untuk Apoteker pada potongan tabel pascasarjana."
+    "source_chunk_ids": [
+      "doc_c40f56ffe74e__216cb9abf8__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_c40f56ffe74e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/"
+    ]
   },
   {
     "id": "v5_032",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Untuk Kenotariatan di tabel pascasarjana, kategori yang tercantum apa saja?",
-    "ground_truth": "Kategori yang tercantum untuk Kenotariatan adalah WNI, RPL, Kerja Sama, dan WNA.",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program S1 Reguler UI dapat diikuti oleh lulusan dengan usia ijazah maksimal berapa tahun dan melalui jalur apa saja?",
+    "ground_truth": "Program S1 Reguler UI dapat diikuti lulusan SMA/SMK/MA sederajat dengan usia ijazah tidak lebih dari tiga tahun terakhir. Jalur masuknya adalah SNBP, SNBT, PPKB, dan SIMAK UI.",
+    "expected_answer": [
+      "tiga tahun terakhir",
+      "SNBP",
+      "SNBT",
+      "PPKB",
+      "SIMAK UI"
+    ],
     "source_chunk_ids": [
-      "216"
+      "doc_9feb58b5c6f8__541e1238f9__chunk_0000",
+      "doc_ae6875aa02d1__5100a63cf5__chunk_0000"
     ],
-    "must_include": [
-      "WNI",
-      "RPL",
-      "Kerja Sama",
-      "WNA"
+    "source_doc_ids": [
+      "doc_9feb58b5c6f8",
+      "doc_ae6875aa02d1"
     ],
-    "should_not_include": [
-      "Khusus",
-      "Riset"
-    ],
-    "retrieval_notes": "Ambil semua kategori yang tercantum untuk Kenotariatan."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-reguler/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-sarjana/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_033",
-    "main_category": "academic_program_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Sarjana Terapan Fisioterapi di jalur kerja sama itu masuk D4 atau D3?",
-    "ground_truth": "Sarjana Terapan Fisioterapi pada jalur kerja sama masuk D4.",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program S1 Reguler UI dapat masuk melalui jalur apa saja dan bagaimana ketentuan IPI untuk jalur reguler?",
+    "ground_truth": "Program S1 Reguler UI dapat masuk melalui SNBP, SNBT, PPKB, dan SIMAK UI. Untuk jalur reguler, biaya pendidikan berupa UKT per semester dan tanpa IPI.",
+    "expected_answer": [
+      "SNBP",
+      "SNBT",
+      "PPKB",
+      "SIMAK UI",
+      "tanpa IPI"
+    ],
     "source_chunk_ids": [
-      "179"
+      "doc_9feb58b5c6f8__541e1238f9__chunk_0000",
+      "doc_ae6875aa02d1__5100a63cf5__chunk_0000"
     ],
-    "must_include": [
-      "D4"
+    "source_doc_ids": [
+      "doc_9feb58b5c6f8",
+      "doc_ae6875aa02d1"
     ],
-    "should_not_include": [
-      "D3"
-    ],
-    "retrieval_notes": "Cari jenjang program Fisioterapi pada tabel kerja sama."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-reguler/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-sarjana/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_034",
-    "main_category": "academic_program_information",
-    "scope_category": "multi_chunk",
-    "wording_style": "shifted",
-    "difficulty": "hard",
-    "question": "Dokumen jalur kerja sama ini mengatur mahasiswa program apa saja, dan komponen biayanya terdiri dari apa?",
-    "ground_truth": "Dokumen itu mengatur mahasiswa Program Sarjana dan Program Pendidikan Vokasi jalur khusus kerja sama Tahun Akademik 2026/2027, dan komponen biayanya terdiri atas Uang Kuliah Tunggal serta Iuran Pengembangan Institusi.",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program Kelas Internasional UI dapat diikuti oleh lulusan dengan usia ijazah maksimal berapa tahun dan melalui jalur penerimaan apa saja?",
+    "ground_truth": "Program Kelas Internasional UI dapat diikuti lulusan sekolah lanjutan atas dan sederajat dengan usia ijazah tidak lebih dari lima tahun. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
+    "expected_answer": [
+      "lima tahun",
+      "Talent Scouting",
+      "SIMAK Kelas Internasional"
+    ],
     "source_chunk_ids": [
-      "160",
-      "161"
+      "doc_61cf8f77f1ec__56d5834d08__chunk_0000",
+      "doc_54e90723a068__5f906a445a__chunk_0000"
     ],
-    "must_include": [
-      "Program Sarjana",
-      "Program Pendidikan Vokasi",
-      "jalur khusus kerja sama",
-      "Uang Kuliah Tunggal",
-      "Iuran Pengembangan Institusi"
+    "source_doc_ids": [
+      "doc_61cf8f77f1ec",
+      "doc_54e90723a068"
     ],
-    "should_not_include": [
-      "Program Pascasarjana",
-      "biaya tunda kuliah"
-    ],
-    "retrieval_notes": "Gabungkan cakupan dokumen kerja sama dan komponen biaya yang ditetapkan."
+    "source_urls": [
+      "https://www.ui.ac.id/program-kelas-internasional/#kingster-top-anchor",
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_035",
-    "main_category": "academic_program_information",
-    "scope_category": "cross_section",
-    "wording_style": "user_like",
-    "difficulty": "hard",
-    "question": "Kalau dibandingkan, kategori tarif Kenotariatan lebih lengkap daripada Apoteker atau tidak?",
-    "ground_truth": "Ya, Kenotariatan lebih lengkap. Kenotariatan memiliki kategori WNI, RPL, Kerja Sama, dan WNA, sedangkan Apoteker pada cuplikan itu hanya menampilkan WNI dan Khusus (S1 Non UI).",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program Kelas Internasional UI dapat diikuti oleh lulusan dengan usia ijazah maksimal berapa tahun dan melalui jalur apa saja?",
+    "ground_truth": "Program Kelas Internasional UI dapat diikuti lulusan sekolah lanjutan atas dan sederajat dengan usia ijazah tidak lebih dari lima tahun. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
+    "expected_answer": [
+      "lima tahun",
+      "Talent Scouting",
+      "SIMAK Kelas Internasional"
+    ],
     "source_chunk_ids": [
-      "216",
-      "210"
+      "doc_54e90723a068__5f906a445a__chunk_0000",
+      "doc_61cf8f77f1ec__56d5834d08__chunk_0000"
     ],
-    "must_include": [
-      "Kenotariatan: WNI, RPL, Kerja Sama, WNA",
-      "Apoteker: WNI, Khusus (S1 Non UI)",
-      "Kenotariatan lebih lengkap"
+    "source_doc_ids": [
+      "doc_54e90723a068",
+      "doc_61cf8f77f1ec"
     ],
-    "should_not_include": [
-      "Apoteker punya RPL",
-      "Kenotariatan punya Khusus"
-    ],
-    "retrieval_notes": "Bandingkan kelengkapan kategori dua program berbeda pada tabel pascasarjana."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-kelas-internasional/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_036",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "UKT kelompok tertinggi untuk Pendidikan Dokter pada tabel sarjana reguler 2026/2027 berapa?",
-    "ground_truth": "UKT kelompok tertinggi untuk Pendidikan Dokter pada tabel sarjana reguler 2026/2027 adalah Rp20.000.000 pada UKT 11.",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Apa perbedaan Single Degree dan Double Degree atau Joint Degree pada KKI UI?",
+    "ground_truth": "Single Degree membuat mahasiswa mengikuti mobilitas internasional minimal satu semester dan memperoleh ijazah tunggal dari UI, sedangkan Double Degree atau Joint Degree memberi kesempatan memperoleh dua ijazah dan dua gelar akademik setelah menyelesaikan studi di UI dan universitas mitra.",
+    "expected_answer": [
+      "Single Degree",
+      "Double Degree",
+      "dua ijazah"
+    ],
     "source_chunk_ids": [
-      "22"
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
     ],
-    "must_include": [
-      "Pendidikan Dokter",
-      "UKT 11",
-      "Rp20.000.000"
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
     ],
-    "should_not_include": [
-      "IPI",
-      "Rp17.500.000"
-    ],
-    "retrieval_notes": "Cari nilai UKT tertinggi Pendidikan Dokter pada tabel reguler."
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_037",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "easy",
-    "question": "Untuk Administrasi Rumah Sakit di vokasi reguler, berapa nilai UKT paling atas yang masih tercantum di chunk itu?",
-    "ground_truth": "Untuk Administrasi Rumah Sakit di vokasi reguler, nilai UKT paling atas yang tercantum adalah Rp14.000.000 pada UKT 9.",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Pada Program Sarjana Jalur RPL UI, capaian pembelajaran dari sumber apa yang diakui?",
+    "ground_truth": "Program Sarjana Jalur RPL UI mengakui capaian pembelajaran dari pendidikan formal sebelumnya seperti jenjang Diploma maupun pengalaman kerja.",
+    "expected_answer": [
+      "pendidikan formal",
+      "pengalaman kerja"
+    ],
     "source_chunk_ids": [
-      "28"
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000"
     ],
-    "must_include": [
-      "Administrasi Rumah Sakit",
-      "UKT 9",
-      "Rp14.000.000"
+    "source_doc_ids": [
+      "doc_065d1b23186d"
     ],
-    "should_not_include": [
-      "Rp13.000.000",
-      "IPI"
-    ],
-    "retrieval_notes": "Cari nilai UKT tertinggi yang terlihat untuk Administrasi Rumah Sakit pada tabel vokasi reguler."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_038",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Di tabel reguler, Sastra Arab masih punya angka buat UKT 10 atau sudah strip?",
-    "ground_truth": "Pada tabel reguler, Sastra Arab untuk UKT 10 sudah ditandai dengan strip.",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Materi seleksi apa yang digunakan untuk Program Sarjana Jalur RPL UI?",
+    "ground_truth": "Seleksi Program Sarjana Jalur RPL UI dilakukan melalui SIMAK UI dengan materi Tes Potensi Akademik dan Bahasa Inggris.",
+    "expected_answer": [
+      "SIMAK UI",
+      "Tes Potensi Akademik",
+      "Bahasa Inggris"
+    ],
     "source_chunk_ids": [
-      "25"
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000"
     ],
-    "must_include": [
-      "Sastra Arab",
-      "UKT 10",
-      "strip"
+    "source_doc_ids": [
+      "doc_065d1b23186d"
     ],
-    "should_not_include": [
-      "Rp8.300.000",
-      "Rp11.500.000"
-    ],
-    "retrieval_notes": "Pastikan jawaban membaca status sel UKT 10 untuk Sastra Arab, bukan UKT lain."
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_039",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau Geofisika di tabel sarjana reguler, UKT 10 ada nominalnya atau kosong?",
-    "ground_truth": "UKT 10 Geofisika ada nominalnya, yaitu Rp16.900.000.",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program Magister UI ditujukan untuk lulusan jenjang apa dan berapa biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027?",
+    "ground_truth": "Program Magister UI ditujukan untuk lulusan Sarjana dan proses seleksinya dilakukan melalui SIMAK UI Pascasarjana. Biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027 adalah Rp1.350.000.",
+    "expected_answer": [
+      "lulusan Sarjana",
+      "SIMAK UI Pascasarjana",
+      "Rp1.350.000"
+    ],
     "source_chunk_ids": [
-      "23"
+      "doc_5bcaf2a7eb51__b98593a775__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
     ],
-    "must_include": [
-      "Geofisika",
-      "UKT 10",
-      "Rp16.900.000"
+    "source_doc_ids": [
+      "doc_5bcaf2a7eb51",
+      "doc_70e6f5d0f243"
     ],
-    "should_not_include": [
-      "UKT 11",
-      "strip"
-    ],
-    "retrieval_notes": "Cari entri Geofisika dan baca nilai pada kolom UKT 10."
+    "source_urls": [
+      "https://simak.ui.ac.id/s2-magister/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   },
   {
     "id": "v5_040",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "Berapa IPI 4 untuk Program Studi Pendidikan Dokter pada dokumen IPI jalur mandiri?",
-    "ground_truth": "IPI 4 untuk Program Studi Pendidikan Dokter pada dokumen IPI jalur mandiri adalah Rp120.000.000.",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Program Doktor UI ditujukan untuk lulusan jenjang apa, dan apakah SIMAK UI mencakup jenjang S3?",
+    "ground_truth": "Program Doktor UI ditujukan untuk lulusan Magister dan berfokus pada pengembangan riset orisinal dan kontributif. SIMAK UI mencakup seleksi untuk jenjang S3.",
+    "expected_answer": [
+      "lulusan Magister",
+      "riset orisinal dan kontributif",
+      "S3"
+    ],
     "source_chunk_ids": [
-      "86"
+      "doc_a09bbd8c8549__00802908b5__chunk_0000",
+      "doc_c40f56ffe74e__216cb9abf8__chunk_0000"
     ],
-    "must_include": [
-      "Pendidikan Dokter",
-      "IPI 4",
-      "Rp120.000.000"
+    "source_doc_ids": [
+      "doc_a09bbd8c8549",
+      "doc_c40f56ffe74e"
     ],
-    "should_not_include": [
-      "Rp111.100.000",
-      "UKT"
-    ],
-    "retrieval_notes": "Cari nilai IPI 4 Pendidikan Dokter pada tabel IPI mandiri."
+    "source_urls": [
+      "https://simak.ui.ac.id/s3-doktor/#kingster-top-anchor",
+      "https://simak.ui.ac.id/"
+    ]
   },
   {
     "id": "v5_041",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "easy",
-    "question": "Untuk Farmasi jalur mandiri, IPI 2-nya berapa?",
-    "ground_truth": "IPI 2 Farmasi jalur mandiri adalah Rp28.500.000.",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Apa tujuan utama Pendidikan Vokasi UI?",
+    "ground_truth": "Pendidikan Vokasi UI bertujuan menyiapkan tenaga profesional siap kerja dengan pembelajaran yang menekankan keterampilan.",
+    "expected_answer": [
+      "tenaga profesional siap kerja",
+      "keterampilan"
+    ],
     "source_chunk_ids": [
-      "87"
+      "doc_897571be23f9__27c75c7079__chunk_0000"
     ],
-    "must_include": [
-      "Farmasi",
-      "IPI 2",
-      "Rp28.500.000"
+    "source_doc_ids": [
+      "doc_897571be23f9"
     ],
-    "should_not_include": [
-      "IPI 4 Rp75.000.000",
-      "KKI"
-    ],
-    "retrieval_notes": "Cari nilai IPI 2 Farmasi pada tabel IPI mandiri."
+    "source_urls": [
+      "https://simak.ui.ac.id/vokasi-2/#kingster-top-anchor"
+    ]
   },
   {
     "id": "v5_042",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "Berapa IPI 4 Ilmu Hukum pada dokumen IPI jalur mandiri?",
-    "ground_truth": "IPI 4 Ilmu Hukum pada dokumen IPI jalur mandiri adalah Rp48.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Dalam Sistem Beasiswa UI, apa yang dimaksud dengan Beasiswa?",
+    "ground_truth": "Beasiswa adalah bantuan kepada mahasiswa sebagai apresiasi prestasi atau bantuan biaya pendidikan bagi mahasiswa yang memiliki keterbatasan finansial.",
+    "expected_answer": [
+      "bantuan",
+      "prestasi",
+      "keterbatasan finansial"
+    ],
     "source_chunk_ids": [
-      "89"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Ilmu Hukum",
-      "IPI 4",
-      "Rp48.000.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "Rp70.000.000",
-      "Rp98.000.000"
-    ],
-    "retrieval_notes": "Cari entri Ilmu Hukum pada tabel IPI mandiri."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_043",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Untuk Sastra Inggris di IPI mandiri, kelompok IPI 3 nilainya berapa?",
-    "ground_truth": "Untuk Sastra Inggris di IPI mandiri, IPI 3 adalah Rp23.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Dalam Sistem Beasiswa UI, apa yang dimaksud dengan Paket Beasiswa?",
+    "ground_truth": "Paket Beasiswa adalah penawaran beasiswa dengan syarat dan ketentuan yang berlaku.",
+    "expected_answer": [
+      "penawaran beasiswa",
+      "syarat dan ketentuan"
+    ],
     "source_chunk_ids": [
-      "90"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Sastra Inggris",
-      "IPI 3",
-      "Rp23.000.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "IPI 4 Rp28.000.000",
-      "UKT"
-    ],
-    "retrieval_notes": "Cari nilai IPI 3 Sastra Inggris pada tabel IPI mandiri."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_044",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau Ilmu Administrasi Niaga lewat mandiri, IPI 2-nya berapa?",
-    "ground_truth": "IPI 2 Ilmu Administrasi Niaga jalur mandiri adalah Rp12.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Dalam Sistem Beasiswa UI, siapa yang disebut Penerima Beasiswa?",
+    "ground_truth": "Penerima Beasiswa adalah pelamar atau pendaftar beasiswa yang sudah disetujui oleh Pengelola dan Pendonor dari suatu Paket Beasiswa.",
+    "expected_answer": [
+      "disetujui",
+      "Pengelola",
+      "Pendonor"
+    ],
     "source_chunk_ids": [
-      "91"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Ilmu Administrasi Niaga",
-      "IPI 2",
-      "Rp12.000.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "Ilmu Administrasi Negara",
-      "Rp24.000.000"
-    ],
-    "retrieval_notes": "Ambil nilai IPI 2 untuk Ilmu Administrasi Niaga, bukan program administrasi lain."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_045",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "Berapa IPI 2 untuk Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi jalur seleksi mandiri?",
-    "ground_truth": "IPI 2 untuk Sarjana Terapan Fisioterapi pada Program Pendidikan Vokasi jalur seleksi mandiri adalah Rp6.500.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Dalam Sistem Beasiswa UI, apa perbedaan Pengelola dan Pendonor?",
+    "ground_truth": "Pengelola adalah pihak UI yang mengelola Paket Beasiswa, sedangkan Pendonor adalah pihak yang memberikan beasiswa.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor"
+    ],
     "source_chunk_ids": [
-      "92"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Sarjana Terapan Fisioterapi",
-      "IPI 2",
-      "Rp6.500.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "Rp15.000.000",
-      "jalur kerja sama"
-    ],
-    "retrieval_notes": "Cari nilai IPI 2 Fisioterapi pada tabel IPI mandiri vokasi."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_046",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "medium",
-    "question": "Untuk Kelas Khusus Internasional, berapa UKT dan IPI Program Studi Farmasi?",
-    "ground_truth": "Untuk Kelas Khusus Internasional, Program Studi Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Apa fungsi Sistem Beasiswa UI?",
+    "ground_truth": "Sistem Beasiswa UI berfungsi sebagai alat pengelolaan administrasi terintegrasi untuk pemangku kepentingan terkait proses beasiswa.",
+    "expected_answer": [
+      "administrasi terintegrasi",
+      "beasiswa"
+    ],
     "source_chunk_ids": [
-      "110"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Farmasi",
-      "UKT Rp55.000.000",
-      "IPI Rp190.000.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "Rp28.500.000",
-      "jalur kerja sama"
-    ],
-    "retrieval_notes": "Cari pasangan UKT dan IPI Farmasi pada tabel KKI."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_047",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau Ilmu Komputer masuk lewat RPL, paket biayanya berapa aja?",
-    "ground_truth": "Kalau Ilmu Komputer masuk lewat RPL, UKT-nya Rp29.300.000 dan IPI-nya Rp50.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Saat periode pendaftaran Paket Beasiswa berlangsung, apa yang dapat dilakukan pelamar melalui Sistem Beasiswa UI?",
+    "ground_truth": "Saat periode pendaftaran Paket Beasiswa berlangsung, pelamar dapat mengisi formulir elektronik dan mengunggah dokumen yang diperlukan.",
+    "expected_answer": [
+      "formulir elektronik",
+      "mengunggah dokumen"
+    ],
     "source_chunk_ids": [
-      "137"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
     ],
-    "must_include": [
-      "Ilmu Komputer",
-      "UKT Rp29.300.000",
-      "IPI Rp50.000.000"
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
     ],
-    "should_not_include": [
-      "Rp60.000.000",
-      "Rp80.000.000"
-    ],
-    "retrieval_notes": "Cari UKT dan IPI Ilmu Komputer pada tabel RPL."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
   },
   {
     "id": "v5_048",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Pada jalur kerja sama, Sistem Informasi dikenai UKT dan IPI berapa?",
-    "ground_truth": "Pada jalur kerja sama, Sistem Informasi dikenai UKT Rp29.300.000 dan IPI Rp80.000.000.",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Setelah periode pendaftaran Paket Beasiswa berakhir, siapa yang mengusulkan calon penerima beasiswa kepada pendonor?",
+    "ground_truth": "Setelah periode pendaftaran Paket Beasiswa berakhir, Pengelola mengusulkan calon Penerima Beasiswa kepada Pendonor.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor"
+    ],
     "source_chunk_ids": [
-      "178"
+      "doc_914cb2fec542__41210b74e0__chunk_0000"
     ],
-    "must_include": [
-      "Sistem Informasi",
-      "UKT Rp29.300.000",
-      "IPI Rp80.000.000"
+    "source_doc_ids": [
+      "doc_914cb2fec542"
     ],
-    "should_not_include": [
-      "Rp29.334.000",
-      "Ilmu Komputer KKI Rp60.000.000"
-    ],
-    "retrieval_notes": "Cari biaya Sistem Informasi pada tabel kerja sama."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/beasiswa/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_049",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "medium",
-    "question": "Mahasiswa status overseas pada jalur kerja sama dikenai biaya registrasi berapa per semester atau term?",
-    "ground_truth": "Mahasiswa status overseas pada jalur kerja sama dikenai biaya registrasi Rp1.100.000 per semester/term.",
+    "category": "scholarship_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Setelah periode pendaftaran Paket Beasiswa berakhir, siapa yang mengusulkan calon penerima beasiswa dan siapa yang menyetujui usulan calon penerima?",
+    "ground_truth": "Setelah periode pendaftaran Paket Beasiswa berakhir, Pengelola mengusulkan calon Penerima Beasiswa kepada Pendonor. Pendonor kemudian melakukan seleksi dan menyetujui usulan calon Penerima Beasiswa.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor",
+      "menyetujui"
+    ],
     "source_chunk_ids": [
-      "162"
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000",
+      "doc_914cb2fec542__41210b74e0__chunk_0000"
     ],
-    "must_include": [
-      "overseas",
-      "Rp1.100.000",
-      "per semester/term"
+    "source_doc_ids": [
+      "doc_b3655d4f5026",
+      "doc_914cb2fec542"
     ],
-    "should_not_include": [
-      "Rp2.475.000",
-      "student exchange"
-    ],
-    "retrieval_notes": "Cari aturan biaya registrasi overseas pada dokumen kerja sama."
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about",
+      "https://kemahasiswaan.ui.ac.id/beasiswa/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_050",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "Biaya tunda kuliah pascasarjana dihitung berdasarkan rumus apa?",
-    "ground_truth": "Biaya tunda kuliah pascasarjana dihitung sebesar 10% dari besaran uang kuliah pada semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan.",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Untuk meminjam Pusgiwa UI, dokumen apa yang wajib disiapkan pemohon?",
+    "ground_truth": "Untuk meminjam Pusgiwa UI, pemohon wajib menyiapkan surat permohonan resmi, proposal kegiatan, dan surat persetujuan dari pembina atau manajer kemahasiswaan fakultas/prodi.",
+    "expected_answer": [
+      "surat permohonan resmi",
+      "proposal kegiatan",
+      "surat persetujuan"
+    ],
     "source_chunk_ids": [
-      "186"
+      "doc_9193c8e2416f__6b8b18e9c2__chunk_0000"
     ],
-    "must_include": [
-      "10%",
-      "besaran uang kuliah",
-      "semester saat calon mahasiswa dinyatakan lulus seleksi penerimaan"
+    "source_doc_ids": [
+      "doc_9193c8e2416f"
     ],
-    "should_not_include": [
-      "Rp1.100.000",
-      "dicicil"
-    ],
-    "retrieval_notes": "Cari rumus tarif tunda kuliah pada diktum keputusan."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/fasilitas-2/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_051",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "hard",
-    "question": "Biaya tunda kuliah pascasarjana dikenakan kapan?",
-    "ground_truth": "Biaya tunda kuliah pascasarjana dikenakan untuk setiap semester pada saat yang bersangkutan menunda kuliah.",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Ke alamat surel apa dokumen peminjaman Pusgiwa UI dikirim?",
+    "ground_truth": "Dokumen peminjaman Pusgiwa UI dikirim ke ppsb.ui@gmail.com dengan subjek “PERMOHONAN PEMINJAMAN – [NAMA RUANGAN]”.",
+    "expected_answer": [
+      "ppsb.ui@gmail.com",
+      "PERMOHONAN PEMINJAMAN"
+    ],
     "source_chunk_ids": [
-      "186"
+      "doc_9193c8e2416f__6b8b18e9c2__chunk_0000"
     ],
-    "must_include": [
-      "setiap semester",
-      "menunda kuliah"
+    "source_doc_ids": [
+      "doc_9193c8e2416f"
     ],
-    "should_not_include": [
-      "sekali saja",
-      "setiap tahun"
-    ],
-    "retrieval_notes": "Cari ketentuan waktu pengenaan biaya tunda kuliah."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/fasilitas-2/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_052",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "easy",
-    "question": "Untuk mahasiswa overseas, biaya registrasi status kuliah di luar negeri pada program profesi dan pada program magister/doktor/spesialis berbeda bagaimana?",
-    "ground_truth": "Biayanya berbeda. Program profesi dikenakan Rp1.000.000 per semester/term, sedangkan program magister, doktor, spesialis, dan subspesialis dikenakan Rp1.250.000 per semester/term.",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Apa tugas Ditmawa UI menurut laman Direktorat Kemahasiswaan?",
+    "ground_truth": "Ditmawa UI bertugas menyusun dan melaksanakan kebijakan pembinaan, pendampingan, dan pelayanan bidang kemahasiswaan, terutama kegiatan di luar kelas yang meningkatkan kompetensi non-akademik mahasiswa.",
+    "expected_answer": [
+      "pembinaan",
+      "pendampingan",
+      "pelayanan bidang kemahasiswaan"
+    ],
     "source_chunk_ids": [
-      "203"
+      "doc_799afc936e69__2d824a4c7a__chunk_0000"
     ],
-    "must_include": [
-      "profesi Rp1.000.000",
-      "magister/doktor/spesialis/subspesialis Rp1.250.000",
-      "berbeda"
+    "source_doc_ids": [
+      "doc_799afc936e69"
     ],
-    "should_not_include": [
-      "Rp1.100.000",
-      "student exchange"
-    ],
-    "retrieval_notes": "Cari dua kelompok tarif overseas pada dokumen pascasarjana."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/profile/"
+    ]
   },
   {
     "id": "v5_053",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "user_like",
-    "difficulty": "medium",
-    "question": "Kalau Profesi Kedokteran Gigi di dokumen pascasarjana, biaya WNI, Khusus, dan WNA masing-masing berapa?",
-    "ground_truth": "Biaya Profesi Kedokteran Gigi adalah Rp17.500.000 untuk WNI, Rp25.000.000 untuk Khusus, dan Rp61.000.000 untuk WNA.",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Apa saja contoh rangkaian kegiatan PKKMB UI?",
+    "ground_truth": "Contoh rangkaian PKKMB UI mencakup Pemeriksaan Kesehatan, Pembagian Jaket Kuning, Kegiatan PKKMB, Latihan Paduan Suara, Display UKM, Orientasi Kehidupan Kampus, Orientasi Belajar Mahasiswa, dan Pengenalan Sistem Akademik Fakultas.",
+    "expected_answer": [
+      "Pemeriksaan Kesehatan",
+      "Jaket Kuning",
+      "Display UKM"
+    ],
     "source_chunk_ids": [
-      "209"
+      "doc_6704bcd12ba1__2b8d183e4d__chunk_0000"
     ],
-    "must_include": [
-      "WNI Rp17.500.000",
-      "Khusus Rp25.000.000",
-      "WNA Rp61.000.000"
+    "source_doc_ids": [
+      "doc_6704bcd12ba1"
     ],
-    "should_not_include": [
-      "Kedokteran Gigi - KKI",
-      "Rp100.000.000",
-      "Rp125.000.000"
-    ],
-    "retrieval_notes": "Cari tiga nilai biaya untuk Profesi Kedokteran Gigi pada tabel pascasarjana."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/pkkmb/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_054",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "shifted",
-    "difficulty": "hard",
-    "question": "Untuk Apoteker, berapa biaya kategori WNI dan Khusus (S1 Non UI)?",
-    "ground_truth": "Untuk Apoteker, biaya kategori WNI adalah Rp25.000.000 dan kategori Khusus (S1 Non UI) adalah Rp40.000.000.",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Apa yang dimaksud dengan Unit Kegiatan Mahasiswa UI?",
+    "ground_truth": "Unit Kegiatan Mahasiswa adalah lembaga kemahasiswaan tempat mahasiswa bergabung berdasarkan kesamaan minat, kegemaran, kreativitas, dan orientasi aktivitas ekstrakurikuler di kampus.",
+    "expected_answer": [
+      "lembaga kemahasiswaan",
+      "minat",
+      "ekstrakurikuler"
+    ],
     "source_chunk_ids": [
-      "210"
+      "doc_796805692e58__dd864a67f7__chunk_0000"
     ],
-    "must_include": [
-      "WNI Rp25.000.000",
-      "Khusus (S1 Non UI) Rp40.000.000"
+    "source_doc_ids": [
+      "doc_796805692e58"
     ],
-    "should_not_include": [
-      "WNA",
-      "Rp57.500.000"
-    ],
-    "retrieval_notes": "Cari dua nilai biaya Apoteker pada tabel pascasarjana."
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/unit-kegiatan-mahasiswa/#kingster-mobile-menu"
+    ]
   },
   {
     "id": "v5_055",
-    "main_category": "fees_and_financial_information",
-    "scope_category": "single_chunk",
-    "wording_style": "near_source",
-    "difficulty": "hard",
-    "question": "Berapa uang kuliah Magister Kajian Administrasi Rumah Sakit (KARS) kategori WNI dan WNA?",
-    "ground_truth": "Uang kuliah Magister Kajian Administrasi Rumah Sakit (KARS) adalah Rp21.000.000 untuk WNI dan Rp42.000.000 untuk WNA.",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Jika sekolah belum terdaftar untuk mengikuti PPKB UI, surel apa yang digunakan untuk pengajuan sekolah?",
+    "ground_truth": "Sekolah yang belum terdaftar untuk mengikuti PPKB UI dapat mengajukan melalui surel ppkb@ui.ac.id.",
+    "expected_answer": [
+      "ppkb@ui.ac.id"
+    ],
     "source_chunk_ids": [
-      "211"
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
     ],
-    "must_include": [
-      "KARS",
-      "WNI Rp21.000.000",
-      "WNA Rp42.000.000"
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
     ],
-    "should_not_include": [
-      "IKM",
-      "Rp20.000.000"
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_056",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Jika sekolah belum terdaftar untuk Talent Scouting UI, surel apa yang digunakan untuk pengajuan?",
+    "ground_truth": "Sekolah yang belum terdaftar untuk Talent Scouting UI dapat mengajukan melalui surel kkitalentscouting@ui.ac.id.",
+    "expected_answer": [
+      "kkitalentscouting@ui.ac.id"
     ],
-    "retrieval_notes": "Cari dua nilai biaya KARS pada tabel pascasarjana."
+    "source_chunk_ids": [
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_057",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Untuk informasi PPKB UI, kapan periode pendaftarannya dan kontak apa yang disebutkan pada laman SIMAK UI?",
+    "ground_truth": "Pendaftaran PPKB UI berlangsung pada 15 Mei–19 Juni 2026. Kontak yang disebutkan pada laman SIMAK UI adalah penerimaan@ui.ac.id dan telepon (+62-21) 7864126.",
+    "expected_answer": [
+      "15 Mei–19 Juni 2026",
+      "penerimaan@ui.ac.id",
+      "(+62-21) 7864126"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_058",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Apakah UI bekerja sama dengan bimbingan belajar atau lembaga sejenis untuk menjanjikan kelulusan?",
+    "ground_truth": "Tidak. Universitas Indonesia tidak bekerja sama dengan pihak bimbingan belajar, bimbingan tes, atau lembaga sejenis untuk mengadakan try-out atau menjanjikan kemudahan diterima di UI.",
+    "expected_answer": [
+      "tidak bekerja sama",
+      "bimbingan belajar",
+      "menjanjikan kelulusan"
+    ],
+    "source_chunk_ids": [
+      "doc_95dbe867a9e9__87e9aeefec__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_95dbe867a9e9"
+    ],
+    "source_urls": [
+      "https://penerimaan.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_059",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "document_or_url",
+    "question": "Nomor SK untuk tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 apa?",
+    "ground_truth": "Nomor SK untuk tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 adalah 112/SK/R/UI/2026.",
+    "expected_answer": [
+      "112/SK/R/UI/2026"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_060",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Kapan SK tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 ditetapkan?",
+    "ground_truth": "SK tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 ditetapkan di Jakarta pada 6 Februari 2026.",
+    "expected_answer": [
+      "6 Februari 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
   }
 ]
