@@ -1,0 +1,16 @@
+# Generation-quality subset for the remaining rerank5 models.
+extends: "../profiles/generation.yaml"
+
+retrieval:
+  rerank_top_k: 5
+
+evaluation:
+  model_matrix:
+    - label: "gemma4_31b_rerank5"
+      model_name: "gemma4:31b"
+    - label: "gpt_oss_20b_rerank5"
+      model_name: "gpt-oss:20b"
+    - label: "mistral_small_24b_rerank5"
+      model_name: "mistral-small:24b"
+    - label: "qwen35_4b_rerank5"
+      model_name: "qwen3.5:4b"
