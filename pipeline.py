@@ -1546,6 +1546,18 @@ class RAGPipeline:
             for sample in samples
         ]
 
+        print(
+            "Starting score-only evaluation: "
+            f"samples={len(samples)} metrics={list(self.config.evaluation.metrics)} "
+            f"judge_model={self.config.evaluation.eval_llm}",
+            flush=True,
+        )
+        print(
+            "Scoring progress is batch-style in the current RAGAS path, "
+            "so logs will update at phase boundaries rather than once per question.",
+            flush=True,
+        )
+
         eval_results = self.evaluator.evaluate(
             questions=questions,
             contexts=contexts,
@@ -1555,6 +1567,11 @@ class RAGPipeline:
 
         timings_summary = self._summarize_timings(timings)
         total_runtime_ms = (time.time() - scoring_started) * 1000
+        print(
+            "Finished score-only evaluation: "
+            f"samples={len(samples)} total_runtime_ms={total_runtime_ms}",
+            flush=True,
+        )
         generation_model = None
         generation_label = None
         if dataset_metadata:

@@ -508,6 +508,13 @@ def _runtime_settings_snapshot(config: RAGConfig, config_path: str | None = None
     }
 
 
+def _summarize_question_for_log(question: str, limit: int = 120) -> str:
+    compact = " ".join((question or "").split())
+    if len(compact) <= limit:
+        return compact
+    return compact[: limit - 3] + "..."
+
+
 def _derive_ollama_generate_url(llm_endpoint: str) -> str:
     endpoint = llm_endpoint.rstrip("/")
     if endpoint.endswith("/v1"):
@@ -642,6 +649,12 @@ def _generate_eval_predictions_via_api(
     with httpx.Client(timeout=300.0) as client:
         for index, question in enumerate(questions):
             started = time.time()
+            question_preview = _summarize_question_for_log(question)
+            print(
+                f"[{index + 1}/{len(questions)}] Starting generation for question: "
+                f"{question_preview}",
+                flush=True,
+            )
             payload: dict[str, object] = {"query": question}
             if generation_override or retrieval_override:
                 payload["config_override"] = {}
@@ -692,6 +705,16 @@ def _generate_eval_predictions_via_api(
                     "question": question,
                     **sample["timings"],
                 }
+            )
+            retrieval_time_ms = sample["timings"].get("retrieval_time_ms")
+            generation_time_ms = sample["timings"].get("generation_time_ms")
+            end_to_end_time_ms = sample["timings"].get("end_to_end_time_ms")
+            print(
+                f"[{index + 1}/{len(questions)}] Finished generation "
+                f"retrieval_ms={retrieval_time_ms} "
+                f"generation_ms={generation_time_ms} "
+                f"end_to_end_ms={end_to_end_time_ms}",
+                flush=True,
             )
             if show_answers:
                 print(f"\n[{index + 1}/{len(questions)}] {question}")
