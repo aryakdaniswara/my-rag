@@ -122,9 +122,9 @@ For day-to-day iteration, the default evaluation dataset is `storage/eval_datase
 Recommended entrypoints:
 
 ```bash
-sh /app/scripts/eval_generate_matrix.sh evaluation/configs/matrices/generation_rerank8.yaml http://127.0.0.1:8000
-sh /app/scripts/eval_score_matrix.sh evaluation/configs/matrices/generation_rerank8.yaml
-sh /app/scripts/eval_score.sh --latest qwen35_4b_rerank8 evaluation/configs/profiles/retrieval.yaml
+sh /app/scripts/eval_generate_matrix.sh evaluation/configs/matrices/generation_rerank5.yaml http://127.0.0.1:8000
+sh /app/scripts/eval_score_matrix.sh evaluation/configs/matrices/generation_rerank5.yaml
+sh /app/scripts/eval_score.sh --latest qwen35_4b_rerank5 evaluation/configs/profiles/retrieval.yaml
 ```
 
 The structured eval workspace now lives under `storage/eval_runs/<run_name>/` with:

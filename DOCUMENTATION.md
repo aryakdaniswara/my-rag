@@ -406,7 +406,7 @@ Common commands:
 sh /app/scripts/eval_run.sh evaluation/configs/base/qwen36_judge.yaml
 python cli.py eval-generate --config config_rag.yaml --model qwen3.5:4b --label qwen35_4b
 python cli.py eval-score --config evaluation/configs/profiles/generation.yaml --predictions storage/eval_runs/<run_name>/predictions/<file>.json
-python cli.py eval --config evaluation/configs/matrices/generation_rerank8.yaml
+python cli.py eval --config evaluation/configs/matrices/generation_rerank5.yaml
 ```
 
 The guide documents:
@@ -414,6 +414,8 @@ The guide documents:
 - what each RAGAS metric means
 - where the live prompt logic actually comes from
 - how the run manifest and structured eval folders work
+- that the recommended generation matrix uses `retrieval.rerank_top_k: 5` via `evaluation/configs/matrices/generation_rerank5.yaml`
+- that score-only reports measure whole-job scoring runtime in `total_runtime_ms` and `total_runtime_seconds`
 - how reasoning toggles work for local generation and qwen3.6:27b judging
 
 ---

@@ -32,8 +32,8 @@ The active judge is `qwen3.6:27b`.
 - `evaluation/configs/base/qwen36_judge.yaml`: all four metrics
 - `evaluation/configs/profiles/generation.yaml`: `faithfulness`, `answer_relevancy`
 - `evaluation/configs/profiles/retrieval.yaml`: `context_precision`, `context_recall`
-- `evaluation/configs/singles/generation_v4_rerank8.yaml`: recommended one-model v4 check
-- `evaluation/configs/matrices/generation_rerank8.yaml`: generation matrix at `rerank_top_k: 8`
+- `evaluation/configs/singles/generation_v4_rerank8.yaml`: one-model v4 check pinned to `rerank_top_k: 8`
+- `evaluation/configs/matrices/generation_rerank5.yaml`: recommended generation matrix pinned to `rerank_top_k: 5`
 - `evaluation/configs/matrices/retrieval_qwen35_rerank_sweep.yaml`: retrieval metric rerank sweep
 
 ## Recommended One-Model v4 Run
@@ -67,11 +67,11 @@ sh /app/scripts/eval_generate_and_score_api.sh \
 
 ## Matrix Run
 
-Generate streamed predictions for the fixed rerank-8 generation matrix:
+Generate streamed predictions for the recommended generation matrix with `retrieval.rerank_top_k: 5`:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
   http://127.0.0.1:8000
 ```
 
@@ -79,15 +79,15 @@ Score those predictions:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml
+  evaluation/configs/matrices/generation_rerank5.yaml
 ```
 
 Or chain both phases:
 
 ```sh
 sh /app/scripts/eval_generate_and_score_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml \
-  evaluation/configs/matrices/generation_rerank8.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
   http://127.0.0.1:8000
 ```
 
@@ -107,6 +107,17 @@ For model answer-quality comparison, use generation metrics only:
 
 Use retrieval metrics separately when retrieval settings, corpus, chunking, or
 dataset evidence changes.
+
+## Timing Fields
+
+Generation artifacts record per-question retrieval, generation, and end-to-end timings in milliseconds.
+
+Score-only artifacts do not add per-question judge timings. They keep the per-question timings from the prediction artifact and measure only the total scoring runtime for the whole scoring job.
+
+Total runtime is written in both `summary.timings` and `timings.summary` as:
+
+- `total_runtime_ms`
+- `total_runtime_seconds`
 
 ## Artifacts
 

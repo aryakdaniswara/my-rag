@@ -1,4 +1,4 @@
-# Generation-quality comparison with fixed rerank_top_k=8.
+# Generation-quality comparison with fixed rerank_top_k=5.
 extends: "../profiles/generation.yaml"
 
 retrieval:

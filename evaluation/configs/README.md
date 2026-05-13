@@ -15,7 +15,7 @@ evaluation/configs/
   singles/
     generation_v4_rerank8.yaml
   matrices/
-    generation_rerank8.yaml
+    generation_rerank5.yaml
     retrieval_qwen35_rerank_sweep.yaml
 ```
 
@@ -42,9 +42,9 @@ evaluation/configs/
   - Fixes `retrieval.rerank_top_k: 8`.
   - Use this for a quick one-model check against the expanded v4 dataset.
 
-- `matrices/generation_rerank8.yaml`
+- `matrices/generation_rerank5.yaml`
   - Uses generation metrics only.
-  - Fixes `retrieval.rerank_top_k: 8`.
+  - Fixes `retrieval.rerank_top_k: 5`.
   - Compares the configured generation models with the same retrieval setting.
 
 - `matrices/retrieval_qwen35_rerank_sweep.yaml`
@@ -95,11 +95,11 @@ sh /app/scripts/eval_score.sh \
 
 ## Matrix Run
 
-Generate streamed predictions for the fixed rerank-8 generation matrix:
+Generate streamed predictions for the recommended generation matrix with `retrieval.rerank_top_k: 5`:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
   http://127.0.0.1:8000
 ```
 
@@ -107,15 +107,15 @@ Score those predictions with generation metrics:
 
 ```sh
 sh /app/scripts/eval_score_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml
+  evaluation/configs/matrices/generation_rerank5.yaml
 ```
 
 Generate and score the matrix automatically:
 
 ```sh
 sh /app/scripts/eval_generate_and_score_matrix.sh \
-  evaluation/configs/matrices/generation_rerank8.yaml \
-  evaluation/configs/matrices/generation_rerank8.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
+  evaluation/configs/matrices/generation_rerank5.yaml \
   http://127.0.0.1:8000
 ```
 
@@ -133,6 +133,12 @@ storage/eval_runs/<run_name>/
 
 The manifest is the canonical lookup source for latest prediction and score
 artifacts.
+
+## Timing Fields
+
+- Generation artifacts store per-question retrieval, generation, and end-to-end timings in milliseconds.
+- Score-only artifacts reuse those per-question timings and measure only total scoring runtime for the whole scoring job.
+- Total runtime is available in both `summary.timings` and `timings.summary` as `total_runtime_ms` and `total_runtime_seconds`.
 
 ## Environment
 
