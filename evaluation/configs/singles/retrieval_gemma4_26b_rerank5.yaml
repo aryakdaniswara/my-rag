@@ -1,0 +1,5 @@
+# Retrieval-quality score config for gemma4:26b predictions at rerank_top_k=5.
+extends: "../profiles/retrieval.yaml"
+
+retrieval:
+  rerank_top_k: 5

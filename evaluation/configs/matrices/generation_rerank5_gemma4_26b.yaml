@@ -1,0 +1,10 @@
+# Single-model generation-quality run for gemma4:26b at rerank_top_k=5.
+extends: "../profiles/generation.yaml"
+
+retrieval:
+  rerank_top_k: 5
+
+evaluation:
+  model_matrix:
+    - label: "gemma4_26b_rerank5"
+      model_name: "gemma4:26b"
