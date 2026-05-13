@@ -467,6 +467,17 @@ class RAGPipeline:
             summary["timings"]["total_runtime_seconds"] = total_runtime_ms / 1000.0
         return summary
 
+    @staticmethod
+    def _with_total_runtime(
+        timings_summary: Dict[str, Any],
+        total_runtime_ms: Optional[float] = None,
+    ) -> Dict[str, Any]:
+        summary = dict(timings_summary)
+        if total_runtime_ms is not None:
+            summary["total_runtime_ms"] = total_runtime_ms
+            summary["total_runtime_seconds"] = total_runtime_ms / 1000.0
+        return summary
+
     def _write_eval_report(
         self,
         report: Dict[str, Any],
@@ -1391,7 +1402,7 @@ class RAGPipeline:
             },
             "timings": {
                 "per_question": timings,
-                "summary": timings_summary,
+                "summary": self._with_total_runtime(timings_summary, total_runtime_ms),
             },
             "results": eval_results,
             "artifacts": {
@@ -1494,7 +1505,7 @@ class RAGPipeline:
                 "per_question": [
                     {"question": sample["question"], **sample["timings"]} for sample in samples
                 ],
-                "summary": timings_summary,
+                "summary": self._with_total_runtime(timings_summary, total_runtime_ms),
             },
             "artifacts": {
                 "samples": samples,
@@ -1581,7 +1592,7 @@ class RAGPipeline:
             },
             "timings": {
                 "per_question": timings,
-                "summary": timings_summary,
+                "summary": self._with_total_runtime(timings_summary, total_runtime_ms),
             },
             "results": eval_results,
             "artifacts": {

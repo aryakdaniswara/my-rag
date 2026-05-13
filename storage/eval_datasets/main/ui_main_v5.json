@@ -760,11 +760,12 @@
     "id": "v5_035",
     "category": "program_info",
     "scope": "multi_chunk",
-    "answer_type": "rule_or_eligibility",
-    "question": "Program Kelas Internasional UI dapat diikuti oleh lulusan dengan usia ijazah maksimal berapa tahun dan melalui jalur apa saja?",
-    "ground_truth": "Program Kelas Internasional UI dapat diikuti lulusan sekolah lanjutan atas dan sederajat dengan usia ijazah tidak lebih dari lima tahun. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
+    "answer_type": "program_or_faculty",
+    "question": "Pada Program Kelas Internasional UI, Program Studi Ilmu Komputer tersedia dalam skema apa dan jalur penerimaannya apa saja?",
+    "ground_truth": "Pada Program Kelas Internasional UI, Program Studi Ilmu Komputer tersedia dalam skema Double Degree. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
     "expected_answer": [
-      "lima tahun",
+      "Ilmu Komputer",
+      "Double Degree",
       "Talent Scouting",
       "SIMAK Kelas Internasional"
     ],

@@ -698,6 +698,7 @@ def _generate_eval_predictions_via_api(
                 print(sample.get("answer", ""))
                 print("", flush=True)
 
+    total_runtime_ms = (time.time() - run_started) * 1000
     report = {
         "generated_at": datetime.now().isoformat(),
         "mode": "prediction_generation_api",
@@ -733,7 +734,8 @@ def _generate_eval_predictions_via_api(
                     if timing_rows else None
                 ),
                 "ttft_ms_avg": None,
-                "total_runtime_ms": (time.time() - run_started) * 1000,
+                "total_runtime_ms": total_runtime_ms,
+                "total_runtime_seconds": total_runtime_ms / 1000.0,
             },
         },
         "api_base_url": api_base_url,
@@ -786,6 +788,8 @@ def _generate_eval_predictions_via_api(
                     if timing_rows else None
                 ),
                 "ttft_ms_avg": None,
+                "total_runtime_ms": total_runtime_ms,
+                "total_runtime_seconds": total_runtime_ms / 1000.0,
             },
         },
         "artifacts": {
@@ -914,7 +918,10 @@ def _build_leaderboards(model_entries: list[dict]) -> dict[str, list[dict]]:
 def _build_matrix_entry(report: dict, label: str) -> dict:
     results_block = report.get("results", {}) if isinstance(report.get("results"), dict) else {}
     summary_block = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
-    timings = report.get("timings", {}).get("summary", {})
+    report_timings = report.get("timings", {}) if isinstance(report.get("timings"), dict) else {}
+    nested_timings = report_timings.get("summary", {}) if isinstance(report_timings.get("summary"), dict) else {}
+    summary_timings = summary_block.get("timings", {}) if isinstance(summary_block.get("timings"), dict) else {}
+    timings = {**nested_timings, **summary_timings}
     metric_means = _metric_means(results_block)
     return {
         "label": label,
