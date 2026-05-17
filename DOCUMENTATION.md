@@ -106,6 +106,8 @@ For a responsive user experience, the system supports real-time token streaming:
     - **Type: `sources`**: The second message contains the full list of retrieved document metadata.
     - **Type: `token`**: Subsequent messages contain individual text tokens as they are emitted by the LLM.
     - **Type: `confidence`**: The final message contains retrieval-strength confidence derived from ranked evidence.
+    - **Type: `timings`**: The final timing payload contains retrieval, generation, and end-to-end duration fields.
+- **Context exposure**: The stream does not emit the raw retrieved context. Use the non-streaming `/query` endpoint when a client or evaluation job needs full context text.
 - **Implementation**: The pipeline uses the `stream=True` parameter in the OpenAI-compatible client, yielding chunks directly to the FastAPI `StreamingResponse`.
 
 ### H. Evaluation & Observability
@@ -200,9 +202,13 @@ Streaming version of the RAG query. Returns tokens as they are generated.
 - **Request Body**: Same as `/query`.
 - **Response**: SSE stream of JSON objects:
   ```json
+  {"type": "metadata", "content": {"num_docs": 5, "query": "..."}}
   {"type": "sources", "content": [...]}
   {"type": "token", "content": "Hello"}
+  {"type": "confidence", "content": {"confidence_score": 0.82, "query": "..."}}
+  {"type": "timings", "content": {"retrieval_time_ms": 100.0, "generation_time_ms": 500.0, "end_to_end_time_ms": 650.0}}
   ```
+  The stream omits raw retrieved context to keep frontend parsing simple. Use `/query` for full context text.
 
 ### Scraper API
 The scraper API refreshes source files under `/app/data` and deliberately does not trigger ingestion automatically. Use it to refresh the raw corpus, then run `/ingest` for incremental updates or the CLI rebuild workflow when you need a fresh state file and shadow collection.

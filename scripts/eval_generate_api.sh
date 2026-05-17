@@ -8,7 +8,7 @@ API_BASE_URL="${4:-http://127.0.0.1:8000}"
 OUTPUT_PATH="${5:-}"
 RUN_NAME="${RUN_NAME:-eval_generate_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
-EVAL_GENERATE_STREAM="${EVAL_GENERATE_STREAM:-true}"
+EVAL_GENERATE_STREAM="${EVAL_GENERATE_STREAM:-false}"
 EVAL_SHOW_ANSWERS="${EVAL_SHOW_ANSWERS:-true}"
 
 if [ -z "$MODEL" ]; then

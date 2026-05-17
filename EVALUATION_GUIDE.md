@@ -38,8 +38,8 @@ The active judge is `qwen3.6:27b`.
 
 ## Recommended One-Model v4 Run
 
-Restart the API after code changes because streamed eval needs `/query/stream`
-to emit `context`:
+Restart the API after code changes so the evaluation run uses the latest query
+and scoring behavior:
 
 ```sh
 docker compose restart rag-api
@@ -67,7 +67,8 @@ sh /app/scripts/eval_generate_and_score_api.sh \
 
 ## Matrix Run
 
-Generate streamed predictions for the recommended generation matrix with `retrieval.rerank_top_k: 5`:
+Generate predictions for the recommended generation matrix with `retrieval.rerank_top_k: 5`.
+The wrapper defaults to non-streaming `/query` so RAGAS context metrics receive the full retrieved context:
 
 ```sh
 sh /app/scripts/eval_generate_matrix.sh \

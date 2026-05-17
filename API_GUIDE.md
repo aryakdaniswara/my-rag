@@ -202,7 +202,10 @@ data: {"type":"metadata","content":{"num_docs":5,"query":"..."}}
 data: {"type":"sources","content":[...]}
 data: {"type":"token","content":"..."}
 data: {"type":"confidence","content":{"confidence_score":0.82,"query":"..."}}
+data: {"type":"timings","content":{"retrieval_time_ms":...,"generation_time_ms":...}}
 ```
+
+The stream does not emit the raw retrieved context. Use `POST /query` when a client or evaluation job needs the full context text.
 
 The confidence score is retrieval-strength from ranked retrieval evidence. It is deterministic and does not trigger a second LLM confidence check.
 It is computed as the average of normalized RRF scores from the top-5 ranked documents, where each item is normalized by the theoretical max fused score: `2/(60+1)`.

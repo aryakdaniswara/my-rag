@@ -6,7 +6,7 @@ API_BASE_URL="${2:-http://127.0.0.1:8000}"
 RERANK_TOP_K_VALUES="${RERANK_TOP_K_VALUES:-}"
 RUN_NAME="${RUN_NAME:-eval_generate_matrix_$(date +%Y%m%d_%H%M%S)}"
 RUN_DIR="${RUN_DIR:-/app/storage/eval_runs/$RUN_NAME}"
-EVAL_GENERATE_STREAM="${EVAL_GENERATE_STREAM:-true}"
+EVAL_GENERATE_STREAM="${EVAL_GENERATE_STREAM:-false}"
 EVAL_SHOW_ANSWERS="${EVAL_SHOW_ANSWERS:-true}"
 
 if [ -n "${EVAL_MODELS:-}" ]; then

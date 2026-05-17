@@ -600,9 +600,9 @@ def _stream_prediction_sample(
 
     answer = _clean_stream_answer("".join(tokens))
     if not context:
-        raise RuntimeError(
-            "Streaming response did not include a context event. "
-            "Restart the RAG API after updating the code, or rerun eval-generate without --stream."
+        print(
+            "Warning: streaming response did not include retrieved context; "
+            "use eval-generate without --stream when scoring context-based RAGAS metrics."
         )
     end_to_end_time_ms = (time.time() - started) * 1000
     retrieval_time_ms = timings.get("retrieval_time_ms", metadata.get("retrieval_time_ms"))
@@ -1436,7 +1436,7 @@ def main():
     eval_generate_parser.add_argument(
         "--stream",
         action="store_true",
-        help="Generate predictions through /query/stream and save the reconstructed answer/context",
+        help="Generate predictions through /query/stream and save the reconstructed answer. Use non-stream mode when scoring context-based RAGAS metrics.",
     )
     eval_generate_parser.add_argument(
         "--show-answers",
