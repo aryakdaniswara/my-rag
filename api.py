@@ -15,6 +15,7 @@ import httpx
 from pipeline import RAGPipeline
 from config import RAGConfig
 from generation import LLM
+from generation.sources import build_public_sources
 from scraper_api import ScrapeConfig, ScraperJobManager
 from scraper_api.sites import (
     config_from_configured_site,
@@ -874,7 +875,7 @@ async def query_rag_stream(request: QueryRequest):
                     "retrieval_time_ms": retrieval_time_ms,
                 }
                 yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
-                yield f"data: {json.dumps({'type': 'sources', 'content': [{'pdf_url': doc.metadata.get('pdf_url'), 'page_url': doc.metadata.get('page_url'), 'scraped_at': doc.metadata.get('scraped_at'), 'page': doc.metadata.get('page_number', 'Unknown')} for doc in docs]})}\n\n"
+                yield f"data: {json.dumps({'type': 'sources', 'content': build_public_sources(docs)})}\n\n"
                 generation_started = time.time()
                 for token in request_llm.generate_stream(prompt=request.query, retrieved_docs=docs):
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"

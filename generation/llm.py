@@ -3,6 +3,8 @@ from typing import List, Optional, Dict, Any
 import logging
 import re
 
+from generation.sources import build_public_sources
+
 logger = logging.getLogger(__name__)
 
 
@@ -150,17 +152,7 @@ class LLM:
             clean_content = re.sub(r"<think>.*?</think>", "", raw_content, flags=re.DOTALL).strip()
             answer = clean_content
 
-            sources = []
-            if retrieved_docs:
-                sources = [
-                    {
-                        "pdf_url": doc.metadata.get("pdf_url"),
-                        "page_url": doc.metadata.get("page_url"),
-                        "scraped_at": doc.metadata.get("scraped_at"),
-                        "page": doc.metadata.get("page_number", "Unknown"),
-                    }
-                    for doc in retrieved_docs
-                ]
+            sources = build_public_sources(retrieved_docs)
 
             return GenerationResult(
                 answer=answer,

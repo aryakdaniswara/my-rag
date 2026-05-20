@@ -24,6 +24,7 @@ from embedding import DenseEmbeddingModel, SparseEmbeddingModel
 from storage import MilvusClient
 from retrieval import Retriever
 from generation import LLM
+from generation.sources import build_public_sources
 from evaluation import RAGASEvaluator
 from debugging import ChunkInspector, RetrievalTracer
 from ingestion.state import IngestionState
@@ -1208,15 +1209,7 @@ class RAGPipeline:
             yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
 
             # Yield sources separately for backward compatibility/UI richness
-            sources = [
-                {
-                    "pdf_url": doc.metadata.get("pdf_url"),
-                    "page_url": doc.metadata.get("page_url"),
-                    "scraped_at": doc.metadata.get("scraped_at"),
-                    "page": doc.metadata.get("page_number", "Unknown"),
-                }
-                for doc in docs
-            ]
+            sources = build_public_sources(docs)
             yield f"data: {json.dumps({'type': 'sources', 'content': sources})}\n\n"
 
             # Stream the LLM response.
