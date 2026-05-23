@@ -875,6 +875,7 @@ async def query_rag_stream(request: QueryRequest):
                     "retrieval_time_ms": retrieval_time_ms,
                 }
                 yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
+                yield f"data: {json.dumps({'type': 'context', 'content': request_llm._format_context(retrieved_docs=docs)})}\n\n"
                 yield f"data: {json.dumps({'type': 'sources', 'content': build_public_sources(docs)})}\n\n"
                 generation_started = time.time()
                 for token in request_llm.generate_stream(prompt=request.query, retrieved_docs=docs):

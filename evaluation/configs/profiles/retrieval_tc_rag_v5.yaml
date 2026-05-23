@@ -1,0 +1,4 @@
+extends: "retrieval.yaml"
+
+evaluation:
+  dataset_path: "storage/eval_datasets/query_rewrite/tc-rag-v5.json"

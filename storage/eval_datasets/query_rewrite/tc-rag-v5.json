@@ -1,0 +1,1328 @@
+[
+  {
+    "id": "v5_001",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "document_or_url",
+    "question": "Portal pendaftaran untuk pendaftar internasional non-WNI",
+    "ground_truth": "Pendaftar internasional yang bukan WNI menggunakan portal admission.ui.ac.id.",
+    "expected_answer": [
+      "admission.ui.ac.id"
+    ],
+    "source_chunk_ids": [
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9d96ec26bdaf"
+    ],
+    "source_urls": [
+      "https://admission.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_002",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "comparison",
+    "question": "Perbedaan prosedur pendaftaran Universitas Indonesia antara WNI dan WNA",
+    "ground_truth": "Pendaftar WNA atau pendaftar internasional menggunakan admission.ui.ac.id, sedangkan pendaftar WNI diarahkan mendaftar melalui SIMAK UI di penerimaan.ui.ac.id.",
+    "expected_answer": [
+      "pendaftar WNA",
+      "admission.ui.ac.id",
+      "pendaftar WNI",
+      "SIMAK UI",
+      "penerimaan.ui.ac.id"
+    ],
+    "source_chunk_ids": [
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000",
+      "doc_6bc21bfaa434__7852f532af__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9d96ec26bdaf",
+      "doc_6bc21bfaa434"
+    ],
+    "source_urls": [
+      "https://admission.ui.ac.id/",
+      "https://admission.ui.ac.id/register"
+    ]
+  },
+  {
+    "id": "v5_003",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Dasar seleksi SNBP UI",
+    "ground_truth": "SNBP merupakan jalur seleksi nasional masuk perguruan tinggi negeri untuk siswa SMA dan sederajat yang menggunakan prestasi dan nilai rapor siswa.",
+    "expected_answer": [
+      "prestasi",
+      "nilai rapor"
+    ],
+    "source_chunk_ids": [
+      "doc_b38476c69de5__e61221675f__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b38476c69de5"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/snbp/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_004",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Jadwal pendaftaran SNBP UI tahun 2026 dan pengumuman hasil",
+    "ground_truth": "Pendaftaran SNBP UI tahun 2026 berlangsung pada 3–18 Februari 2026, dan pengumuman hasil SNBP pada 31 Maret 2026.",
+    "expected_answer": [
+      "3–18 Februari 2026",
+      "31 Maret 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_b38476c69de5__e61221675f__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b38476c69de5"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/snbp/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_005",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Jenis tes pada SNBT UI",
+    "ground_truth": "SNBT adalah seleksi masuk perguruan tinggi negeri dengan tes berbasis komputer yang mencakup Tes Potensi Skolastik dan Tes Literasi.",
+    "expected_answer": [
+      "tes berbasis komputer",
+      "Tes Potensi Skolastik",
+      "Tes Literasi"
+    ],
+    "source_chunk_ids": [
+      "doc_dade9390666e__3260e84a88__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_dade9390666e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/snbt/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_006",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Jadwal pendaftaran dan pelaksanaan UTBK-SNBT UI tahun 2026",
+    "ground_truth": "Pendaftaran UTBK-SNBT UI tahun 2026 berlangsung pada 25 Maret–7 April 2026, dan pelaksanaan UTBK pada 21–30 April 2026.",
+    "expected_answer": [
+      "25 Maret–7 April 2026",
+      "21–30 April 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_dade9390666e__3260e84a88__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_dade9390666e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/snbt/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_007",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Prosedur seleksi dan biaya pendaftaran Program Pendidikan Karir Bidang Teknik (PPKB) Sarjana S1 Tahun Akademik 2026/2027",
+    "ground_truth": "PPKB UI menggunakan seleksi berdasarkan prestasi akademik siswa selama studi di sekolah asal. Biaya pendaftaran PPKB Sarjana S1 Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "prestasi akademik",
+      "Rp900.000"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07",
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_008",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Kualifikasi peserta PPKB UI tahun 2026",
+    "ground_truth": "Peserta PPKB berasal dari sekolah yang mendapat undangan PPKB dari UI dan merupakan siswa kelas XII atau kelas 3 SMA/MA/SMK sederajat yang akan lulus pada tahun 2026.",
+    "expected_answer": [
+      "sekolah undangan",
+      "kelas XII",
+      "lulus pada tahun 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_009",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Jadwal periode pendaftaran dan pengumuman PPKB UI tahun 2026",
+    "ground_truth": "Pendaftaran PPKB UI berlangsung pada 15 Mei–19 Juni 2026, dan pengumuman dilakukan paling lambat 1 Juli 2026.",
+    "expected_answer": [
+      "15 Mei–19 Juni 2026",
+      "1 Juli 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_010",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Tujuan dan biaya pendaftaran Talentscouting Global Talent S1 KKI (Kelas Khusus Internasional)",
+    "ground_truth": "Talent Scouting UI ditujukan untuk program Sarjana S1 Kelas Internasional. Biaya pendaftaran Talentscouting/Global Talent S1 KKI adalah Rp1.800.000.",
+    "expected_answer": [
+      "Sarjana S1 Kelas Internasional",
+      "Rp1.800.000"
+    ],
+    "source_chunk_ids": [
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_4aa8dc97105e",
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_011",
+    "category": "admission_procedure",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Standar minimal sertifikasi bahasa inggris dalam Talent Scouting UI",
+    "ground_truth": "Pada Talent Scouting UI, pendaftar wajib menyertakan sertifikat TOEFL atau IELTS yang masih berlaku, dengan standar minimum TOEFL ITP/PBT 500, iBT 61, CBT 173, atau IELTS 5.5.",
+    "expected_answer": [
+      "TOEFL ITP/PBT 500",
+      "iBT 61",
+      "CBT 173",
+      "IELTS 5.5"
+    ],
+    "source_chunk_ids": [
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_012",
+    "category": "admission_procedure",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Persyaratan dan biaya pendaftaran SIMAK Sarjana dan Vokasi (Program Pendidikan Vokasi) melalui acceptance.ui.ac.id",
+    "ground_truth": "Sebelum membuat pendaftaran baru, pendaftar harus membuat akun di situs penerimaan UI dan mengunggah foto berwarna ukuran 4x6 cm. Biaya pendaftaran SIMAK Sarjana dan Vokasi UI Tahun Akademik 2026/2027 adalah Rp650.000.",
+    "expected_answer": [
+      "membuat akun",
+      "mengunggah foto berwarna ukuran 4x6 cm",
+      "Rp650.000"
+    ],
+    "source_chunk_ids": [
+      "doc_1361d03fce6a__b4ddf7eee5__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_1361d03fce6a",
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://penerimaan.ui.ac.id/page/registration",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_013",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Informasi biaya pendaftaran PPKB Sarjana S1 UI Tahun Akademik 2026/2027",
+    "ground_truth": "Biaya pendaftaran PPKB Sarjana S1 UI Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "Rp900.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_014",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Biaya pendaftaran Program Pendidikan Profesi Kebumian dan Kewirausahaan di Universitas Indonesia (Vokasi (Program Pendidikan Vokasi)) untuk tingkat pendidikan D3 dan D4 pada Tahun Akademik 2026/2027",
+    "ground_truth": "Biaya pendaftaran PPKB Vokasi D4 dan D3 UI Tahun Akademik 2026/2027 adalah Rp900.000.",
+    "expected_answer": [
+      "Rp900.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_015",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Perbedaan biaya pendaftaran program Global Talent S1 KKI (Kelas Khusus Internasional) dan SIMAK S1",
+    "ground_truth": "Ya. Biaya pendaftaran Talentscouting/Global Talent S1 KKI dan SIMAK S1 KKI sama-sama Rp1.800.000.",
+    "expected_answer": [
+      "Rp1.800.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_016",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Biaya pendaftaran SIMAK Sarjana dan Vokasi (Program Pendidikan Vokasi) UI Tahun Akademik 2026/2027",
+    "ground_truth": "Biaya pendaftaran SIMAK Sarjana dan Vokasi UI Tahun Akademik 2026/2027 adalah Rp650.000.",
+    "expected_answer": [
+      "Rp650.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_017",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Informasi biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027",
+    "ground_truth": "Biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027 adalah Rp1.350.000.",
+    "expected_answer": [
+      "Rp1.350.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_018",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Informasi biaya pendaftaran Program Spesialis dan Subspesialis UI Tahun Akademik 2026/2027",
+    "ground_truth": "Biaya pendaftaran Program Spesialis dan Subspesialis UI Tahun Akademik 2026/2027 adalah Rp1.650.000.",
+    "expected_answer": [
+      "Rp1.650.000"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_019",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Informasi biaya pendaftaran awal dan biaya tambahan per pilihan program studi SIMAK Sarjana dan Vokasi (Program Pendidikan Vokasi) UI",
+    "ground_truth": "Biaya pendaftaran SIMAK Sarjana dan Vokasi UI adalah Rp650.000. Biaya tambahan setelah dua pilihan awal adalah Rp100.000 per pilihan program studi, dengan tambahan paling banyak empat pilihan.",
+    "expected_answer": [
+      "Rp650.000",
+      "Rp100.000 per pilihan program studi",
+      "paling banyak empat pilihan"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0001"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_020",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Biaya pendaftaran pelamar Warga Negara Asing melalui UI Admission",
+    "ground_truth": "Pendaftar WNA melalui UI Admission membayar biaya pendaftaran US$150 dan menggunakan portal admission.ui.ac.id.",
+    "expected_answer": [
+      "US$150",
+      "admission.ui.ac.id"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002",
+      "doc_9d96ec26bdaf__d09ab6a19a__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243",
+      "doc_9d96ec26bdaf"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf",
+      "https://admission.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_021",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif KKI (Kelas Khusus Internasional) S1 UI 2026/2027: UKT (Uang Kuliah Tunggal) dan IPI (Iuran Pengembangan Institusi) untuk Pendidikan Dokter",
+    "ground_truth": "Pada tarif KKI S1 UI 2026/2027, Pendidikan Dokter memiliki UKT Rp51.700.000 dan IPI Rp111.100.000.",
+    "expected_answer": [
+      "Rp51.700.000",
+      "Rp111.100.000"
+    ],
+    "source_chunk_ids": [
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0004"
+    ],
+    "source_doc_ids": [
+      "doc_8b6bc8d0be38"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_022",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif KKI (Kelas Khusus Internasional) S1 UI 2026/2027, UKT (Uang Kuliah Tunggal) dan IPI (Iuran Pengembangan Institusi) untuk kedokteran gigi",
+    "ground_truth": "Pada tarif KKI S1 UI 2026/2027, Kedokteran Gigi memiliki UKT Rp64.500.000 dan IPI Rp225.000.000.",
+    "expected_answer": [
+      "Rp64.500.000",
+      "Rp225.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0004"
+    ],
+    "source_doc_ids": [
+      "doc_8b6bc8d0be38"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_023",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Skema pendidikan program KKI (Kelas Khusus Internasional) untuk Fakultas Ilmu Komputer (Fasilkom) termasuk besaran Uang Kuliah Tunggal (UKT) dan Iuran Pengembangan Institusi (IPI)",
+    "ground_truth": "Pada S1 KKI UI, Ilmu Komputer tersedia dalam skema Double Degree. Tarif Ilmu Komputer adalah UKT Rp29.300.000 dan IPI Rp60.000.000.",
+    "expected_answer": [
+      "Double Degree",
+      "Rp29.300.000",
+      "Rp60.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_54e90723a068__5f906a445a__chunk_0000",
+      "doc_8b6bc8d0be38__c240f834f6__chunk_0005"
+    ],
+    "source_doc_ids": [
+      "doc_54e90723a068",
+      "doc_8b6bc8d0be38"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/SK-Tarif-BP-S1-KKI-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_024",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif RPL Sarjana UI periode 2026/2027 bagi mahasiswa Fakultas Ilmu Keperawatan (FIK) (FKI)",
+    "ground_truth": "Pada tarif RPL Sarjana UI 2026/2027, Ilmu Keperawatan memiliki UKT Rp10.000.000 dan IPI Rp20.000.000.",
+    "expected_answer": [
+      "Rp10.000.000",
+      "Rp20.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
+    ],
+    "source_doc_ids": [
+      "doc_1ed76d48b5f2"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_025",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif RPL Sarjana UI 2026/2027 untuk program Farmasi",
+    "ground_truth": "Pada tarif RPL Sarjana UI 2026/2027, Farmasi memiliki UKT Rp55.000.000 dan IPI Rp190.000.000.",
+    "expected_answer": [
+      "Rp55.000.000",
+      "Rp190.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
+    ],
+    "source_doc_ids": [
+      "doc_1ed76d48b5f2"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_026",
+    "category": "tuition_fee",
+    "scope": "multi_chunk",
+    "answer_type": "fee_amount",
+    "question": "Informasi ketersediaan mata kuliah Ilmu Hukum pada Program Sarjana Jalur RPL UI termasuk rincian UKT (Uang Kuliah Tunggal) dan IPI (Iuran Pengembangan Institusi)",
+    "ground_truth": "Ilmu Hukum tersedia pada Program Sarjana Jalur RPL UI. Tarif Ilmu Hukum adalah UKT Rp17.000.000 dan IPI Rp22.000.000.",
+    "expected_answer": [
+      "Ilmu Hukum",
+      "Rp17.000.000",
+      "Rp22.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000",
+      "doc_1ed76d48b5f2__d262b01e0d__chunk_0004"
+    ],
+    "source_doc_ids": [
+      "doc_065d1b23186d",
+      "doc_1ed76d48b5f2"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/bp-RPL-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_027",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Kukuh mata uang tunggal (UKT (Uang Kuliah Tunggal)) 9 tahun ajaran akademik 2026/2027 untuk mahasiswa di Fasilkom (Fakultas Ilmu Komputer)",
+    "ground_truth": "Pada UKT Sarjana Reguler UI 2026/2027, UKT 9 untuk Ilmu Komputer adalah Rp14.600.000.",
+    "expected_answer": [
+      "Rp14.600.000"
+    ],
+    "source_chunk_ids": [
+      "doc_0a2ab3e92430__4d742ec3cf__chunk_0006"
+    ],
+    "source_doc_ids": [
+      "doc_0a2ab3e92430"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-skbp-sarjana-vokasi-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_028",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "UKT (Uang Kuliah Tunggal) per tahun bagi Program Studi Pendidikan Dokter tahun ajaran 2026/2027",
+    "ground_truth": "Pada UKT Sarjana Reguler UI 2026/2027, UKT 11 untuk Pendidikan Dokter adalah Rp20.000.000.",
+    "expected_answer": [
+      "Rp20.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_0a2ab3e92430__4d742ec3cf__chunk_0003"
+    ],
+    "source_doc_ids": [
+      "doc_0a2ab3e92430"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-skbp-sarjana-vokasi-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_029",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif IPI (Iuran Pengembangan Institusi) Sarjana Reguler UI periode 2026-2027 khusus Program Pendidikan Dokter",
+    "ground_truth": "Pada tarif IPI Sarjana Reguler UI 2026/2027, IPI 4 untuk Pendidikan Dokter adalah Rp120.000.000.",
+    "expected_answer": [
+      "Rp120.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_9df28125cf9a__a88ffac703__chunk_0013"
+    ],
+    "source_doc_ids": [
+      "doc_9df28125cf9a"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-tarif-IPI-sarjana-vokasi-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_030",
+    "category": "tuition_fee",
+    "scope": "single_chunk",
+    "answer_type": "fee_amount",
+    "question": "Tarif IPI (Iuran Pengembangan Institusi) program D4 Sarjana Terapan Fisioterapi tahun akademik 2026/2027",
+    "ground_truth": "Pada tarif IPI Program D4 UI 2026/2027, IPI 3 untuk Sarjana Terapan Fisioterapi adalah Rp13.000.000.",
+    "expected_answer": [
+      "Rp13.000.000"
+    ],
+    "source_chunk_ids": [
+      "doc_9df28125cf9a__a88ffac703__chunk_0019"
+    ],
+    "source_doc_ids": [
+      "doc_9df28125cf9a"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/pdf-tarif-IPI-sarjana-vokasi-2026.pdf"
+    ]
+  },
+  {
+    "id": "v5_031",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "program_or_faculty",
+    "question": "Syarat SIMAK UI untuk penerimaan mahasiswa baru pada berbagai jenjang",
+    "ground_truth": "SIMAK UI menyaring calon mahasiswa dari jenjang Vokasi D3 dan D4, Sarjana, Sarjana Kelas Khusus Internasional, Sarjana RPL, Profesi, S2, Spesialis, hingga S3.",
+    "expected_answer": [
+      "Vokasi",
+      "Sarjana",
+      "RPL",
+      "Profesi",
+      "S2",
+      "Spesialis",
+      "S3"
+    ],
+    "source_chunk_ids": [
+      "doc_c40f56ffe74e__216cb9abf8__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_c40f56ffe74e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_032",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Syarat kelulusan dan jalur seleksi Program S1 Reguler Universitas Indonesia berdasarkan batas usia ijazah",
+    "ground_truth": "Program S1 Reguler UI dapat diikuti lulusan SMA/SMK/MA sederajat dengan usia ijazah tidak lebih dari tiga tahun terakhir. Jalur masuknya adalah SNBP, SNBT, PPKB, dan SIMAK UI.",
+    "expected_answer": [
+      "tiga tahun terakhir",
+      "SNBP",
+      "SNBT",
+      "PPKB",
+      "SIMAK UI"
+    ],
+    "source_chunk_ids": [
+      "doc_9feb58b5c6f8__541e1238f9__chunk_0000",
+      "doc_ae6875aa02d1__5100a63cf5__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9feb58b5c6f8",
+      "doc_ae6875aa02d1"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-reguler/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-sarjana/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_033",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Jalur pendaftaran Program Sarjana Reguler UI dan ketentuan IPI (Iuran Pengembangan Institusi) untuk jalur reguler",
+    "ground_truth": "Program S1 Reguler UI dapat masuk melalui SNBP, SNBT, PPKB, dan SIMAK UI. Untuk jalur reguler, biaya pendidikan berupa UKT per semester dan tanpa IPI.",
+    "expected_answer": [
+      "SNBP",
+      "SNBT",
+      "PPKB",
+      "SIMAK UI",
+      "tanpa IPI"
+    ],
+    "source_chunk_ids": [
+      "doc_9feb58b5c6f8__541e1238f9__chunk_0000",
+      "doc_ae6875aa02d1__5100a63cf5__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9feb58b5c6f8",
+      "doc_ae6875aa02d1"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-reguler/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-sarjana/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_034",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Syarat kelulusan dan jalur penerimaan Program Kelas Internasional UI",
+    "ground_truth": "Program Kelas Internasional UI dapat diikuti lulusan sekolah lanjutan atas dan sederajat dengan usia ijazah tidak lebih dari lima tahun. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
+    "expected_answer": [
+      "lima tahun",
+      "Talent Scouting",
+      "SIMAK Kelas Internasional"
+    ],
+    "source_chunk_ids": [
+      "doc_61cf8f77f1ec__56d5834d08__chunk_0000",
+      "doc_54e90723a068__5f906a445a__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_61cf8f77f1ec",
+      "doc_54e90723a068"
+    ],
+    "source_urls": [
+      "https://www.ui.ac.id/program-kelas-internasional/#kingster-top-anchor",
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_035",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "program_or_faculty",
+    "question": "Skema dan jalur penerimaan Program Studi Ilmu Komputer dalam Program Kelas Internasional",
+    "ground_truth": "Pada Program Kelas Internasional UI, Program Studi Ilmu Komputer tersedia dalam skema Double Degree. Jalur penerimaannya adalah Talent Scouting dan SIMAK Kelas Internasional.",
+    "expected_answer": [
+      "Ilmu Komputer",
+      "Double Degree",
+      "Talent Scouting",
+      "SIMAK Kelas Internasional"
+    ],
+    "source_chunk_ids": [
+      "doc_54e90723a068__5f906a445a__chunk_0000",
+      "doc_61cf8f77f1ec__56d5834d08__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_54e90723a068",
+      "doc_61cf8f77f1ec"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-kelas-khusus-internasional-kki/#kingster-top-anchor",
+      "https://www.ui.ac.id/program-kelas-internasional/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_036",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Perbedaan program Single Degree, Double Degree, dan Joint Degree dalam KKI (Kelas Khusus Internasional) UI",
+    "ground_truth": "Single Degree membuat mahasiswa mengikuti mobilitas internasional minimal satu semester dan memperoleh ijazah tunggal dari UI, sedangkan Double Degree atau Joint Degree memberi kesempatan memperoleh dua ijazah dan dua gelar akademik setelah menyelesaikan studi di UI dan universitas mitra.",
+    "expected_answer": [
+      "Single Degree",
+      "Double Degree",
+      "dua ijazah"
+    ],
+    "source_chunk_ids": [
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_037",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Capaian pembelajaran program sarjana jalur RPL UI dari sumber pengakuan",
+    "ground_truth": "Program Sarjana Jalur RPL UI mengakui capaian pembelajaran dari pendidikan formal sebelumnya seperti jenjang Diploma maupun pengalaman kerja.",
+    "expected_answer": [
+      "pendidikan formal",
+      "pengalaman kerja"
+    ],
+    "source_chunk_ids": [
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_065d1b23186d"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_038",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Materi seleksi Program Sarjana Jalur RPL UI",
+    "ground_truth": "Seleksi Program Sarjana Jalur RPL UI dilakukan melalui SIMAK UI dengan materi Tes Potensi Akademik dan Bahasa Inggris.",
+    "expected_answer": [
+      "SIMAK UI",
+      "Tes Potensi Akademik",
+      "Bahasa Inggris"
+    ],
+    "source_chunk_ids": [
+      "doc_065d1b23186d__5bf505b0eb__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_065d1b23186d"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s1-rpl/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_039",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Syarat kelulusan program magister tingkat sarjana dan informasi biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027",
+    "ground_truth": "Program Magister UI ditujukan untuk lulusan Sarjana dan proses seleksinya dilakukan melalui SIMAK UI Pascasarjana. Biaya pendaftaran Program Magister S2 UI Tahun Akademik 2026/2027 adalah Rp1.350.000.",
+    "expected_answer": [
+      "lulusan Sarjana",
+      "SIMAK UI Pascasarjana",
+      "Rp1.350.000"
+    ],
+    "source_chunk_ids": [
+      "doc_5bcaf2a7eb51__b98593a775__chunk_0000",
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_5bcaf2a7eb51",
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s2-magister/#kingster-top-anchor",
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_040",
+    "category": "program_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Kriteria kualifikasi program doktor UI untuk jenjang S3",
+    "ground_truth": "Program Doktor UI ditujukan untuk lulusan Magister dan berfokus pada pengembangan riset orisinal dan kontributif. SIMAK UI mencakup seleksi untuk jenjang S3.",
+    "expected_answer": [
+      "lulusan Magister",
+      "riset orisinal dan kontributif",
+      "S3"
+    ],
+    "source_chunk_ids": [
+      "doc_a09bbd8c8549__00802908b5__chunk_0000",
+      "doc_c40f56ffe74e__216cb9abf8__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_a09bbd8c8549",
+      "doc_c40f56ffe74e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/s3-doktor/#kingster-top-anchor",
+      "https://simak.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_041",
+    "category": "program_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Tujuan pendidikan Vokasi (Program Pendidikan Vokasi) UI",
+    "ground_truth": "Pendidikan Vokasi UI bertujuan menyiapkan tenaga profesional siap kerja dengan pembelajaran yang menekankan keterampilan.",
+    "expected_answer": [
+      "tenaga profesional siap kerja",
+      "keterampilan"
+    ],
+    "source_chunk_ids": [
+      "doc_897571be23f9__27c75c7079__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_897571be23f9"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/vokasi-2/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_042",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Definisi beasiswa dalam Sistem Beasiswa UI",
+    "ground_truth": "Beasiswa adalah bantuan kepada mahasiswa sebagai apresiasi prestasi atau bantuan biaya pendidikan bagi mahasiswa yang memiliki keterbatasan finansial.",
+    "expected_answer": [
+      "bantuan",
+      "prestasi",
+      "keterbatasan finansial"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_043",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Definisi Paket Beasiswa dalam Sistem Beasiswa UI",
+    "ground_truth": "Paket Beasiswa adalah penawaran beasiswa dengan syarat dan ketentuan yang berlaku.",
+    "expected_answer": [
+      "penawaran beasiswa",
+      "syarat dan ketentuan"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_044",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Dalam Sistem Beasiswa UI, siapa yang disebut Penerima Beasiswa?",
+    "ground_truth": "Penerima Beasiswa adalah pelamar atau pendaftar beasiswa yang sudah disetujui oleh Pengelola dan Pendonor dari suatu Paket Beasiswa.",
+    "expected_answer": [
+      "disetujui",
+      "Pengelola",
+      "Pendonor"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_045",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "comparison",
+    "question": "Perbedaan pengelola dan pendonor dalam Sistem Beasiswa UI",
+    "ground_truth": "Pengelola adalah pihak UI yang mengelola Paket Beasiswa, sedangkan Pendonor adalah pihak yang memberikan beasiswa.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_046",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Fungsi sistem beasiswa UI",
+    "ground_truth": "Sistem Beasiswa UI berfungsi sebagai alat pengelolaan administrasi terintegrasi untuk pemangku kepentingan terkait proses beasiswa.",
+    "expected_answer": [
+      "administrasi terintegrasi",
+      "beasiswa"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_047",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Peran pelamar dalam Sistem Beasiswa UI selama periode pendaftaran Paket Beasiswa",
+    "ground_truth": "Saat periode pendaftaran Paket Beasiswa berlangsung, pelamar dapat mengisi formulir elektronik dan mengunggah dokumen yang diperlukan.",
+    "expected_answer": [
+      "formulir elektronik",
+      "mengunggah dokumen"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about"
+    ]
+  },
+  {
+    "id": "v5_048",
+    "category": "scholarship_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Proses usulan calon penerima beasiswa setelah periode pendaftaran Paket Beasiswa berakhir",
+    "ground_truth": "Setelah periode pendaftaran Paket Beasiswa berakhir, Pengelola mengusulkan calon Penerima Beasiswa kepada Pendonor.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor"
+    ],
+    "source_chunk_ids": [
+      "doc_914cb2fec542__41210b74e0__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_914cb2fec542"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/beasiswa/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_049",
+    "category": "scholarship_info",
+    "scope": "multi_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Tata cara penentuan dan persetujuan calon penerima paket beasiswa setelah akhir periode pendaftaran",
+    "ground_truth": "Setelah periode pendaftaran Paket Beasiswa berakhir, Pengelola mengusulkan calon Penerima Beasiswa kepada Pendonor. Pendonor kemudian melakukan seleksi dan menyetujui usulan calon Penerima Beasiswa.",
+    "expected_answer": [
+      "Pengelola",
+      "Pendonor",
+      "menyetujui"
+    ],
+    "source_chunk_ids": [
+      "doc_b3655d4f5026__fbde4e8e16__chunk_0000",
+      "doc_914cb2fec542__41210b74e0__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_b3655d4f5026",
+      "doc_914cb2fec542"
+    ],
+    "source_urls": [
+      "https://beasiswa.ui.ac.id/web/index.html#about",
+      "https://kemahasiswaan.ui.ac.id/beasiswa/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_050",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Persyaratan dokumen untuk meminjam Perpustakaan Pusat (Perpusat) Universitas Indonesia",
+    "ground_truth": "Untuk meminjam Pusgiwa UI, pemohon wajib menyiapkan surat permohonan resmi, proposal kegiatan, dan surat persetujuan dari pembina atau manajer kemahasiswaan fakultas/prodi.",
+    "expected_answer": [
+      "surat permohonan resmi",
+      "proposal kegiatan",
+      "surat persetujuan"
+    ],
+    "source_chunk_ids": [
+      "doc_9193c8e2416f__6b8b18e9c2__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9193c8e2416f"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/fasilitas-2/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_051",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Alamat pengiriman dokumen peminjaman Pusgiwa UI",
+    "ground_truth": "Dokumen peminjaman Pusgiwa UI dikirim ke ppsb.ui@gmail.com dengan subjek “PERMOHONAN PEMINJAMAN – [NAMA RUANGAN]”.",
+    "expected_answer": [
+      "ppsb.ui@gmail.com",
+      "PERMOHONAN PEMINJAMAN"
+    ],
+    "source_chunk_ids": [
+      "doc_9193c8e2416f__6b8b18e9c2__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_9193c8e2416f"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/fasilitas-2/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_052",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Tugas Ditmawa UI menurut laman Direktorat Kemahasiswaan",
+    "ground_truth": "Ditmawa UI bertugas menyusun dan melaksanakan kebijakan pembinaan, pendampingan, dan pelayanan bidang kemahasiswaan, terutama kegiatan di luar kelas yang meningkatkan kompetensi non-akademik mahasiswa.",
+    "expected_answer": [
+      "pembinaan",
+      "pendampingan",
+      "pelayanan bidang kemahasiswaan"
+    ],
+    "source_chunk_ids": [
+      "doc_799afc936e69__2d824a4c7a__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_799afc936e69"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/profile/"
+    ]
+  },
+  {
+    "id": "v5_053",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Contoh rangkaian kegiatan PKKMB UI",
+    "ground_truth": "Contoh rangkaian PKKMB UI mencakup Pemeriksaan Kesehatan, Pembagian Jaket Kuning, Kegiatan PKKMB, Latihan Paduan Suara, Display UKM, Orientasi Kehidupan Kampus, Orientasi Belajar Mahasiswa, dan Pengenalan Sistem Akademik Fakultas.",
+    "expected_answer": [
+      "Pemeriksaan Kesehatan",
+      "Jaket Kuning",
+      "Display UKM"
+    ],
+    "source_chunk_ids": [
+      "doc_6704bcd12ba1__2b8d183e4d__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_6704bcd12ba1"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/pkkmb/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_054",
+    "category": "student_service_info",
+    "scope": "single_chunk",
+    "answer_type": "definition",
+    "question": "Pengertian Unit Kegiatan Mahasiswa UI",
+    "ground_truth": "Unit Kegiatan Mahasiswa adalah lembaga kemahasiswaan tempat mahasiswa bergabung berdasarkan kesamaan minat, kegemaran, kreativitas, dan orientasi aktivitas ekstrakurikuler di kampus.",
+    "expected_answer": [
+      "lembaga kemahasiswaan",
+      "minat",
+      "ekstrakurikuler"
+    ],
+    "source_chunk_ids": [
+      "doc_796805692e58__dd864a67f7__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_796805692e58"
+    ],
+    "source_urls": [
+      "https://kemahasiswaan.ui.ac.id/unit-kegiatan-mahasiswa/#kingster-mobile-menu"
+    ]
+  },
+  {
+    "id": "v5_055",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Surel pengajuan pendataan sekolah untuk PPKB UI",
+    "ground_truth": "Sekolah yang belum terdaftar untuk mengikuti PPKB UI dapat mengajukan melalui surel ppkb@ui.ac.id.",
+    "expected_answer": [
+      "ppkb@ui.ac.id"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_056",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Surat pengajuan sekolah tidak terdaftar untuk program Talent Scouting UI",
+    "ground_truth": "Sekolah yang belum terdaftar untuk Talent Scouting UI dapat mengajukan melalui surel kkitalentscouting@ui.ac.id.",
+    "expected_answer": [
+      "kkitalentscouting@ui.ac.id"
+    ],
+    "source_chunk_ids": [
+      "doc_4aa8dc97105e__bbc388b5a6__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_4aa8dc97105e"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/talent-scouting/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_057",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "contact_or_system",
+    "question": "Periode pendaftaran Program Kewirausahaan (PPKB UI) dan kontak pada laman SIMAK UI",
+    "ground_truth": "Pendaftaran PPKB UI berlangsung pada 15 Mei–19 Juni 2026. Kontak yang disebutkan pada laman SIMAK UI adalah penerimaan@ui.ac.id dan telepon (+62-21) 7864126.",
+    "expected_answer": [
+      "15 Mei–19 Juni 2026",
+      "penerimaan@ui.ac.id",
+      "(+62-21) 7864126"
+    ],
+    "source_chunk_ids": [
+      "doc_f51aa1d97d07__19a1fe9eab__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_f51aa1d97d07"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/ppkb/#kingster-top-anchor"
+    ]
+  },
+  {
+    "id": "v5_058",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "rule_or_eligibility",
+    "question": "Kebijakan kerja sama Universitas Indonesia dengan lembaga bimbingan belajar",
+    "ground_truth": "Tidak. Universitas Indonesia tidak bekerja sama dengan pihak bimbingan belajar, bimbingan tes, atau lembaga sejenis untuk mengadakan try-out atau menjanjikan kemudahan diterima di UI.",
+    "expected_answer": [
+      "tidak bekerja sama",
+      "bimbingan belajar",
+      "menjanjikan kelulusan"
+    ],
+    "source_chunk_ids": [
+      "doc_95dbe867a9e9__87e9aeefec__chunk_0000"
+    ],
+    "source_doc_ids": [
+      "doc_95dbe867a9e9"
+    ],
+    "source_urls": [
+      "https://penerimaan.ui.ac.id/"
+    ]
+  },
+  {
+    "id": "v5_059",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "document_or_url",
+    "question": "Nomor Surat Keputusan penetapan tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027",
+    "ground_truth": "Nomor SK untuk tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 adalah 112/SK/R/UI/2026.",
+    "expected_answer": [
+      "112/SK/R/UI/2026"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  },
+  {
+    "id": "v5_060",
+    "category": "official_reference",
+    "scope": "single_chunk",
+    "answer_type": "date_or_period",
+    "question": "Penetapan jadwal SK tarif biaya pendaftaran penerimahsan mahasiswa baru UI Tahun Akademik 2026/2027",
+    "ground_truth": "SK tarif biaya pendaftaran penerimaan mahasiswa baru UI Tahun Akademik 2026/2027 ditetapkan di Jakarta pada 6 Februari 2026.",
+    "expected_answer": [
+      "6 Februari 2026"
+    ],
+    "source_chunk_ids": [
+      "doc_70e6f5d0f243__81894d5f18__chunk_0002"
+    ],
+    "source_doc_ids": [
+      "doc_70e6f5d0f243"
+    ],
+    "source_urls": [
+      "https://simak.ui.ac.id/wp-content/uploads/sites/55/2026/02/KR-Tarif-Pendaftaran-Penerimaan-Mahasiswa-Baru-TA-2026-2027.pdf"
+    ]
+  }
+]

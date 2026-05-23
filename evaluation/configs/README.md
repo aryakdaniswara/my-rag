@@ -12,6 +12,8 @@ evaluation/configs/
   profiles/
     generation.yaml
     retrieval.yaml
+    generation_tc_rag_v5.yaml
+    retrieval_tc_rag_v5.yaml
   singles/
     generation_v4_rerank8.yaml
   matrices/
@@ -35,6 +37,16 @@ evaluation/configs/
   - Uses the same `qwen3.6:27b` judge.
   - Scores retrieval quality only: `context_precision`, `context_recall`.
   - Use this when retrieval settings, corpus, chunking, or dataset evidence changes.
+
+- `profiles/generation_tc_rag_v5.yaml`
+  - Uses generation metrics only.
+  - Uses the query-rewritten paired dataset `storage/eval_datasets/query_rewrite/tc-rag-v5.json`.
+  - Use this to compare whether query rewriting improves final answer quality.
+
+- `profiles/retrieval_tc_rag_v5.yaml`
+  - Uses retrieval metrics only.
+  - Uses the query-rewritten paired dataset `storage/eval_datasets/query_rewrite/tc-rag-v5.json`.
+  - Use this to compare whether query rewriting improves retrieved context quality.
 
 - `singles/generation_v4_rerank8.yaml`
   - Uses generation metrics only.
@@ -118,6 +130,51 @@ sh /app/scripts/eval_generate_and_score_matrix.sh \
   evaluation/configs/matrices/generation_rerank5.yaml \
   http://127.0.0.1:8000
 ```
+
+## Qwen 27B Query-Rewrite Complete Curve
+
+Use this additive runner when you want the complete rerank curve for the best
+quality model and the practical qwen 9B comparison without changing existing
+matrix scripts or baseline artifacts.
+
+Planned experiment grid:
+
+```text
+normal ui_main_v5 + qwen3.6:27b:
+  rerank_top_k = 3, 8, 10
+  rerank_top_k = 5 is not regenerated because the existing baseline is qwen36_27b_rerank5
+
+query rewrite tc-rag-v5 + qwen3.6:27b:
+  rerank_top_k = 3, 5, 8, 10
+
+query rewrite tc-rag-v5 + qwen3.5:9b:
+  rerank_top_k = 3, 5, 8, 10
+```
+
+The runner generates all predictions first, then scores generation quality, then
+scores retrieval quality:
+
+```sh
+sh /app/scripts/eval_qwen36_query_rewrite_complete_curve.sh \
+  http://127.0.0.1:8000
+```
+
+For a detached server run:
+
+```sh
+docker exec -d my-rag-api sh -lc \
+  'cd /app && sh /app/scripts/eval_qwen36_query_rewrite_complete_curve.sh http://127.0.0.1:8000'
+```
+
+Target metrics:
+
+- Generation quality: `faithfulness`, `answer_relevancy`, generation overall, generation failure count, non-finite/error count.
+- Retrieval quality: `context_precision`, `context_recall`, retrieval overall, retrieval failure count.
+- Runtime: retrieval time, generation time, end-to-end time, and TTFT when stream mode is enabled.
+
+The new runner defaults to streamed prediction generation and the streaming API
+now emits a `context` event before tokens, so generated prediction artifacts keep
+`retrieved_contexts` available for context-based scoring.
 
 ## Artifacts
 
