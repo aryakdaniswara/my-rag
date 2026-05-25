@@ -70,7 +70,7 @@ For late-stage precision, we use a **Listwise Cross-Encoder Reranker**:
 - **Grounding & Attribution**:
   - The system uses a strict system prompt that forces the LLM to rely ONLY on the provided context.
   - Each chunk is prepended with source URLs and scrape date: `Source [pdf_url | page_url (Scraped: date)]: Text`.
-  - The system returns a deduplicated public source list with `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. Non-PDF sources use `page_url`; if only scraped `source_url` exists, it is exposed as `page_url`.
+  - The system returns public source objects with `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. PDF sources are grouped by PDF URL plus page number, and `pages` is kept empty for now. Non-PDF sources use `page_url`; if only scraped `source_url` exists, it is exposed as `page_url`.
   - `<think>...</think>` tags from reasoning models (e.g., Qwen, DeepSeek) are automatically stripped.
 - **Confidence Scoring**:
   - The confidence score is retrieval-strength only, derived from retrieval ranking evidence (`0.0` to `1.0`).
@@ -196,7 +196,7 @@ The primary endpoint for retrieving context and generating answers.
     "config_override": {}
   }
   ```
-- **Response**: Returns the answer, combined context, and a deduplicated public source array. Each source contains `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`; HTML/non-PDF sources have `pdf_url: null`, `page: null`, and `pages: []`.
+- **Response**: Returns the answer, combined context, and a public source array. Each source contains `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`; PDF sources are grouped by PDF URL plus page number, `pages` is currently empty, and HTML/non-PDF sources have `pdf_url: null`, `page: null`, and `pages: []`.
 
 ### `POST /query/stream`
 Streaming version of the RAG query. Returns tokens as they are generated.

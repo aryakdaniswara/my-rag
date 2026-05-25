@@ -11,7 +11,7 @@ class FakeRetrievedDoc:
 
 
 class PublicSourceTests(unittest.TestCase):
-    def test_duplicate_pdf_sources_merge_pages(self):
+    def test_pdf_sources_are_split_by_page_without_pages_rollup(self):
         docs = [
             FakeRetrievedDoc(
                 {
@@ -47,8 +47,15 @@ class PublicSourceTests(unittest.TestCase):
                     "page_url": "https://simak.ui.ac.id/sk-biaya/",
                     "scraped_at": "2026-05-08T06:13:55Z",
                     "page": 6,
-                    "pages": [6, 7],
-                }
+                    "pages": [],
+                },
+                {
+                    "pdf_url": "https://simak.ui.ac.id/a.pdf",
+                    "page_url": "https://simak.ui.ac.id/sk-biaya/",
+                    "scraped_at": "2026-05-08T06:13:55Z",
+                    "page": 7,
+                    "pages": [],
+                },
             ],
         )
 
@@ -144,7 +151,7 @@ class PublicSourceTests(unittest.TestCase):
                     "page_url": "https://simak.ui.ac.id/sk-biaya/",
                     "scraped_at": "2026-05-08T06:13:55Z",
                     "page": 6,
-                    "pages": [6],
+                    "pages": [],
                 },
                 {
                     "pdf_url": None,

@@ -208,7 +208,7 @@ data: {"type":"timings","content":{"retrieval_time_ms":...,"generation_time_ms":
 
 The stream emits the same formatted retrieved context used by the LLM before any answer tokens. Use the `sources` event for user-visible source cards and the `context` event for debugging or evaluation capture.
 
-Each public source object is deduplicated and contains only `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. PDF sources use `pdf_url` as the primary source key and collect page numbers in `pages`. Non-PDF page sources use `page_url`; if `page_url` is missing, the API falls back to scraped `source_url` and exposes it as `page_url`. Non-PDF sources return `page: null` and `pages: []`.
+Each public source object contains only `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. PDF sources are grouped by `pdf_url` plus page number, so different PDF pages can appear as separate source cards. The `pages` field is kept for response-shape compatibility but is not populated for now. Non-PDF page sources use `page_url`; if `page_url` is missing, the API falls back to scraped `source_url` and exposes it as `page_url`. Non-PDF sources return `page: null` and `pages: []`.
 
 The confidence score is retrieval-strength from ranked retrieval evidence. It is deterministic and does not trigger a second LLM confidence check.
 It is computed as the average of normalized RRF scores from the top-5 ranked documents, where each item is normalized by the theoretical max fused score: `2/(60+1)`.
