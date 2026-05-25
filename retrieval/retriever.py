@@ -124,6 +124,7 @@ class Retriever:
                         "rrf_score": scores[doc_id],
                         "pdf_url": entity.get("pdf_url"),
                         "page_url": entity.get("page_url"),
+                        "source_url": entity.get("source_url"),
                         "scraped_at": entity.get("scraped_at"),
                         "breadcrumb": entity.get("breadcrumb"),
                         "page_number": entity.get("page_number"),
@@ -150,7 +151,17 @@ class Retriever:
 
         filter_expr = self._build_filter(doc_ids, metadata_filter)
 
-        output_fields = ["text", "doc_id", "chunk_index", "pdf_url", "page_url", "scraped_at", "breadcrumb", "page_number"]
+        output_fields = [
+            "text",
+            "doc_id",
+            "chunk_index",
+            "pdf_url",
+            "page_url",
+            "source_url",
+            "scraped_at",
+            "breadcrumb",
+            "page_number",
+        ]
         search_kwargs = dict(limit=candidate_k, filter=filter_expr, output_fields=output_fields)
 
         # ── Dense search ──────────────────────────────────────────────────────
@@ -245,7 +256,17 @@ class Retriever:
         results = self.milvus.query(
             collection_name=collection_name,
             filter=filter_expr,
-            output_fields=["text", "doc_id", "chunk_index", "pdf_url", "page_url", "scraped_at", "breadcrumb", "page_number"],
+            output_fields=[
+                "text",
+                "doc_id",
+                "chunk_index",
+                "pdf_url",
+                "page_url",
+                "source_url",
+                "scraped_at",
+                "breadcrumb",
+                "page_number",
+            ],
             limit=10000,
         )
 
@@ -265,6 +286,7 @@ class Retriever:
                         metadata={
                             "pdf_url": res.get("pdf_url"),
                             "page_url": res.get("page_url"),
+                            "source_url": res.get("source_url"),
                             "scraped_at": res.get("scraped_at"),
                             "keyword": keyword,
                             "breadcrumb": res.get("breadcrumb"),
