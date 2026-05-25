@@ -69,8 +69,8 @@ For late-stage precision, we use a **Listwise Cross-Encoder Reranker**:
 - **LLM**: Local models served via **vLLM** or **Ollama** (accessed via OpenAI-compatible API).
 - **Grounding & Attribution**:
   - The system uses a strict system prompt that forces the LLM to rely ONLY on the provided context.
-  - Each chunk is prepended with its breadcrumb: `Source [Breadcrumb]: Text`.
-  - The system returns an explicit list of sources (breadcrumb, filename, page) used in the answer.
+  - Each chunk is prepended with source URLs and scrape date: `Source [pdf_url | page_url (Scraped: date)]: Text`.
+  - The system returns a deduplicated public source list with `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. Non-PDF sources use `page_url`; if only scraped `source_url` exists, it is exposed as `page_url`.
   - `<think>...</think>` tags from reasoning models (e.g., Qwen, DeepSeek) are automatically stripped.
 - **Confidence Scoring**:
   - The confidence score is retrieval-strength only, derived from retrieval ranking evidence (`0.0` to `1.0`).
@@ -103,11 +103,12 @@ For a responsive user experience, the system supports real-time token streaming:
 - **Protocol**: Server-Sent Events (SSE).
 - **Format**:
     - **Type: `metadata`**: The first message contains the query and number of retrieved docs.
-    - **Type: `sources`**: The second message contains the full list of retrieved document metadata.
+    - **Type: `context`**: The second message contains the formatted retrieved context sent to the LLM.
+    - **Type: `sources`**: The third message contains the deduplicated public source list.
     - **Type: `token`**: Subsequent messages contain individual text tokens as they are emitted by the LLM.
     - **Type: `confidence`**: The final message contains retrieval-strength confidence derived from ranked evidence.
     - **Type: `timings`**: The final timing payload contains retrieval, generation, and end-to-end duration fields.
-- **Context exposure**: The stream does not emit the raw retrieved context. Use the non-streaming `/query` endpoint when a client or evaluation job needs full context text.
+- **Context exposure**: The stream emits the formatted retrieved context before answer tokens, so clients and evaluation jobs can capture context without falling back to non-streaming `/query`.
 - **Implementation**: The pipeline uses the `stream=True` parameter in the OpenAI-compatible client, yielding chunks directly to the FastAPI `StreamingResponse`.
 
 ### H. Evaluation & Observability
@@ -195,7 +196,7 @@ The primary endpoint for retrieving context and generating answers.
     "config_override": {}
   }
   ```
-- **Response**: Returns the answer, combined context, and an array of source documents with breadcrumbs, filenames, and page numbers.
+- **Response**: Returns the answer, combined context, and a deduplicated public source array. Each source contains `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`; HTML/non-PDF sources have `pdf_url: null`, `page: null`, and `pages: []`.
 
 ### `POST /query/stream`
 Streaming version of the RAG query. Returns tokens as they are generated.
@@ -203,12 +204,13 @@ Streaming version of the RAG query. Returns tokens as they are generated.
 - **Response**: SSE stream of JSON objects:
   ```json
   {"type": "metadata", "content": {"num_docs": 5, "query": "..."}}
+  {"type": "context", "content": "Source [...]..."}
   {"type": "sources", "content": [...]}
   {"type": "token", "content": "Hello"}
   {"type": "confidence", "content": {"confidence_score": 0.82, "query": "..."}}
   {"type": "timings", "content": {"retrieval_time_ms": 100.0, "generation_time_ms": 500.0, "end_to_end_time_ms": 650.0}}
   ```
-  The stream omits raw retrieved context to keep frontend parsing simple. Use `/query` for full context text.
+  The stream emits context before answer tokens. The `sources` event uses the same public source builder as `/query`, including non-PDF fallback from `source_url` to public `page_url`.
 
 ### Scraper API
 The scraper API refreshes source files under `/app/data` and deliberately does not trigger ingestion automatically. Use it to refresh the raw corpus, then run `/ingest` for incremental updates or the CLI rebuild workflow when you need a fresh state file and shadow collection.
@@ -249,6 +251,7 @@ The scraper API refreshes source files under `/app/data` and deliberately does n
 **`POST /scraper/jobs/{job_id}/cancel`** - request cancellation.
 
 The scraper writes `page.html` plus `page.meta.json` for HTML pages, and stores PDFs beside the referring page with `<filename>.pdf.meta.json`. The sidecars preserve source URL, domain, scraped time, status code, content type, and PDF-specific fields such as `pdf_url`, `page_url`, and `filename`.
+During ingestion, HTML `source_url` and PDF `pdf_url`/`page_url` are preserved in chunk metadata. Query and stream responses expose HTML `source_url` as public `page_url` when no explicit `page_url` exists.
 Configured `disallowed_paths` are also used as noise control, so selected low-signal pages/PDFs are intentionally skipped during scraping to keep retrieval quality focused.
 
 The current refreshed corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Scraping and ingestion remain separate: once the corpus looks sane, use the rebuild workflow below to create a fresh shadow collection.

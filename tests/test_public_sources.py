@@ -85,6 +85,37 @@ class PublicSourceTests(unittest.TestCase):
             ],
         )
 
+    def test_html_sources_fall_back_to_source_url(self):
+        docs = [
+            FakeRetrievedDoc(
+                {
+                    "source_url": "https://admission.ui.ac.id/register",
+                    "scraped_at": "2026-05-08T06:13:55Z",
+                    "page_number": None,
+                }
+            ),
+            FakeRetrievedDoc(
+                {
+                    "source_url": "https://admission.ui.ac.id/register",
+                    "scraped_at": "2026-05-08T06:13:55Z",
+                    "page_number": None,
+                }
+            ),
+        ]
+
+        self.assertEqual(
+            build_public_sources(docs),
+            [
+                {
+                    "pdf_url": None,
+                    "page_url": "https://admission.ui.ac.id/register",
+                    "scraped_at": "2026-05-08T06:13:55Z",
+                    "page": None,
+                    "pages": [],
+                }
+            ],
+        )
+
     def test_mixed_pdf_and_html_sources_stay_separate(self):
         docs = [
             FakeRetrievedDoc(

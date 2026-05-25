@@ -199,13 +199,16 @@ Stream event order:
 
 ```text
 data: {"type":"metadata","content":{"num_docs":5,"query":"..."}}
+data: {"type":"context","content":"Source [...]..."}
 data: {"type":"sources","content":[...]}
 data: {"type":"token","content":"..."}
 data: {"type":"confidence","content":{"confidence_score":0.82,"query":"..."}}
 data: {"type":"timings","content":{"retrieval_time_ms":...,"generation_time_ms":...}}
 ```
 
-The stream does not emit the raw retrieved context. Use `POST /query` when a client or evaluation job needs the full context text.
+The stream emits the same formatted retrieved context used by the LLM before any answer tokens. Use the `sources` event for user-visible source cards and the `context` event for debugging or evaluation capture.
+
+Each public source object is deduplicated and contains only `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. PDF sources use `pdf_url` as the primary source key and collect page numbers in `pages`. Non-PDF page sources use `page_url`; if `page_url` is missing, the API falls back to scraped `source_url` and exposes it as `page_url`. Non-PDF sources return `page: null` and `pages: []`.
 
 The confidence score is retrieval-strength from ranked retrieval evidence. It is deterministic and does not trigger a second LLM confidence check.
 It is computed as the average of normalized RRF scores from the top-5 ranked documents, where each item is normalized by the theoretical max fused score: `2/(60+1)`.
@@ -307,6 +310,7 @@ The scraper writes the same file shape ingestion expects:
 
 `page.meta.json` contains `source_url`, `domain`, `folder`, `scraped_at`, `status_code`, and `content_type`.
 PDF sidecars contain `pdf_url`, `page_url`, `filename`, `domain`, `scraped_at`, `status_code`, and `content_type`.
+During ingestion, these sidecar fields are copied into chunk metadata. Query responses and stream source events convert HTML `source_url` into public `page_url` when no explicit `page_url` is available.
 
 After the current configured scrape, the local corpus contains 99 HTML files, 49 PDFs, and 148 metadata JSON files. Re-run scraping only when the source sites need refreshing; otherwise go straight to the rebuild workflow.
 The configured `disallowed_paths` rules are intentionally used to exclude noisy or low-signal pages/PDFs from scraping so the downstream index stays focused.

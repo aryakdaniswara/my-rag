@@ -13,7 +13,9 @@ def build_public_sources(retrieved_docs: Optional[List[Any]]) -> List[Dict[str, 
     for doc in retrieved_docs:
         metadata = getattr(doc, "metadata", {}) or {}
         pdf_url = _clean_value(metadata.get("pdf_url"))
-        page_url = _clean_value(metadata.get("page_url"))
+        page_url = _clean_value(metadata.get("page_url")) or _clean_value(
+            metadata.get("source_url")
+        )
         scraped_at = _clean_value(metadata.get("scraped_at"))
         page_number = _coerce_page_number(metadata.get("page_number"))
 
