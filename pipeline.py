@@ -1207,7 +1207,6 @@ class RAGPipeline:
             }
             logger.info(f"Streaming metadata: {metadata_payload}")
             yield f"data: {json.dumps({'type': 'metadata', 'content': metadata_payload})}\n\n"
-            yield f"data: {json.dumps({'type': 'context', 'content': self.llm._format_context(retrieved_docs=docs)})}\n\n"
 
             # Yield sources separately for backward compatibility/UI richness
             sources = build_public_sources(docs)
