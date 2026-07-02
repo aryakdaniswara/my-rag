@@ -6,6 +6,33 @@ This repo is organized to support two common modes:
 
 - local development with `config_rag.yaml`
 - Docker server deployment with `config_server.yaml` mounted as `/app/config_rag.yaml`
+- 
+
+<details>
+<summary>Future Development Notes</summary>
+
+**Summary:** Fokus utama buat pengembangan lanjutan ini adalah **siapin buat WhatsApp Bot** pakai *building block* RAG ini. Karena arahnya bakal beda dari yang sekarang, lo **HARUS BENER-BENER HARUS** ngobrol dan gali kebutuhannya ke kemahasiswaan (Mbak Finda & Mas Rengga). Jangan tebak-tebak sendiri!
+
+Berikut *notes* dari Ari buat pengembangan ke depannya:
+
+### 1. Sistem & Flow WhatsApp Bot
+- **Pilihan Platform:** Coba *consider* pake [Chatwoot](https://github.com/chatwoot/chatwoot) kalau emang buat WA bot. Itu *open source*, udah *tested* banget, dan sifatnya *omnichannel*.
+- **Koneksi WhatsApp:** Sangat disarankan pake **OFFICIAL META WHATSAPP** karena ke depannya pasti butuh. Kalau emang ga mau, bisa coba pake [go-whatsapp](https://github.com/aldinokemal/go-whatsapp-web-multidevice), tapi **hati-hati banget** karena ada resiko ke-ban.
+- **Service Line / UX Flow:** Pikirin *flow*-nya bakal kayak gimana. Misal: user nanya -> jawab RAG dulu -> *show sources*-nya gimana. Karena ini di WA, ga usah dituntut cepet *under* 10 detik. Proses *under* 5-10 menit masih masuk akal kok. Gunain *processing time* itu sebaik-baiknya buat hasilin *output* yang bagus.
+
+### 2. JANGAN LANJUT LOCAL, PAKE API AJA!
+- **Tinggalin Local Server:** Boleh aja sih *local* karena ada GPU 3090, tapi itu *shared server* (bakal cuma dipake AI doang) dan kurang ideal. Lagipula kadang lama banget prosesnya apalagi kalau modelnya gede.
+- **API AI Udah Murah:** Inget ituuu! Sekarang harga API AI udah jauh lebih murah. Jangan pelit, mending ajuin *budget* API ke Pak Ari atau koornya dari awal. Awalnya kita mau coba *local*, tapi *trust me, we've been there and IT SUCKS*. Banyak banget limitasi dan butuh waktu lama buat nyari *work around*-nya.
+- **Reranker dkk:** Buat *reranking* atau *embedding*, lo atur aja. Tapi kalau mau pake, lagi-lagi **PAKE API AJA**. Jangan siksa diri sendiri bikin berat *shared server*. Asli, langsung daftar OpenRouter atau sejenisnya, masukin *credit*, kelar.
+
+### 3. Ingestion & Gali Requirement
+- **Upgrade Ingestion:** Sekarang *ingestion* masih pake Docling (yang *kinda good*), tapi kalau lo udah pake API, mending sekalian pake Multi-modal LLM API buat *ingestion* sama *embedding*.
+- **Minta Data LENGKAP:** Ini paling penting. Ari sempat kesusahan nentuin *ingestion* yang pas karena ga dapet *requirement* dan data yang lengkap. Jadi saran gue: **GALI BENER-BENER DALEM, INTERVIEW, TANYA, MINTA DATA YANG LENGKAP**. Mas Rengga pernah tunjukin data riwayat pertanyaannya, itu dipake aja.
+
+> **Final Note:** Kalau lo disuruh *local*, saran gue *pushback*. Jelasin aja prediksi hitungan biayanya kalau pake API (*usage based*) dibanding beratnya numpang di *shared server*. Dan inget, lo **selalu** bisa hubungi Ari (minta kontaknya ke Syifa atau Alifa aja, aman!). 
+> Daripada lo buang waktu berantem sama setup *local* yang GPU-nya terbatas, mending fokus ke *live production* dan *pengembangannya*. Semangatt!!!
+
+</details>
 
 ## Features
 

@@ -32,7 +32,7 @@ storage:
 # Retrieval settings
 retrieval:
   k: 8                         # Candidate pool fetched from Milvus before reranking
-  rerank_top_k: 5               # Docs passed to the LLM after reranking (prevents token overflow)
+  rerank_top_k: 8               # Docs passed to the LLM after reranking (prevents token overflow)
   reranker_model: null  # Set to null to disable
   reranker_endpoint: null
 
