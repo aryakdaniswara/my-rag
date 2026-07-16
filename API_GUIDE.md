@@ -50,6 +50,7 @@ http://152.118.31.54:8000/docs
 - Normal ingestion writes one job-level chunk snapshot when `save_snapshots` is enabled.
 - Scraping writes source HTML/PDF files into `/app/data`; it does not automatically ingest or rebuild the index.
 - Reranking is optional in the server deployment. If `retrieval.reranker_model` is `null` in `config_server.yaml`, the API skips reranker use and you do not need to start the reranker container.
+- The current streaming query contract emits `metadata`, `sources`, answer `token`s, `confidence`, and `timings`. It does not emit a separate `context` event; use non-streaming `/query` when the formatted context must be captured directly.
 - `confidence_score` is retrieval-strength only. It reflects how strong retrieval evidence is, not factual correctness probability.
 - The value is normalized to `0.0`-`1.0` from the top-5 RRF strengths using the current RRF setup (dense+sparse fusion, `k=60`).
 - Use `GET /collections` to inspect which Milvus collections are actually present before promotion or cleanup.
@@ -199,14 +200,13 @@ Stream event order:
 
 ```text
 data: {"type":"metadata","content":{"num_docs":5,"query":"..."}}
-data: {"type":"context","content":"Source [...]..."}
 data: {"type":"sources","content":[...]}
 data: {"type":"token","content":"..."}
 data: {"type":"confidence","content":{"confidence_score":0.82,"query":"..."}}
 data: {"type":"timings","content":{"retrieval_time_ms":...,"generation_time_ms":...}}
 ```
 
-The stream emits the same formatted retrieved context used by the LLM before any answer tokens. Use the `sources` event for user-visible source cards and the `context` event for debugging or evaluation capture.
+Use the `sources` event for user-visible source cards. The current stream does not expose the full formatted context separately; if a client or evaluation job needs that context, call non-streaming `/query` or update the streaming contract and docs together.
 
 Each public source object contains only `pdf_url`, `page_url`, `scraped_at`, `page`, and `pages`. PDF sources are grouped by `pdf_url` plus page number, so different PDF pages can appear as separate source cards. The `pages` field is kept for response-shape compatibility but is not populated for now. Non-PDF page sources use `page_url`; if `page_url` is missing, the API falls back to scraped `source_url` and exposes it as `page_url`. Non-PDF sources return `page: null` and `pages: []`.
 

@@ -103,12 +103,11 @@ For a responsive user experience, the system supports real-time token streaming:
 - **Protocol**: Server-Sent Events (SSE).
 - **Format**:
     - **Type: `metadata`**: The first message contains the query and number of retrieved docs.
-    - **Type: `context`**: The second message contains the formatted retrieved context sent to the LLM.
-    - **Type: `sources`**: The third message contains the deduplicated public source list.
+    - **Type: `sources`**: The second message contains the deduplicated public source list.
     - **Type: `token`**: Subsequent messages contain individual text tokens as they are emitted by the LLM.
     - **Type: `confidence`**: The final message contains retrieval-strength confidence derived from ranked evidence.
     - **Type: `timings`**: The final timing payload contains retrieval, generation, and end-to-end duration fields.
-- **Context exposure**: The stream emits the formatted retrieved context before answer tokens, so clients and evaluation jobs can capture context without falling back to non-streaming `/query`.
+- **Context exposure**: The current stream does not emit a separate formatted-context event. Use non-streaming `/query` when a client or evaluation job must capture the exact context sent to the LLM, or update the streaming API contract explicitly.
 - **Implementation**: The pipeline uses the `stream=True` parameter in the OpenAI-compatible client, yielding chunks directly to the FastAPI `StreamingResponse`.
 
 ### H. Evaluation & Observability
@@ -204,13 +203,12 @@ Streaming version of the RAG query. Returns tokens as they are generated.
 - **Response**: SSE stream of JSON objects:
   ```json
   {"type": "metadata", "content": {"num_docs": 5, "query": "..."}}
-  {"type": "context", "content": "Source [...]..."}
   {"type": "sources", "content": [...]}
   {"type": "token", "content": "Hello"}
   {"type": "confidence", "content": {"confidence_score": 0.82, "query": "..."}}
   {"type": "timings", "content": {"retrieval_time_ms": 100.0, "generation_time_ms": 500.0, "end_to_end_time_ms": 650.0}}
   ```
-  The stream emits context before answer tokens. The `sources` event uses the same public source builder as `/query`, including non-PDF fallback from `source_url` to public `page_url`.
+  The `sources` event uses the same public source builder as `/query`, including non-PDF fallback from `source_url` to public `page_url`. The current stream does not emit the full formatted context separately.
 
 ### Scraper API
 The scraper API refreshes source files under `/app/data` and deliberately does not trigger ingestion automatically. Use it to refresh the raw corpus, then run `/ingest` for incremental updates or the CLI rebuild workflow when you need a fresh state file and shadow collection.
